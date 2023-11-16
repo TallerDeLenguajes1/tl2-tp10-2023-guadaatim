@@ -4,7 +4,7 @@ namespace Kanban.Repository;
 
 public class TableroRepository : ITableroRepository
 {
-    private string cadenaConexion = "Data Source:DB/tareas.db:Cache=Shared";
+    private string cadenaConexion = "Data Source=DB/kanban.db;Cache=Shared";
     
     public void CreateTablero(Tablero tablero)
     {
@@ -108,7 +108,7 @@ public class TableroRepository : ITableroRepository
     public void UpdateTablero(int idTablero, Tablero tableroModificar)
     {
         var queryString = @"UPDATE Tablero SET nombre = @nombre, descripcion = @descripcion, id_usuario_propietario = @idUsuario
-        WHERE id = @idUsuario;";
+        WHERE id = @idTablero;";
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
@@ -118,6 +118,7 @@ public class TableroRepository : ITableroRepository
             command.Parameters.Add(new SQLiteParameter("@nombre", tableroModificar.Nombre));
             command.Parameters.Add(new SQLiteParameter("@descripcion", tableroModificar.Descripcion));
             command.Parameters.Add(new SQLiteParameter("@id_usuario_propietario", tableroModificar.IdUsuarioPropietario));
+            command.Parameters.Add(new SQLiteParameter("idTablero", idTablero));
 
             command.ExecuteNonQuery();
             connection.Close();
@@ -130,9 +131,9 @@ public class TableroRepository : ITableroRepository
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
-            SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
-         
+
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
             command.Parameters.Add(new SQLiteParameter("@idTablero", idTablero));
 
             command.ExecuteNonQuery();

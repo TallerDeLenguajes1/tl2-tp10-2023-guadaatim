@@ -4,7 +4,7 @@ namespace Kanban.Repository;
 
 public class TareaRepository : ITareaRepository
 {
-    private string cadenaConexion = "Data Source:DB/tareas.db:Cache=Shared";
+    private string cadenaConexion = "Data Source=DB/kanban.db:Cache=Shared";
 
     public void CreateTarea(int idTablero, Tarea tarea) //devuelve tablero ???
     {
@@ -38,14 +38,43 @@ public class TareaRepository : ITareaRepository
             connection.Open();
 
             command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
-            command.Parameters.Add(new SQLiteParameter("@idTablero", idTarea));
+            command.Parameters.Add(new SQLiteParameter("@idTarea", idTarea));
 
             command.ExecuteNonQuery();
             connection.Close();
         }
     }
+    public List<Tarea> GetAllTareas()
+    {
+        var queryString = @"SELECT * FROM Tarea;";
+        List<Tarea> tareas = new List<Tarea>();
 
-    public List<Tarea> GetAllTareaByTablero(int idTablero)
+        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        {
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+            connection.Open();
+
+            using (SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Tarea tarea = new Tarea();
+                    tarea.Id = Convert.ToInt32(reader["id"]);
+                    tarea.IdTablero = Convert.ToInt32(reader["id_tablero"]);
+                    tarea.Nombre = reader["nombre"].ToString();
+                    tarea.Estado = (EstadoTarea)Convert.ToInt32(reader["estado"]);
+                    tarea.Descripcion = reader["descripcion"].ToString();
+                    tarea.Color = reader["color"].ToString();
+                    tarea.IdUsuarioAsignado = Convert.ToInt32(reader["id_usuario_propietario"]);
+                    tareas.Add(tarea);
+                }
+            }
+            connection.Close();
+        }
+        return tareas;
+    }
+
+    public List<Tarea> GetAllTareasByTablero(int idTablero)
     {
         var queryString = @"SELECT * FROM Tarea WHERE id_tablero = @idTablero;";
         List<Tarea> tareas = new List<Tarea>();
@@ -147,6 +176,7 @@ public class TareaRepository : ITareaRepository
             command.Parameters.Add(new SQLiteParameter("@estado", tareaModificar.Estado));
             command.Parameters.Add(new SQLiteParameter("@descripcion", tareaModificar.Descripcion));
             command.Parameters.Add(new SQLiteParameter("@color", tareaModificar.Color));
+            command.Parameters.Add(new SQLiteParameter("@idTarea", idTarea));
 
             command.ExecuteNonQuery();
             connection.Close();
