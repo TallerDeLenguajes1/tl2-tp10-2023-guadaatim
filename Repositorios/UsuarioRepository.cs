@@ -4,7 +4,7 @@ namespace Kanban.Repository;
 
 public class UsuarioRepository : IUsuarioRepository
 {
-    private string cadenaConexion = "Data Source=DB/kanban.db:Cache=Shared";
+    private string cadenaConexion = "Data Source=DB/kanban.db;Cache=Shared";
     public void CreateUsuario(Usuario usuarioNuevo)
     {
         var queryString = @"INSERT INTO Usuario (nombre_de_usuario) VALUES(@nombre);";
@@ -88,7 +88,7 @@ public class UsuarioRepository : IUsuarioRepository
     }
     public void EliminarUsuario(int idUsuario)
     {
-        var queryString = @"DELETE * FROM Usuario WHERE id = @idUsuario;";
+        var queryString = @"DELETE FROM Usuario WHERE id = @idUsuario;";
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {

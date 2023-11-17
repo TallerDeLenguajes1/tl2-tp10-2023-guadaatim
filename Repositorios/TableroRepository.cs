@@ -127,7 +127,7 @@ public class TableroRepository : ITableroRepository
     
     public void DeleteTablero(int idTablero)
     {
-        var queryString = @"DELETE * FROM Tablero WHERE id = @idTablero;";
+        var queryString = @"DELETE FROM Tablero WHERE id = @idTablero;";
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {

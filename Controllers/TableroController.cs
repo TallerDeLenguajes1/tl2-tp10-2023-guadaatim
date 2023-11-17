@@ -43,9 +43,9 @@ public class TableroController : Controller
     }
 
     [HttpGet]
-    public IActionResult Altatablero(Tablero tableroNuevo)
+    public IActionResult AltaTablero()
     {
-       return View("AltaTablero");
+       return View(new Tablero());
     }
 
     [HttpPost]

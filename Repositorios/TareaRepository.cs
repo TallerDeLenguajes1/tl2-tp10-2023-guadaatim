@@ -4,7 +4,7 @@ namespace Kanban.Repository;
 
 public class TareaRepository : ITareaRepository
 {
-    private string cadenaConexion = "Data Source=DB/kanban.db:Cache=Shared";
+    private string cadenaConexion = "Data Source=DB/kanban.db;Cache=Shared";
 
     public void CreateTarea(int idTablero, Tarea tarea) //devuelve tablero ???
     {
@@ -185,7 +185,7 @@ public class TareaRepository : ITareaRepository
     
     public void DeleteTarea(int idTarea)
     {
-        var queryString = @"DELETE * FROM Tarea WHERE id = @idTarea;";
+        var queryString = @"DELETE FROM Tarea WHERE id = @idTarea;";
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {

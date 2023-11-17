@@ -1,0 +1,15 @@
+@using Kanban.Models
+
+@model Tablero
+
+<form asp-controller="Tablero" asp-action="CreateTablero">
+    <label asp-for="@Model.Id">id</label>
+    <input type="number">
+    <label asp-for="@Model.IdUsuarioPropietario">id usuario propietario</label>
+    <input type="number">
+    <label asp-for="@Model.Nombre">nombre</label>
+    <input>
+    <label asp-for="@Model.Descripcion">descripcion</label>
+    <input>
+    <button type="submit">Crear Tablero</button>
+</form>
