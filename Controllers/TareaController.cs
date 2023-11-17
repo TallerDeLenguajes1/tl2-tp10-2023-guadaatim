@@ -6,7 +6,7 @@ using tl2_tp10_2023_guadaatim.Models;
 
 namespace Kanban.Controllers;
 
-public class TareaController : ControllerBase
+public class TareaController : Controller
 {
     private ITareaRepository tareaRepository;
     private ILogger<TareaController> _logger;
@@ -17,14 +17,14 @@ public class TareaController : ControllerBase
         tareaRepository = new TareaRepository();
     }
 
-    [HttpGet("")]
+    [HttpGet("GetAllTareasByTablero")]
     public IActionResult GetAll(int idTablero)
     {
-        List<Tarea> tareas = tareaRepository.GetAllTareaByTablero(idTablero);
+        List<Tarea> tareas = tareaRepository.GetAllTareasByTablero(idTablero);
         
         if (tareas != null)
         {
-            return Ok(tareas);
+            return View(tareas);
         } else
         {
             return NotFound();

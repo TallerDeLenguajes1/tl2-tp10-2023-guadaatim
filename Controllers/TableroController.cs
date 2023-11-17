@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Kanban.Repository;
 using Kanban.Models;
+
 using tl2_tp10_2023_guadaatim.Models;
 
 namespace Kanban.Controllers;
@@ -37,8 +38,14 @@ public class TableroController : Controller
             return View(tableros);
         } else
         {
-            return View();
+            return Error();
         }
+    }
+
+    [HttpGet]
+    public IActionResult Altatablero(Tablero tableroNuevo)
+    {
+       return View("AltaTablero");
     }
 
     [HttpPost]
