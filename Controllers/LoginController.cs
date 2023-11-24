@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Session;
 using Kanban.Repository;
 using Kanban.Models;
 
@@ -45,7 +46,7 @@ public class LoginController : Controller
 
     private void loggearUsuario(Usuario usuario)
     {
-        HttpContext.Session.SetString("Usuario", usuario.NombreDeUsuario);
+        HttpContext.Session.SetString("NombreDeUsuario", usuario.NombreDeUsuario);
         HttpContext.Session.SetString("Rol", usuario.Rol.ToString());
     }
 
