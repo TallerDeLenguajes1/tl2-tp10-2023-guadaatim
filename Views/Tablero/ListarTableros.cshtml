@@ -1,0 +1,30 @@
+@using Kanban.Models
+
+@model List<Tablero>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Id Usuario Propietario</th>
+            <th>Nombre</th>
+            <th>Descripcion</th>
+            <th>Modificar</th>
+            <th>Eliminar</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach(Tablero tablero in @Model)
+        {
+        <tr>
+            <td>@tablero.Id</td>
+            <td>@tablero.IdUsuarioPropietario</td>
+            <td>@tablero.Nombre</td>
+            <td>@tablero.Descripcion</td>
+            <td><a asp-controller="Tablero" asp-action="ModificarTablero" asp-route-idTablero="@tablero.Id">Modificar</a></td>
+            <td><a asp-controller="Tablero" asp-action="EliminarTablero" asp-route-idTablero="@tablero.Id">Eliminar</a></td>
+        </tr>
+        }
+    </tbody>
+</table>
