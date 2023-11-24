@@ -29,9 +29,9 @@ public class TableroController : Controller
     }
 
     [HttpGet]
-    public IActionResult GetAllTableros()
+    public IActionResult ListarTableros()
     {
-        List<Tablero> tableros = tableroRepository.GetAllTablero();
+        List<Tablero> tableros = tableroRepository.GetAllTableros();
 
         if(tableros != null)
         {
@@ -55,19 +55,32 @@ public class TableroController : Controller
         return Ok();
     }
 
-    [HttpPut]
-    public IActionResult UpdateTablero(int idTablero, Tablero tableroModificado)
+    [HttpGet]
+    public IActionResult ModificarTablero(int idTablero)
     {
-        
-        tableroRepository.UpdateTablero(idTablero, tableroModificado);
-        return Ok();
+        Tablero tablero = tableroRepository.GetTableroById(idTablero);
+        return View(tablero);
     }
 
-    [HttpDelete]
-    public IActionResult DeleteTablero(int idTablero)
+    [HttpPost]
+    public IActionResult UpdateTablero(Tablero tableroModificado)
     {
-        tableroRepository.DeleteTablero(idTablero);
-        return Ok();
+        tableroRepository.UpdateTablero(tableroModificado.Id, tableroModificado);
+        return RedirectToAction("GetAllTableros");
+    }
+
+    [HttpGet]
+    public IActionResult EliminarTablero(int idTablero)
+    {
+        Tablero tablero = tableroRepository.GetTableroById(idTablero);
+        return View(tablero);
+    }
+
+    [HttpPost]
+    public IActionResult DeleteTablero(Tablero tablero)
+    {
+        tableroRepository.DeleteTablero(tablero.Id);
+        return RedirectToAction("GetAllTableros");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
