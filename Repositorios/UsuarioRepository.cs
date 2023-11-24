@@ -7,7 +7,7 @@ public class UsuarioRepository : IUsuarioRepository
     private string cadenaConexion = "Data Source=DB/kanban.db;Cache=Shared";
     public void CreateUsuario(Usuario usuarioNuevo)
     {
-        var queryString = @"INSERT INTO Usuario (nombre_de_usuario) VALUES(@nombre);";
+        var queryString = @"INSERT INTO Usuario (nombre_de_usuario, contrasenia, rol) VALUES(@nombre, @contrasenia, @rol);";
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
@@ -15,6 +15,8 @@ public class UsuarioRepository : IUsuarioRepository
 
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             command.Parameters.Add(new SQLiteParameter("@nombre", usuarioNuevo.NombreDeUsuario));
+            command.Parameters.Add(new SQLiteParameter("@contrasenia", usuarioNuevo.Contrasenia));
+            command.Parameters.Add(new SQLiteParameter("@rol", usuarioNuevo.Rol));
             command.ExecuteNonQuery();
 
             connection.Close();
@@ -22,7 +24,7 @@ public class UsuarioRepository : IUsuarioRepository
     }
     public void UpdateUsuario(int idUsuario, Usuario usuarioModificar)
     {
-        var queryString = @"UPDATE Usuario SET nombre_de_usuario = @nombre WHERE id = @idUsuario;";
+        var queryString = @"UPDATE Usuario SET nombre_de_usuario = @nombre, contrasenia = @contrasenia, rol = @rol WHERE id = @idUsuario;";
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
@@ -31,6 +33,8 @@ public class UsuarioRepository : IUsuarioRepository
 
             command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
             command.Parameters.Add(new SQLiteParameter("@nombre", usuarioModificar.NombreDeUsuario));
+            command.Parameters.Add(new SQLiteParameter("@contrasenia", usuarioModificar.Contrasenia));
+            command.Parameters.Add(new SQLiteParameter("@rol", usuarioModificar.Rol));
 
             command.ExecuteNonQuery();
 
@@ -53,7 +57,9 @@ public class UsuarioRepository : IUsuarioRepository
                 {
                     Usuario usuario = new Usuario();
                     usuario.Id = Convert.ToInt32(reader["id"]);
-                    usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();                
+                    usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
+                    usuario.Contrasenia = reader["contrasenia"].ToString();
+                    usuario.Rol = (Rol)Convert.ToInt32(reader["rol"]);                
                     usuarios.Add(usuario);
                 }
             }
@@ -78,9 +84,10 @@ public class UsuarioRepository : IUsuarioRepository
                 {
                     usuario.Id = Convert.ToInt32(reader["id"]);
                     usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
+                    usuario.Contrasenia = reader["contrasenia"].ToString();
+                    usuario.Rol = (Rol)Convert.ToInt32(reader["rol"]);
                 }
             }
-            
         connection.Close();
         }
         return usuario;

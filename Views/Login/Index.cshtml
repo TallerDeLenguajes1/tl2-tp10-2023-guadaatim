@@ -1,0 +1,13 @@
+@model LoginViewModel
+
+<form asp-controller="Login" asp-action="Login">
+    <label asp-for="@Model.NombreDeUsuario">Nombre de usuario</label>
+        <input asp-for="@Model.NombreDeUsuario">
+        <span asp-validation-for="@Model.NombreDeUsuario"></span>
+    <label asp-for="@Model.Contrasenia">Contraseña</label>
+        <input asp-for="@Model.Contrasenia">
+        <span asp-validation-for="@Model.Contrasenia"></span>
+    <button type="submit">Iniciar sesion</button>
+</form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" />}
