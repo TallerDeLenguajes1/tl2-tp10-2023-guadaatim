@@ -26,7 +26,7 @@ public class TableroRepository : ITableroRepository
         }
     }
     
-    public List<Tablero> GetAllTablero()
+    public List<Tablero> GetAllTableros()
     {
         var queryString = @"SELECT * FROM Tablero;";
         List<Tablero> tableros = new List<Tablero>();
@@ -62,6 +62,7 @@ public class TableroRepository : ITableroRepository
         {
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
+            command.Parameters.Add(new SQLiteParameter("@idTablero", idTablero));
 
             using (SQLiteDataReader reader = command.ExecuteReader())
             {
@@ -87,6 +88,7 @@ public class TableroRepository : ITableroRepository
         {
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
 
             using (SQLiteDataReader reader = command.ExecuteReader())
             {
@@ -115,10 +117,10 @@ public class TableroRepository : ITableroRepository
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
 
+            command.Parameters.Add(new SQLiteParameter("idTablero", idTablero));
             command.Parameters.Add(new SQLiteParameter("@nombre", tableroModificar.Nombre));
             command.Parameters.Add(new SQLiteParameter("@descripcion", tableroModificar.Descripcion));
-            command.Parameters.Add(new SQLiteParameter("@id_usuario_propietario", tableroModificar.IdUsuarioPropietario));
-            command.Parameters.Add(new SQLiteParameter("idTablero", idTablero));
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", tableroModificar.IdUsuarioPropietario));
 
             command.ExecuteNonQuery();
             connection.Close();

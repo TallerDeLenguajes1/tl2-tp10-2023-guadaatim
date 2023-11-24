@@ -22,23 +22,22 @@ public class UsuarioRepository : IUsuarioRepository
     }
     public void UpdateUsuario(int idUsuario, Usuario usuarioModificar)
     {
-        var queryString = @"UPDATE Usuario SET nombre_de_usuario = (@nombre) WHERE id = (@idUsuario);";
+        var queryString = @"UPDATE Usuario SET nombre_de_usuario = @nombre WHERE id = @idUsuario;";
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
 
-            SQLiteCommand command = new SQLiteCommand(queryString, connection);
-
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
             command.Parameters.Add(new SQLiteParameter("@nombre", usuarioModificar.NombreDeUsuario));
-            command.Parameters.Add(new SQLiteParameter("@id", idUsuario));
 
             command.ExecuteNonQuery();
 
             connection.Close();
         }
     }
-    public List<Usuario> GetAllUsuario()
+    public List<Usuario> GetAllUsuarios()
     {
         var queryString = @"SELECT * FROM Usuario;";
         List<Usuario> usuarios = new List<Usuario>();
@@ -70,8 +69,8 @@ public class UsuarioRepository : IUsuarioRepository
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
-            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
             connection.Open();
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
 
             using (SQLiteDataReader reader = command.ExecuteReader())
             {
