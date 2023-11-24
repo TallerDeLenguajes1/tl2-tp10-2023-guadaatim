@@ -38,7 +38,7 @@ public class TableroController : Controller
             return View(tableros);
         } else
         {
-            return Error();
+            return View("Error");
         }
     }
 
@@ -52,7 +52,7 @@ public class TableroController : Controller
     public IActionResult CreateTablero(Tablero tableroNuevo)
     {
         tableroRepository.CreateTablero(tableroNuevo);
-        return Ok();
+        return RedirectToAction("ListarTableros");
     }
 
     [HttpGet]
@@ -66,7 +66,7 @@ public class TableroController : Controller
     public IActionResult UpdateTablero(Tablero tableroModificado)
     {
         tableroRepository.UpdateTablero(tableroModificado.Id, tableroModificado);
-        return RedirectToAction("GetAllTableros");
+        return RedirectToAction("ListarTableros");
     }
 
     [HttpGet]
@@ -80,7 +80,7 @@ public class TableroController : Controller
     public IActionResult DeleteTablero(Tablero tablero)
     {
         tableroRepository.DeleteTablero(tablero.Id);
-        return RedirectToAction("GetAllTableros");
+        return RedirectToAction("ListarTableros");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
