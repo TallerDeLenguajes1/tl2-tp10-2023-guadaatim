@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Kanban.Repository;
 using Kanban.Models;
+
 using tl2_tp10_2023_guadaatim.Models;
 
 namespace Kanban.Controllers;
@@ -17,9 +18,20 @@ public class TareaController : Controller
         tareaRepository = new TareaRepository();
     }
 
-    [HttpGet("GetAllTareasByTablero")]
-    public IActionResult GetAll(int idTablero)
+    public IActionResult Index()
     {
+        return View();
+    }
+
+    public IActionResult Privacy()
+    {
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult ListarTareas(int idTablero)
+    {
+        idTablero = 1;
         List<Tarea> tareas = tareaRepository.GetAllTareasByTablero(idTablero);
         
         if (tareas != null)
@@ -27,28 +39,54 @@ public class TareaController : Controller
             return View(tareas);
         } else
         {
-            return NotFound();
+            return View("Error");
         }
     }
 
+    [HttpGet]
+    public IActionResult AltaTarea()
+    {
+        return View(new Tarea());
+    }
+
     [HttpPost]
-    public IActionResult CreateTarea(int idTablero, Tarea tareaNueva)
+    public IActionResult CreateTarea(Tarea tareaNueva)
     {
-        tareaRepository.CreateTarea(idTablero, tareaNueva);
-        return Ok();
+        tareaRepository.CreateTarea(1, tareaNueva);
+        return RedirectToAction("ListarTareas");
     }
 
-    [HttpPut]
-    public IActionResult UpdateTarea(int idTarea, Tarea tareaModificada)
+    [HttpGet]
+    public IActionResult ModificarTarea(int idTarea)
     {
-        tareaRepository.UpdateTarea(idTarea, tareaModificada);
-        return Ok();
+        Tarea tarea = tareaRepository.GetTareaById(idTarea);
+        return View(tarea);
     }
 
-    [HttpDelete]
-    public IActionResult DeleteTarea(int idTarea)
+    [HttpPost]
+    public IActionResult UpdateTarea(Tarea tareaModificada)
     {
-        tareaRepository.DeleteTarea(idTarea);
-        return Ok();
+        tareaRepository.UpdateTarea(tareaModificada.Id, tareaModificada);
+        return RedirectToAction("ListarTareas");
+    }
+
+    [HttpGet]
+    public IActionResult EliminarTarea(int idTarea)
+    {
+        Tarea tarea = tareaRepository.GetTareaById(idTarea);
+        return View(tarea);
+    }
+
+    [HttpPost]
+    public IActionResult DeleteTarea(Tarea tarea) //enviar solo el id??
+    {
+        tareaRepository.DeleteTarea(tarea.Id);
+        return RedirectToAction("ListarTareas");
+    }
+
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
