@@ -8,6 +8,6 @@ public interface IUsuarioRepository
     public void UpdateUsuario(int idUsuario, Usuario usuarioModificar);
     public List<Usuario> GetAllUsuarios();
     public Usuario GetUsuarioById(int idUsuario);
-    public void EliminarUsuario(int idUsuario);
+    public void DeleteUsuario(int idUsuario);
 }
     
