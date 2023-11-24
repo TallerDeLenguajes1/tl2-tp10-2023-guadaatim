@@ -4,19 +4,19 @@
 
 <form asp-controller="Tarea" asp-action="DeleteTarea">
     <label asp-for="@Model.Id">Id</label>
-        <input asp-for="@Model.Id">
+        <input asp-for="@Model.Id" value="@Model.Id">
     <label asp-for="@Model.IdTablero">Id Tablero</label>
-        <input asp-for="@Model.IdTablero">
+        <input asp-for="@Model.IdTablero" value="@Model.IdTablero">
     <label asp-for="@Model.Nombre">Nombre</label>
-        <input asp-for="@Model.Nombre">
+        <input asp-for="@Model.Nombre" value="@Model.Nombre">
     <label asp-for="@Model.Descripcion">Descripcion</label>
-        <input asp-for="@Model.Descripcion">
+        <input asp-for="@Model.Descripcion" value="@Model.Descripcion">
     <label asp-for="@Model.Color">Color</label>
-        <input asp-for="@Model.Color">
+        <input asp-for="@Model.Color" value="@Model.Color">
     <label asp-for="@Model.IdUsuarioAsignado">Id Usuario</label>
-        <input asp-for="@Model.IdUsuarioAsignado">
+        <input asp-for="@Model.IdUsuarioAsignado" value="@Model.IdUsuarioAsignado">
     <label asp-for="@Model.Estado">Estado</label>
-        <input asp-for="@Model.Estado">
-    <button type="submit" asp-controller="Tarea" asp-action="DeleteTarea">Eliminar Tarea</button>
-    <button type="submit" asp-controller="Tarea" asp-action="ListarTareas">Cancelar</button>
+        <input asp-for="@Model.Estado" value="@Model.Estado">
+    <button type="submit">Eliminar Tarea</button>
+    <button type="button"><a asp-controller="Tarea" asp-action="ListarTareas">Cancelar</a></button>
 </form>
