@@ -1,0 +1,21 @@
+@using Kanban.Models
+
+@model List<Usuario>
+
+<table>
+    <thead>
+        <th>Id</th>
+        <td>Nombre de Usuario</td>
+    </thead>
+    <tbody>
+        @foreach(Usuario usuario in @Model)
+        {
+            <tr>
+                <td>@usuario.Id</td>
+                <td>@usuario.NombreDeUsuario</td>
+                <td><a asp-controller="Usuario" asp-action="ModificarUsuario" asp-route-idUsuario="@usuario.Id">Modificar</a></td>
+                <td><a asp-controller="Usuario" asp-action="EliminarUsuario" asp-route-idUsuario="@usuario.Id">Eliminar</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

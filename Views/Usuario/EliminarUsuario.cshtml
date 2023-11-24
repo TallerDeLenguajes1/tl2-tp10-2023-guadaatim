@@ -1,0 +1,12 @@
+@using Kanban.Models
+
+@model Usuario
+
+<form asp-controller="Usuario" asp-action="DeleteUsuario">
+    <label asp-for="@Model.Id">Id</label>
+        <input asp-for="@Model.Id" value="@Model.Id">
+    <label asp-for="@Model.NombreDeUsuario">Nombre de usuario</label>
+        <input asp-for="@Model.NombreDeUsuario" value="@Model.NombreDeUsuario">
+    <button type="submit">Eliminar Usuario</button>
+    <button type="button"><a asp-controller="Usuario" asp-action="ListarUsuarios">Cancelar</a></button>
+</form>
