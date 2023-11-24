@@ -1,0 +1,33 @@
+@using Kanban.Models
+
+@model List<Tarea>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Id Tablero</th>
+            <th>Nombre</th>
+            <th>Descripcion</th>
+            <th>Color</th>
+            <th>Id Usuario</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Tarea tarea in @Model)
+        {
+            <tr>
+                <td>@tarea.Id</td>
+                <td>@tarea.IdTablero</td>
+                <td>@tarea.Nombre</td>
+                <td>@tarea.Descripcion</td>
+                <td>@tarea.Color</td>
+                <td>@tarea.IdUsuarioAsignado</td>
+                <td>@tarea.Estado</td>
+                <td><a asp-controller="Tarea" asp-action="ModificarTarea" asp-route-idTarea="@tarea.Id">Modificar</a></td>
+                <td><a asp-controller="Tarea" asp-action="EliminarTarea" asp-route-idTarea="@tarea.Id">Eliminar</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
