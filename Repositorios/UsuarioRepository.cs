@@ -85,7 +85,7 @@ public class UsuarioRepository : IUsuarioRepository
         }
         return usuario;
     }
-    public void EliminarUsuario(int idUsuario)
+    public void DeleteUsuario(int idUsuario)
     {
         var queryString = @"DELETE FROM Usuario WHERE id = @idUsuario;";
 
