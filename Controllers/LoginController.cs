@@ -5,6 +5,7 @@ using Kanban.Repository;
 using Kanban.Models;
 
 using tl2_tp10_2023_guadaatim.Models;
+using Kanban.ViewModels;
 
 namespace Kanban.Controllers;
 
@@ -21,7 +22,7 @@ public class LoginController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        return View(new LoginViewModel());
     }
 
     public IActionResult Privacy()
@@ -36,7 +37,7 @@ public class LoginController : Controller
 
         if (usuarioLoggeado == null)
         {
-            return RedirectToAction("Error");
+            return RedirectToAction("Index");
         } else
         {
             loggearUsuario(usuarioLoggeado);
