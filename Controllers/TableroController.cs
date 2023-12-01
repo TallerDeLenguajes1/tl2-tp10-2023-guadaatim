@@ -32,13 +32,25 @@ public class TableroController : Controller
     public IActionResult ListarTableros()
     {
         List<Tablero> tableros = tableroRepository.GetAllTableros();
-
-        if(tableros != null)
+        
+        if(isAdmin())
         {
-            return View(tableros);
+            if(tableros != null)
+            {
+                return View(tableros);
+            } else
+            {
+                return View("Error");
+            }
         } else
         {
-            return View("Error");
+            if (HttpContext.Session.GetString("Rol") == "Operador")
+            {
+                return View(tableroRepository.GetTableroByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)));
+            } else
+            {
+                return View("Error");
+            }
         }
     }
 
@@ -81,6 +93,17 @@ public class TableroController : Controller
     {
         tableroRepository.DeleteTablero(tablero.Id);
         return RedirectToAction("ListarTableros");
+    }
+
+    private bool isAdmin()
+    {
+        if (HttpContext.Session != null && HttpContext.Session.GetString("Rol") == "Administrador")
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

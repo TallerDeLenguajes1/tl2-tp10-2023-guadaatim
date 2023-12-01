@@ -31,15 +31,12 @@ public class TareaController : Controller
     [HttpGet]
     public IActionResult ListarTareas(int idTablero)
     {
-        idTablero = 1;
-        List<Tarea> tareas = tareaRepository.GetAllTareasByTablero(idTablero);
-        
-        if (tareas != null)
+        if(isAdmin())
         {
-            return View(tareas);
+            return View(tareaRepository.GetAllTareas());
         } else
         {
-            return View("Error");
+            return View(tareaRepository.GetAllTareasByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)));
         }
     }
 
@@ -82,6 +79,17 @@ public class TareaController : Controller
     {
         tareaRepository.DeleteTarea(tarea.Id);
         return RedirectToAction("ListarTareas");
+    }
+
+    private bool isAdmin()
+    {
+        if(HttpContext.Session != null && HttpContext.Session.GetString("Rol") == "Administrador")
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

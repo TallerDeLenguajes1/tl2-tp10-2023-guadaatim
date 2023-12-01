@@ -37,7 +37,7 @@ public class LoginController : Controller
 
         if (usuarioLoggeado == null)
         {
-            return RedirectToAction("Index");
+            return RedirectToAction("Error");
         } else
         {
             loggearUsuario(usuarioLoggeado);
@@ -49,6 +49,7 @@ public class LoginController : Controller
     {
         HttpContext.Session.SetString("NombreDeUsuario", usuario.NombreDeUsuario);
         HttpContext.Session.SetString("Rol", usuario.Rol.ToString());
+        HttpContext.Session.SetString("Id", usuario.Id.ToString());
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
