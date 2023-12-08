@@ -7,6 +7,17 @@ public class Tablero
     private string nombre;
     private string? descripcion;
 
+    public Tablero()
+    {
+    }
+
+    public Tablero(int idUsuarioPropietario, string nombre, string descripcion)
+    {
+        this.idUsuarioPropietario = idUsuarioPropietario;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
+
     public int Id { get => id; set => id = value; }
     public int IdUsuarioPropietario { get => idUsuarioPropietario; set => idUsuarioPropietario = value; }
     public string Nombre { get => nombre; set => nombre = value; }
