@@ -1,6 +1,6 @@
-@using Kanban.Models
+@using Kanban.ViewModels
 
-@model List<Tablero>
+@model ListarTablerosViewModel
 
 <table>
     <thead>
@@ -14,7 +14,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(Tablero tablero in @Model)
+        @foreach(TableroViewModel tablero in @Model.TablerosVM)
         {
         <tr>
             <td>@tablero.Id</td>

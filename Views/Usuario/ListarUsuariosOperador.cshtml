@@ -1,19 +1,18 @@
 @using Kanban.ViewModels
 
-@model ListarUsuariosViewModel
+@model UsuarioViewModel
 
 <table>
     <thead>
+        <th>Id</th>
         <td>Nombre de Usuario</td>
         <td>Rol</td>
     </thead>
     <tbody>
-        @foreach(UsuarioViewModel usuario in @Model.UsuariosVM)
-        {
             <tr>
-                <td>@usuario.NombreDeUsuario</td>
-                <td>@usuario.Rol</td>
+                <th>@Model.Id</th>
+                <td>@Model.NombreDeUsuario</td>
+                <td>@Model.Rol</td>
             </tr>
-        }
     </tbody>
 </table>
