@@ -73,7 +73,7 @@ public class UsuarioController : Controller
             return View(new CrearUsuarioViewModel());
         } else
         {
-             return RedirectToRoute(new {controller = "Home", action = "Index"});
+            return RedirectToRoute(new {controller = "Home", action = "Index"});
         }
     }
 

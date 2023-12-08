@@ -20,7 +20,7 @@ public class CrearTableroViewModel
     {
     }
 
-    public CrearTableroViewModel(Tablero tableroNuevo)
+    public CrearTableroViewModel(TableroViewModel tableroNuevo)
     {
         this.id = tableroNuevo.Id;
         this.idUsuarioPropietario = tableroNuevo.IdUsuarioPropietario;

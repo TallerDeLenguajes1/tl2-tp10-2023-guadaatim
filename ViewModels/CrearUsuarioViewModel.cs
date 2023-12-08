@@ -2,6 +2,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Kanban.Models;
 
+namespace Kanban.ViewModels;
+
 public class CrearUsuarioViewModel
 {
     [Required(ErrorMessage = "Complete el campo")]
