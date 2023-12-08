@@ -30,6 +30,8 @@ public class LoginController : Controller
         return View();
     }
 
+    [HttpPost]
+    
     public IActionResult Login(Usuario usuario)
     {
         List<Usuario> usuarios = usuarioRepository.GetAllUsuarios();
