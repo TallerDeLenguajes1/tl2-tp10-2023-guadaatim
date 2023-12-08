@@ -4,6 +4,7 @@ using Kanban.Repository;
 using Kanban.Models;
 
 using tl2_tp10_2023_guadaatim.Models;
+using Kanban.ViewModels;
 
 namespace Kanban.Controllers;
 
@@ -33,17 +34,25 @@ public class TareaController : Controller
     {
         if(isAdmin())
         {
-            return View(tareaRepository.GetAllTareas());
+            ListarTareasViewModel tareas = new ListarTareasViewModel(tareaRepository.GetAllTareas());
+            return View(tareas);
         } else
         {
-            return View(tareaRepository.GetAllTareasByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)));
+            ListarTareasViewModel tareas = new ListarTareasViewModel(tareaRepository.GetAllTareasByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)));
+            return View(tareas);
         }
     }
 
     [HttpGet]
     public IActionResult AltaTarea()
     {
-        return View(new Tarea());
+        if(isAdmin())
+        {
+            return View(new TareaViewModel());
+        } else
+        {
+            return RedirectToRoute(new {controller = "Home", action = "Index"});
+        }
     }
 
     [HttpPost]
@@ -56,8 +65,15 @@ public class TareaController : Controller
     [HttpGet]
     public IActionResult ModificarTarea(int idTarea)
     {
-        Tarea tarea = tareaRepository.GetTareaById(idTarea);
-        return View(tarea);
+        if(isAdmin())
+        {
+            Tarea tarea = tareaRepository.GetTareaById(idTarea);
+            return View(tarea);
+        } else
+        {
+            return RedirectToRoute(new {controller = "Home", action = "Index"});
+        }
+        
     }
 
     [HttpPost]
@@ -70,8 +86,14 @@ public class TareaController : Controller
     [HttpGet]
     public IActionResult EliminarTarea(int idTarea)
     {
-        Tarea tarea = tareaRepository.GetTareaById(idTarea);
-        return View(tarea);
+        if(isAdmin())
+        {
+           Tarea tarea = tareaRepository.GetTareaById(idTarea);
+            return View(tarea); 
+        } else
+        {
+            return RedirectToRoute(new {controller = "Home", action = "Index"});
+        }   
     }
 
     [HttpPost]
