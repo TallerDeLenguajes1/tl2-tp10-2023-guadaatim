@@ -1,12 +1,14 @@
-@using Kanban.Models
+@using Kanban.ViewModels
 
-@model Usuario
+@model CrearUsuarioViewModel
 
 <form asp-controller="Usuario" asp-action="CreateUsuario">
     <label asp-for="@Model.Id">Id</label>
         <input asp-for="@Model.Id">
     <label asp-for="@Model.NombreDeUsuario">Nombre de usuario</label>
         <input asp-for="@Model.NombreDeUsuario">
+    <label asp-for="@Model.Contrasenia">Contraseña</label>
+        <input asp-for="@Model.Contrasenia">
     <label asp-for="@Model.Rol">Rol</label>
         <input asp-for="@Model.Rol">
     <button type="submit">Crear Usuario</button>
