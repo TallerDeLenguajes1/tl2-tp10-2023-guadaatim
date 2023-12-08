@@ -4,9 +4,16 @@ using Kanban.Models;
 
 public class CrearUsuarioViewModel
 {
+    [Required(ErrorMessage = "Complete el campo")]
     private int id;
+
+    [Required(ErrorMessage = "Complete el campo")]
     private string nombreDeUsuario;
+
+    [Required(ErrorMessage = "Complete el campo")]
     private string contrasenia;
+
+    [Required(ErrorMessage = "Complete el campo")]
     private Rol rol;
 
     public CrearUsuarioViewModel()
