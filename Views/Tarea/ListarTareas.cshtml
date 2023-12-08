@@ -1,6 +1,6 @@
-@using Kanban.Models
+@using Kanban.ViewModels
 
-@model List<Tarea>
+@model ListarTareasViewModel
 
 <table>
     <thead>
@@ -15,7 +15,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(Tarea tarea in @Model)
+        @foreach(TareaViewModel tarea in @Model.TareasVM)
         {
             <tr>
                 <td>@tarea.Id</td>
