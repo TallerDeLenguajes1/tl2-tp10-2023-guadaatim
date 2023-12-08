@@ -6,7 +6,6 @@ namespace Kanban.ViewModels;
 
 public class CrearTareaViewModel
 {
-    private int id;
     private int idTablero;
     private string nombre;
     private EstadoTarea estado;
@@ -20,7 +19,6 @@ public class CrearTareaViewModel
 
     public CrearTareaViewModel(Tarea tarea)
     {
-        this.id = tarea.Id;
         this.idTablero = tarea.IdTablero;
         this.nombre = tarea.Nombre;
         this.estado = tarea.Estado;
@@ -28,7 +26,6 @@ public class CrearTareaViewModel
         this.IdUsuarioAsignado = tarea.IdUsuarioAsignado;
     }
 
-    public int Id { get => id; set => id = value; }
     public int IdTablero { get => idTablero; set => idTablero = value; }
     public string Nombre { get => nombre; set => nombre = value; }
     public EstadoTarea Estado { get => estado; set => estado = value; }
