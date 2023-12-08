@@ -49,14 +49,16 @@ public class UsuarioController : Controller
         }
     }
 
-    [HttpGet]
+    [HttpGet] // mostrar el mismo usuario
     public IActionResult ListarUsuariosOperador()
     {
-        ListarUsuariosViewModel usuarios = new ListarUsuariosViewModel(usuarioRepository.GetAllUsuarios());
+        //ListarUsuariosViewModel usuarios = new ListarUsuariosViewModel(usuarioRepository.GetAllUsuarios());
+
+        UsuarioViewModel usuario = new UsuarioViewModel(usuarioRepository.GetUsuarioById(Int32.Parse(HttpContext.Session.GetString("Id")!)));
 
         if(HttpContext.Session.GetString("Rol") == "Operador")
         {
-            return View(usuarios);
+            return View(usuario);
         } else
         {
             return RedirectToRoute(new {controller = "Login", action = "Index"});
@@ -71,7 +73,7 @@ public class UsuarioController : Controller
             return View(new CrearUsuarioViewModel());
         } else
         {
-             return RedirectToRoute(new {controller = "Login", action = "Index"});
+             return RedirectToRoute(new {controller = "Home", action = "Index"});
         }
     }
 
@@ -91,7 +93,7 @@ public class UsuarioController : Controller
             return View(usuario);
         } else
         {
-             return RedirectToRoute(new {controller = "Login", action = "Index"});
+             return RedirectToRoute(new {controller = "Home", action = "Index"});
         }
     }
 
@@ -111,7 +113,7 @@ public class UsuarioController : Controller
             return View(usuario);
         } else
         {
-             return RedirectToRoute(new {controller = "Login", action = "Index"});
+             return RedirectToRoute(new {controller = "Home", action = "Index"});
         }
     }
 
