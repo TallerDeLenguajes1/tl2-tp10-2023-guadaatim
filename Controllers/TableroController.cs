@@ -4,6 +4,7 @@ using Kanban.Repository;
 using Kanban.Models;
 
 using tl2_tp10_2023_guadaatim.Models;
+using Kanban.ViewModels;
 
 namespace Kanban.Controllers;
 
@@ -31,7 +32,7 @@ public class TableroController : Controller
     [HttpGet]
     public IActionResult ListarTableros()
     {
-        List<Tablero> tableros = tableroRepository.GetAllTableros();
+        ListarTablerosViewModel tableros = new ListarTablerosViewModel(tableroRepository.GetAllTableros());
         
         if(isAdmin())
         {
@@ -40,16 +41,17 @@ public class TableroController : Controller
                 return View(tableros);
             } else
             {
-                return View("Error");
+                return NotFound();
             }
         } else
         {
             if (HttpContext.Session.GetString("Rol") == "Operador")
             {
-                return View(tableroRepository.GetTableroByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)));
+                tableros = new ListarTablerosViewModel(tableroRepository.GetTableroByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)));
+                return View(tableros);
             } else
             {
-                return View("Error");
+                return NotFound();
             }
         }
     }
@@ -57,7 +59,13 @@ public class TableroController : Controller
     [HttpGet]
     public IActionResult AltaTablero()
     {
-       return View(new Tablero());
+        if (isAdmin())
+        {
+            return View(new TableroViewModel());
+        } else
+        {
+            return RedirectToRoute(new {controller = "Home", action = "Index"});
+        }
     }
 
     [HttpPost]
@@ -70,8 +78,15 @@ public class TableroController : Controller
     [HttpGet]
     public IActionResult ModificarTablero(int idTablero)
     {
-        Tablero tablero = tableroRepository.GetTableroById(idTablero);
-        return View(tablero);
+        if (isAdmin())
+        {
+            TableroViewModel tablero = new TableroViewModel(tableroRepository.GetTableroById(idTablero));
+            return View(tablero);
+        } else
+        {
+            return RedirectToRoute(new {controller = "Home", action = "Index"});
+        }
+        
     }
 
     [HttpPost]
@@ -84,8 +99,14 @@ public class TableroController : Controller
     [HttpGet]
     public IActionResult EliminarTablero(int idTablero)
     {
-        Tablero tablero = tableroRepository.GetTableroById(idTablero);
-        return View(tablero);
+        if (isAdmin())
+        {
+            Tablero tablero = tableroRepository.GetTableroById(idTablero);
+            return View(tablero);
+        } else
+        {
+            return RedirectToRoute(new {controller = "Home", action = "Index"});
+        }
     }
 
     [HttpPost]
