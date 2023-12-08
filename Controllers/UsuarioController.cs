@@ -78,8 +78,9 @@ public class UsuarioController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateUsuario(Usuario usuarioNuevo)
+    public IActionResult CreateUsuario(CrearUsuarioViewModel usuarioNuevoVM)
     {
+        Usuario usuarioNuevo = new Usuario(usuarioNuevoVM.NombreDeUsuario, usuarioNuevoVM.Contrasenia, usuarioNuevoVM.Rol);
         usuarioRepository.CreateUsuario(usuarioNuevo);
         return RedirectToAction("ListarUsuarios");
     }
@@ -98,8 +99,9 @@ public class UsuarioController : Controller
     }
 
     [HttpPost]
-    public IActionResult UpdateUsuario(Usuario usuarioModificado)
+    public IActionResult UpdateUsuario(ModificarUsuarioViewModel usuarioModificadoVM)
     {
+        Usuario usuarioModificado = new Usuario(usuarioModificadoVM.NombreDeUsuario, usuarioModificadoVM.Contrasenia, usuarioModificadoVM.Rol);
         usuarioRepository.UpdateUsuario(usuarioModificado.Id, usuarioModificado);
         return RedirectToAction("ListarUsuarios");
     }

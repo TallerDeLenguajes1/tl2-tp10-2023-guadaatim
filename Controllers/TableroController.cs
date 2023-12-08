@@ -69,8 +69,9 @@ public class TableroController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateTablero(Tablero tableroNuevo)
+    public IActionResult CreateTablero(TableroViewModel tableroNuevoVM)
     {
+        Tablero tableroNuevo = new Tablero(tableroNuevoVM.IdUsuarioPropietario, tableroNuevoVM.Nombre, tableroNuevoVM.Descripcion);
         tableroRepository.CreateTablero(tableroNuevo);
         return RedirectToAction("ListarTableros");
     }
@@ -90,9 +91,10 @@ public class TableroController : Controller
     }
 
     [HttpPost]
-    public IActionResult UpdateTablero(Tablero tableroModificado)
+    public IActionResult UpdateTablero(ModificarTableroViewModel tableroModificadoVM)
     {
-        tableroRepository.UpdateTablero(tableroModificado.Id, tableroModificado);
+        Tablero tableroModificado = new Tablero(tableroModificadoVM.IdUsuarioPropietario, tableroModificadoVM.Nombre, tableroModificadoVM.Descripcion);
+        tableroRepository.UpdateTablero(tableroModificadoVM.Id, tableroModificado);
         return RedirectToAction("ListarTableros");
     }
 

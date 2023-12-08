@@ -56,9 +56,10 @@ public class TareaController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateTarea(Tarea tareaNueva)
+    public IActionResult CreateTarea(TareaViewModel tareaNuevaVM)
     {
-        tareaRepository.CreateTarea(1, tareaNueva);
+        Tarea tareaNueva = new Tarea(tareaNuevaVM.IdTablero, tareaNuevaVM.Nombre, tareaNuevaVM.Descripcion, tareaNuevaVM.Color, tareaNuevaVM.IdUsuarioAsignado, tareaNuevaVM.Estado);
+        tareaRepository.CreateTarea(tareaNuevaVM.IdTablero, tareaNueva);
         return RedirectToAction("ListarTareas");
     }
 
@@ -77,9 +78,10 @@ public class TareaController : Controller
     }
 
     [HttpPost]
-    public IActionResult UpdateTarea(Tarea tareaModificada)
+    public IActionResult UpdateTarea(ModificarTareaViewModel tareaModificadaVM)
     {
-        tareaRepository.UpdateTarea(tareaModificada.Id, tareaModificada);
+        Tarea tareaModificada = new Tarea(tareaModificadaVM.IdTablero, tareaModificadaVM.Nombre, tareaModificadaVM.Descripcion, tareaModificadaVM.Color, tareaModificadaVM.IdUsuarioAsignado, tareaModificadaVM.Estado);
+        tareaRepository.UpdateTarea(tareaModificadaVM.Id, tareaModificada);
         return RedirectToAction("ListarTareas");
     }
 
@@ -97,7 +99,7 @@ public class TareaController : Controller
     }
 
     [HttpPost]
-    public IActionResult DeleteTarea(Tarea tarea) //enviar solo el id??
+    public IActionResult DeleteTarea(Tarea tarea)
     {
         tareaRepository.DeleteTarea(tarea.Id);
         return RedirectToAction("ListarTareas");
