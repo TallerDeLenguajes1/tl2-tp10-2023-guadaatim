@@ -34,16 +34,22 @@ public class LoginController : Controller
     
     public IActionResult Login(Usuario usuario)
     {
-        List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
-        Usuario usuarioLoggeado = usuarios.FirstOrDefault(u => u.NombreDeUsuario == usuario.NombreDeUsuario && u.Contrasenia == usuario.Contrasenia);
-
-        if (usuarioLoggeado == null)
+        if(!ModelState.IsValid)
         {
-            return RedirectToAction("Error");
+            return RedirectToRoute(new { controller = "Home", action = "Index"});   
         } else
         {
-            loggearUsuario(usuarioLoggeado);
-            return RedirectToRoute(new { controller = "Home", action = "Index"});
+            List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
+            Usuario usuarioLoggeado = usuarios.FirstOrDefault(u => u.NombreDeUsuario == usuario.NombreDeUsuario && u.Contrasenia == usuario.Contrasenia);
+
+            if (usuarioLoggeado == null)
+            {
+                return RedirectToAction("Error");
+            } else
+            {
+                loggearUsuario(usuarioLoggeado);
+                return RedirectToRoute(new { controller = "Home", action = "Index"});
+            }
         }
     }
 
