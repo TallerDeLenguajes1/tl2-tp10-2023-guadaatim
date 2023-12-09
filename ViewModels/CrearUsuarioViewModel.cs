@@ -27,8 +27,7 @@ public class CrearUsuarioViewModel
     public string NombreDeUsuario { get => nombreDeUsuario; set => nombreDeUsuario = value; }
     
     [Required(ErrorMessage = "Complete el campo")]
-    [MaxLength(16, ErrorMessage = "La contraseña puede tener hasta 16 caracteres")]
-    //[Range(8, 16, ErrorMessage = "La contreseña debe tener entre 8 y 16 caracteres")]
+    [StringLength(16, ErrorMessage = "La contraseña debe tener entre 8 y 16 caracteres"), MinLength(8)]
     [Display(Name = "Contraseña")]
     [PasswordPropertyText]
     public string Contrasenia { get => contrasenia; set => contrasenia = value; }
