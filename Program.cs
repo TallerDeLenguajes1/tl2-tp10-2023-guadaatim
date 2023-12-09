@@ -13,7 +13,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-var CadenaDeConexion = builder.Configuration.GetConnectionString("SqliteCoexion");
+var CadenaDeConexion = builder.Configuration.GetConnectionString("SqliteConexion")!.ToString();
 builder.Services.AddSingleton<string>(CadenaDeConexion);
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
