@@ -3,8 +3,6 @@
 @model TableroViewModel
 
 <form asp-controller="Tablero" asp-action="CreateTablero">
-    <label asp-for="@Model.Id">id</label>
-        <input asp-for="@Model.Id">
     <label asp-for="@Model.IdUsuarioPropietario">id usuario propietario</label>
         <input asp-for="@Model.IdUsuarioPropietario">
     <label asp-for="@Model.Nombre">Nombre</label>
@@ -13,3 +11,5 @@
         <input asp-for="@Model.Descripcion">
     <button type="submit">Crear Tablero</button>
 </form>
+
+@section Scripts {<partial name="_ValidationScriptsPartial"/>}

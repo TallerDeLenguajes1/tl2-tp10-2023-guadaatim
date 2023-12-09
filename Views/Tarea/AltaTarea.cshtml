@@ -3,8 +3,6 @@
 @model TareaViewModel
 
 <form asp-controller="Tarea" asp-action="CreateTarea">
-    <label asp-for="@Model.Id">Id</label>
-        <input asp-for="@Model.Id">
     <label asp-for="@Model.IdTablero">Id Tablero</label>
         <input asp-for="@Model.IdTablero">
     <label asp-for="@Model.Nombre">Nombre</label>
@@ -19,3 +17,5 @@
         <input asp-for="@Model.Estado">
     <button type="submit">Crear Tarea</button>
 </form>
+
+@section Scripts {<partial name="_ValidationScriptsPartial"/>} 
