@@ -10,13 +10,13 @@ namespace Kanban.Controllers;
 
 public class TareaController : Controller
 {
-    private ITareaRepository tareaRepository;
+    private ITareaRepository _tareaRepository;
     private ILogger<TareaController> _logger;
 
-    public TareaController(ILogger<TareaController> logger)
+    public TareaController(ILogger<TareaController> logger, ITareaRepository tareaRepository)
     {
         _logger = logger;
-        tareaRepository = new TareaRepository();
+        _tareaRepository = tareaRepository;
     }
 
     public IActionResult Index()
@@ -34,11 +34,11 @@ public class TareaController : Controller
     {
         if(isAdmin())
         {
-            ListarTareasViewModel tareas = new ListarTareasViewModel(tareaRepository.GetAllTareas());
+            ListarTareasViewModel tareas = new ListarTareasViewModel(_tareaRepository.GetAllTareas());
             return View(tareas);
         } else
         {
-            ListarTareasViewModel tareas = new ListarTareasViewModel(tareaRepository.GetAllTareasByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)));
+            ListarTareasViewModel tareas = new ListarTareasViewModel(_tareaRepository.GetAllTareasByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)));
             return View(tareas);
         }
     }
@@ -64,7 +64,7 @@ public class TareaController : Controller
         } else
         {
             Tarea tareaNueva = new Tarea(tareaNuevaVM.IdTablero, tareaNuevaVM.Nombre, tareaNuevaVM.Descripcion, tareaNuevaVM.Color, tareaNuevaVM.IdUsuarioAsignado, tareaNuevaVM.Estado);
-            tareaRepository.CreateTarea(tareaNuevaVM.IdTablero, tareaNueva);
+            _tareaRepository.CreateTarea(tareaNuevaVM.IdTablero, tareaNueva);
             return RedirectToAction("ListarTareas");
         }
     }
@@ -74,7 +74,7 @@ public class TareaController : Controller
     {
         if(isAdmin())
         {
-            Tarea tarea = tareaRepository.GetTareaById(idTarea);
+            Tarea tarea = _tareaRepository.GetTareaById(idTarea);
             return View(tarea);
         } else
         {
@@ -92,7 +92,7 @@ public class TareaController : Controller
         } else
         {
             Tarea tareaModificada = new Tarea(tareaModificadaVM.IdTablero, tareaModificadaVM.Nombre, tareaModificadaVM.Descripcion, tareaModificadaVM.Color, tareaModificadaVM.IdUsuarioAsignado, tareaModificadaVM.Estado);
-            tareaRepository.UpdateTarea(tareaModificadaVM.Id, tareaModificada);
+            _tareaRepository.UpdateTarea(tareaModificadaVM.Id, tareaModificada);
             return RedirectToAction("ListarTareas");
         }
     }
@@ -102,7 +102,7 @@ public class TareaController : Controller
     {
         if(isAdmin())
         {
-           Tarea tarea = tareaRepository.GetTareaById(idTarea);
+           Tarea tarea = _tareaRepository.GetTareaById(idTarea);
             return View(tarea); 
         } else
         {
@@ -113,7 +113,7 @@ public class TareaController : Controller
     [HttpPost]
     public IActionResult DeleteTarea(Tarea tarea)
     {
-        tareaRepository.DeleteTarea(tarea.Id);
+        _tareaRepository.DeleteTarea(tarea.Id);
         return RedirectToAction("ListarTareas");
     }
 

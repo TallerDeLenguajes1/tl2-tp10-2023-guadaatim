@@ -1,15 +1,24 @@
+using Kanban.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddDistributedMemoryCache();
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromSeconds(300);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+var CadenaDeConexion = builder.Configuration.GetConnectionString("SqliteCoexion");
+builder.Services.AddSingleton<string>(CadenaDeConexion);
+
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<ITareaRepository, TareaRepository>();
+builder.Services.AddScoped<ITableroRepository, TableroRepository>();
 
 var app = builder.Build();
 
@@ -25,10 +34,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

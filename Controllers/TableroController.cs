@@ -10,13 +10,13 @@ namespace Kanban.Controllers;
 
 public class TableroController : Controller
 {
-    private ITableroRepository tableroRepository;
+    private ITableroRepository _tableroRepository;
     private readonly ILogger<TableroController> _logger;
 
-    public TableroController(ILogger<TableroController> logger)
+    public TableroController(ILogger<TableroController> logger, ITableroRepository tableroRepository)
     {
         _logger = logger;
-        tableroRepository = new TableroRepository();
+        _tableroRepository = tableroRepository;
     }
 
     public IActionResult Index()
@@ -32,7 +32,7 @@ public class TableroController : Controller
     [HttpGet]
     public IActionResult ListarTableros()
     {
-        ListarTablerosViewModel tableros = new ListarTablerosViewModel(tableroRepository.GetAllTableros());
+        ListarTablerosViewModel tableros = new ListarTablerosViewModel(_tableroRepository.GetAllTableros());
         
         if(isAdmin())
         {
@@ -47,7 +47,7 @@ public class TableroController : Controller
         {
             if (HttpContext.Session.GetString("Rol") == "Operador")
             {
-                tableros = new ListarTablerosViewModel(tableroRepository.GetTableroByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)));
+                tableros = new ListarTablerosViewModel(_tableroRepository.GetTableroByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)));
                 return View(tableros);
             } else
             {
@@ -77,7 +77,7 @@ public class TableroController : Controller
         } else
         {
             Tablero tableroNuevo = new Tablero(tableroNuevoVM.IdUsuarioPropietario, tableroNuevoVM.Nombre, tableroNuevoVM.Descripcion);
-            tableroRepository.CreateTablero(tableroNuevo);
+            _tableroRepository.CreateTablero(tableroNuevo);
             return RedirectToAction("ListarTableros");
         }
     }
@@ -87,7 +87,7 @@ public class TableroController : Controller
     {
         if (isAdmin())
         {
-            TableroViewModel tablero = new TableroViewModel(tableroRepository.GetTableroById(idTablero));
+            TableroViewModel tablero = new TableroViewModel(_tableroRepository.GetTableroById(idTablero));
             return View(tablero);
         } else
         {
@@ -105,7 +105,7 @@ public class TableroController : Controller
         } else 
         {
             Tablero tableroModificado = new Tablero(tableroModificadoVM.IdUsuarioPropietario, tableroModificadoVM.Nombre, tableroModificadoVM.Descripcion);
-            tableroRepository.UpdateTablero(tableroModificadoVM.Id, tableroModificado);
+            _tableroRepository.UpdateTablero(tableroModificadoVM.Id, tableroModificado);
             return RedirectToAction("ListarTableros");
         }
     }
@@ -115,7 +115,7 @@ public class TableroController : Controller
     {
         if (isAdmin())
         {
-            Tablero tablero = tableroRepository.GetTableroById(idTablero);
+            Tablero tablero = _tableroRepository.GetTableroById(idTablero);
             return View(tablero);
         } else
         {
@@ -126,7 +126,7 @@ public class TableroController : Controller
     [HttpPost]
     public IActionResult DeleteTablero(Tablero tablero)
     {
-        tableroRepository.DeleteTablero(tablero.Id);
+        _tableroRepository.DeleteTablero(tablero.Id);
         return RedirectToAction("ListarTableros");
     }
 

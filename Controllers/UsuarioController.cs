@@ -10,13 +10,13 @@ namespace Kanban.Controllers;
 
 public class UsuarioController : Controller
 {
-    private IUsuarioRepository usuarioRepository;
+    private IUsuarioRepository _usuarioRepository;
     private ILogger<UsuarioController> _logger;
 
-    public UsuarioController(ILogger<UsuarioController> logger)
+    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioRepository usuarioRepository)
     {
         _logger = logger;
-        usuarioRepository = new UsuarioRepository();
+        _usuarioRepository = usuarioRepository;
     }
 
     public IActionResult Index()
@@ -32,7 +32,7 @@ public class UsuarioController : Controller
     [HttpGet]
     public IActionResult ListarUsuarios()
     {
-        ListarUsuariosViewModel usuarios = new ListarUsuariosViewModel(usuarioRepository.GetAllUsuarios());
+        ListarUsuariosViewModel usuarios = new ListarUsuariosViewModel(_usuarioRepository.GetAllUsuarios());
 
         if (isAdmin())
         {
@@ -54,7 +54,7 @@ public class UsuarioController : Controller
     {
         //ListarUsuariosViewModel usuarios = new ListarUsuariosViewModel(usuarioRepository.GetAllUsuarios());
 
-        UsuarioViewModel usuario = new UsuarioViewModel(usuarioRepository.GetUsuarioById(Int32.Parse(HttpContext.Session.GetString("Id")!)));
+        UsuarioViewModel usuario = new UsuarioViewModel(_usuarioRepository.GetUsuarioById(Int32.Parse(HttpContext.Session.GetString("Id")!)));
 
         if(HttpContext.Session.GetString("Rol") == "Operador")
         {
@@ -86,7 +86,7 @@ public class UsuarioController : Controller
         } else 
         {
             Usuario usuarioNuevo = new Usuario(usuarioNuevoVM.NombreDeUsuario, usuarioNuevoVM.Contrasenia, usuarioNuevoVM.Rol);
-            usuarioRepository.CreateUsuario(usuarioNuevo);
+            _usuarioRepository.CreateUsuario(usuarioNuevo);
             return RedirectToAction("ListarUsuarios");
         }
         
@@ -97,7 +97,7 @@ public class UsuarioController : Controller
     {
         if(isAdmin())
         {
-            ModificarUsuarioViewModel usuario = new ModificarUsuarioViewModel(usuarioRepository.GetUsuarioById(idUsuario));
+            ModificarUsuarioViewModel usuario = new ModificarUsuarioViewModel(_usuarioRepository.GetUsuarioById(idUsuario));
             return View(usuario);
         } else
         {
@@ -114,7 +114,7 @@ public class UsuarioController : Controller
         } else
         {
             Usuario usuarioModificado = new Usuario(usuarioModificadoVM.NombreDeUsuario, usuarioModificadoVM.Contrasenia, usuarioModificadoVM.Rol);
-            usuarioRepository.UpdateUsuario(usuarioModificado.Id, usuarioModificado);
+            _usuarioRepository.UpdateUsuario(usuarioModificado.Id, usuarioModificado);
             return RedirectToAction("ListarUsuarios");
         }
     }
@@ -124,7 +124,7 @@ public class UsuarioController : Controller
     {
         if(isAdmin())
         {
-            Usuario usuario = usuarioRepository.GetUsuarioById(idUsuario);
+            Usuario usuario = _usuarioRepository.GetUsuarioById(idUsuario);
             return View(usuario);
         } else
         {
@@ -135,7 +135,7 @@ public class UsuarioController : Controller
     [HttpPost]
     public IActionResult DeleteUsuario(Usuario usuario)
     {
-        usuarioRepository.DeleteUsuario(usuario.Id);
+        _usuarioRepository.DeleteUsuario(usuario.Id);
         return RedirectToAction("ListarUsuarios");
     }
 

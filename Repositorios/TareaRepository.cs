@@ -4,7 +4,12 @@ namespace Kanban.Repository;
 
 public class TareaRepository : ITareaRepository
 {
-    private string cadenaConexion = "Data Source=DB/kanban.db;Cache=Shared";
+    private string cadenaConexion;
+
+    public TareaRepository(string CadenaDeConexion)
+    {
+        cadenaConexion = CadenaDeConexion;
+    }
 
     public void CreateTarea(int idTablero, Tarea tarea) 
     {

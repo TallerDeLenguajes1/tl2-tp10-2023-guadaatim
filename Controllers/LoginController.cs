@@ -12,12 +12,12 @@ namespace Kanban.Controllers;
 public class LoginController : Controller
 {
     private readonly ILogger<LoginController> _logger;
-    private IUsuarioRepository usuarioRepository;
+    private IUsuarioRepository _usuarioRepository;
 
-    public LoginController(ILogger<LoginController> logger)
+    public LoginController(ILogger<LoginController> logger, IUsuarioRepository usuarioRepository)
     {
         _logger = logger;
-        usuarioRepository = new UsuarioRepository();
+        _usuarioRepository = usuarioRepository;
     }
 
     public IActionResult Index()
@@ -34,7 +34,7 @@ public class LoginController : Controller
     
     public IActionResult Login(Usuario usuario)
     {
-        List<Usuario> usuarios = usuarioRepository.GetAllUsuarios();
+        List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
         Usuario usuarioLoggeado = usuarios.FirstOrDefault(u => u.NombreDeUsuario == usuario.NombreDeUsuario && u.Contrasenia == usuario.Contrasenia);
 
         if (usuarioLoggeado == null)

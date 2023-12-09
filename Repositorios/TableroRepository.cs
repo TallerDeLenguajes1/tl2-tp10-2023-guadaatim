@@ -4,7 +4,12 @@ namespace Kanban.Repository;
 
 public class TableroRepository : ITableroRepository
 {
-    private string cadenaConexion = "Data Source=DB/kanban.db;Cache=Shared";
+    private string cadenaConexion;
+
+    public TableroRepository(string CadenaDeConexion)
+    {
+        cadenaConexion = CadenaDeConexion;
+    }
     
     public void CreateTablero(Tablero tablero)
     {

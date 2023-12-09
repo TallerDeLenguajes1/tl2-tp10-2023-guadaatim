@@ -4,7 +4,13 @@ namespace Kanban.Repository;
 
 public class UsuarioRepository : IUsuarioRepository
 {
-    private string cadenaConexion = "Data Source=DB/kanban.db;Cache=Shared";
+    private string cadenaConexion;
+    
+    public UsuarioRepository(string CadenaDeConexion)
+    {
+        cadenaConexion = CadenaDeConexion;
+    }
+
     public void CreateUsuario(Usuario usuarioNuevo)
     {
         var queryString = @"INSERT INTO Usuario (nombre_de_usuario, contrasenia, rol) VALUES(@nombre, @contrasenia, @rol);";
