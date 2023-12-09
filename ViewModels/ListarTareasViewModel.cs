@@ -14,6 +14,8 @@ public class ListarTareasViewModel
 
     public ListarTareasViewModel(List<Tarea> tareas)
     {
+        tareasVM = new List<TareaViewModel>();
+        
         foreach (var t in tareas)
         {
             TareaViewModel tarea = new TareaViewModel(t);

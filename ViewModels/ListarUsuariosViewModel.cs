@@ -15,7 +15,7 @@ public class ListarUsuariosViewModel
         foreach (var usuario in usuarios)
         {
             UsuarioViewModel usuarioNuevo = new UsuarioViewModel(usuario);
-            UsuariosVM.Add(usuarioNuevo);
+            usuariosVM.Add(usuarioNuevo);
         }
     }
 
