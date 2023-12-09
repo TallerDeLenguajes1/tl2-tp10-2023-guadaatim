@@ -58,9 +58,15 @@ public class TareaController : Controller
     [HttpPost]
     public IActionResult CreateTarea(TareaViewModel tareaNuevaVM)
     {
-        Tarea tareaNueva = new Tarea(tareaNuevaVM.IdTablero, tareaNuevaVM.Nombre, tareaNuevaVM.Descripcion, tareaNuevaVM.Color, tareaNuevaVM.IdUsuarioAsignado, tareaNuevaVM.Estado);
-        tareaRepository.CreateTarea(tareaNuevaVM.IdTablero, tareaNueva);
-        return RedirectToAction("ListarTareas");
+        if(!ModelState.IsValid)
+        {
+            return RedirectToRoute(new {controller = "Home", action = "Index"});
+        } else
+        {
+            Tarea tareaNueva = new Tarea(tareaNuevaVM.IdTablero, tareaNuevaVM.Nombre, tareaNuevaVM.Descripcion, tareaNuevaVM.Color, tareaNuevaVM.IdUsuarioAsignado, tareaNuevaVM.Estado);
+            tareaRepository.CreateTarea(tareaNuevaVM.IdTablero, tareaNueva);
+            return RedirectToAction("ListarTareas");
+        }
     }
 
     [HttpGet]
@@ -80,9 +86,15 @@ public class TareaController : Controller
     [HttpPost]
     public IActionResult UpdateTarea(ModificarTareaViewModel tareaModificadaVM)
     {
-        Tarea tareaModificada = new Tarea(tareaModificadaVM.IdTablero, tareaModificadaVM.Nombre, tareaModificadaVM.Descripcion, tareaModificadaVM.Color, tareaModificadaVM.IdUsuarioAsignado, tareaModificadaVM.Estado);
-        tareaRepository.UpdateTarea(tareaModificadaVM.Id, tareaModificada);
-        return RedirectToAction("ListarTareas");
+        if(!ModelState.IsValid)
+        {
+            return RedirectToRoute(new {controller = "Home", action = "Index"});
+        } else
+        {
+            Tarea tareaModificada = new Tarea(tareaModificadaVM.IdTablero, tareaModificadaVM.Nombre, tareaModificadaVM.Descripcion, tareaModificadaVM.Color, tareaModificadaVM.IdUsuarioAsignado, tareaModificadaVM.Estado);
+            tareaRepository.UpdateTarea(tareaModificadaVM.Id, tareaModificada);
+            return RedirectToAction("ListarTareas");
+        }
     }
 
     [HttpGet]

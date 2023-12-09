@@ -71,9 +71,15 @@ public class TableroController : Controller
     [HttpPost]
     public IActionResult CreateTablero(TableroViewModel tableroNuevoVM)
     {
-        Tablero tableroNuevo = new Tablero(tableroNuevoVM.IdUsuarioPropietario, tableroNuevoVM.Nombre, tableroNuevoVM.Descripcion);
-        tableroRepository.CreateTablero(tableroNuevo);
-        return RedirectToAction("ListarTableros");
+        if(!ModelState.IsValid)
+        {
+            return RedirectToRoute(new {controller = "Home", action = "Index"});
+        } else
+        {
+            Tablero tableroNuevo = new Tablero(tableroNuevoVM.IdUsuarioPropietario, tableroNuevoVM.Nombre, tableroNuevoVM.Descripcion);
+            tableroRepository.CreateTablero(tableroNuevo);
+            return RedirectToAction("ListarTableros");
+        }
     }
 
     [HttpGet]
@@ -93,9 +99,15 @@ public class TableroController : Controller
     [HttpPost]
     public IActionResult UpdateTablero(ModificarTableroViewModel tableroModificadoVM)
     {
-        Tablero tableroModificado = new Tablero(tableroModificadoVM.IdUsuarioPropietario, tableroModificadoVM.Nombre, tableroModificadoVM.Descripcion);
-        tableroRepository.UpdateTablero(tableroModificadoVM.Id, tableroModificado);
-        return RedirectToAction("ListarTableros");
+        if(!ModelState.IsValid)
+        {
+            return RedirectToRoute(new {controller = "Home", action = "Index"});
+        } else 
+        {
+            Tablero tableroModificado = new Tablero(tableroModificadoVM.IdUsuarioPropietario, tableroModificadoVM.Nombre, tableroModificadoVM.Descripcion);
+            tableroRepository.UpdateTablero(tableroModificadoVM.Id, tableroModificado);
+            return RedirectToAction("ListarTableros");
+        }
     }
 
     [HttpGet]

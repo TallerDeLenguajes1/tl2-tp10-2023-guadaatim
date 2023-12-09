@@ -80,9 +80,16 @@ public class UsuarioController : Controller
     [HttpPost]
     public IActionResult CreateUsuario(CrearUsuarioViewModel usuarioNuevoVM)
     {
-        Usuario usuarioNuevo = new Usuario(usuarioNuevoVM.NombreDeUsuario, usuarioNuevoVM.Contrasenia, usuarioNuevoVM.Rol);
-        usuarioRepository.CreateUsuario(usuarioNuevo);
-        return RedirectToAction("ListarUsuarios");
+        if(!ModelState.IsValid)
+        {
+           return RedirectToRoute(new {controller = "Home", action = "Index"});
+        } else 
+        {
+            Usuario usuarioNuevo = new Usuario(usuarioNuevoVM.NombreDeUsuario, usuarioNuevoVM.Contrasenia, usuarioNuevoVM.Rol);
+            usuarioRepository.CreateUsuario(usuarioNuevo);
+            return RedirectToAction("ListarUsuarios");
+        }
+        
     }
 
     [HttpGet]
@@ -101,9 +108,15 @@ public class UsuarioController : Controller
     [HttpPost]
     public IActionResult UpdateUsuario(ModificarUsuarioViewModel usuarioModificadoVM)
     {
-        Usuario usuarioModificado = new Usuario(usuarioModificadoVM.NombreDeUsuario, usuarioModificadoVM.Contrasenia, usuarioModificadoVM.Rol);
-        usuarioRepository.UpdateUsuario(usuarioModificado.Id, usuarioModificado);
-        return RedirectToAction("ListarUsuarios");
+        if(!ModelState.IsValid)
+        {
+            return RedirectToRoute(new {controller = "Home", action = "Index"});
+        } else
+        {
+            Usuario usuarioModificado = new Usuario(usuarioModificadoVM.NombreDeUsuario, usuarioModificadoVM.Contrasenia, usuarioModificadoVM.Rol);
+            usuarioRepository.UpdateUsuario(usuarioModificado.Id, usuarioModificado);
+            return RedirectToAction("ListarUsuarios");
+        }
     }
 
     [HttpGet]
