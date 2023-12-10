@@ -34,22 +34,40 @@ public class LoginController : Controller
     
     public IActionResult Login(Usuario usuario)
     {
-        if(!ModelState.IsValid)
+        try
         {
-            return RedirectToRoute(new { controller = "Home", action = "Index"});   
-        } else
-        {
-            List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
-            Usuario usuarioLoggeado = usuarios.FirstOrDefault(u => u.NombreDeUsuario == usuario.NombreDeUsuario && u.Contrasenia == usuario.Contrasenia);
-
-            if (usuarioLoggeado == null)
+            if(!ModelState.IsValid)
             {
-                return RedirectToAction("Error");
+                return RedirectToRoute(new { controller = "Home", action = "Index"});   
             } else
             {
-                loggearUsuario(usuarioLoggeado);
-                return RedirectToRoute(new { controller = "Home", action = "Index"});
+                try
+                {
+                    List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
+                    Usuario usuarioLoggeado = usuarios.FirstOrDefault(u => u.NombreDeUsuario == usuario.NombreDeUsuario && u.Contrasenia == usuario.Contrasenia);
+
+                    if (usuarioLoggeado == null)
+                    {
+                        _logger.LogWarning("Intento de acceso invalido - Usuario: " + usuario.NombreDeUsuario + " - Clave ingresada: " + usuario.Contrasenia);
+                        return RedirectToAction("Index");
+                    } else
+                    {
+                        loggearUsuario(usuarioLoggeado);
+                        _logger.LogInformation("El usuario " + usuario.NombreDeUsuario + " ingreso correctamente!");
+                        return RedirectToRoute(new { controller = "Login", action = "Index"});
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.ToString());
+                    return RedirectToRoute(new { controller = "Login", action = "Index"});
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return RedirectToRoute(new { controller = "Login", action = "Index"});
         }
     }
 

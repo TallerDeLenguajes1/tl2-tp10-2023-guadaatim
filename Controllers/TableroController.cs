@@ -32,102 +32,157 @@ public class TableroController : Controller
     [HttpGet]
     public IActionResult ListarTableros()
     {
-        ListarTablerosViewModel tableros = new ListarTablerosViewModel(_tableroRepository.GetAllTableros());
+        try
+        {
+            ListarTablerosViewModel tableros = new ListarTablerosViewModel(_tableroRepository.GetAllTableros());
         
-        if(isAdmin())
-        {
-            if(tableros != null)
+            if(isAdmin())
             {
-                return View(tableros);
+                if(tableros != null)
+                {
+                    return View(tableros);
+                } else
+                {
+                    return NotFound();
+                }
             } else
             {
-                return NotFound();
+                if (HttpContext.Session.GetString("Rol") == "Operador")
+                {
+                    tableros = new ListarTablerosViewModel(_tableroRepository.GetTableroByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)));
+                    return View(tableros);
+                } else
+                {
+                    return NotFound();
+                }
             }
-        } else
+        }
+        catch (Exception ex)
         {
-            if (HttpContext.Session.GetString("Rol") == "Operador")
-            {
-                tableros = new ListarTablerosViewModel(_tableroRepository.GetTableroByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)));
-                return View(tableros);
-            } else
-            {
-                return NotFound();
-            }
+            _logger.LogError(ex.ToString());
+            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
         }
     }
 
     [HttpGet]
     public IActionResult AltaTablero()
     {
-        if (isAdmin())
+        try
         {
-            return View(new TableroViewModel());
-        } else
+            if (isAdmin())
+            {
+                return View(new TableroViewModel());
+            } else
+            {
+                return RedirectToRoute(new {controller = "Home", action = "Index"});
+            }
+        }
+        catch (Exception ex)
         {
-            return RedirectToRoute(new {controller = "Home", action = "Index"});
+            _logger.LogError(ex.ToString());
+            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
         }
     }
 
     [HttpPost]
     public IActionResult CreateTablero(TableroViewModel tableroNuevoVM)
     {
-        if(!ModelState.IsValid)
+        try
         {
-            return RedirectToRoute(new {controller = "Home", action = "Index"});
-        } else
+            if(!ModelState.IsValid)
+            {
+                return RedirectToRoute(new {controller = "Home", action = "Index"});
+            } else
+            {
+                Tablero tableroNuevo = new Tablero(tableroNuevoVM.IdUsuarioPropietario, tableroNuevoVM.Nombre, tableroNuevoVM.Descripcion);
+                _tableroRepository.CreateTablero(tableroNuevo);
+                return RedirectToAction("ListarTableros");
+            }
+        }
+        catch (Exception ex)
         {
-            Tablero tableroNuevo = new Tablero(tableroNuevoVM.IdUsuarioPropietario, tableroNuevoVM.Nombre, tableroNuevoVM.Descripcion);
-            _tableroRepository.CreateTablero(tableroNuevo);
-            return RedirectToAction("ListarTableros");
+            _logger.LogError(ex.ToString());
+            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
         }
     }
 
     [HttpGet]
     public IActionResult ModificarTablero(int idTablero)
     {
-        if (isAdmin())
+        try
         {
-            TableroViewModel tablero = new TableroViewModel(_tableroRepository.GetTableroById(idTablero));
-            return View(tablero);
-        } else
-        {
-            return RedirectToRoute(new {controller = "Home", action = "Index"});
+            if (isAdmin())
+            {
+                TableroViewModel tablero = new TableroViewModel(_tableroRepository.GetTableroById(idTablero));
+                return View(tablero);
+            } else
+            {
+                return RedirectToRoute(new {controller = "Home", action = "Index"});
+            }
         }
-        
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+        }
     }
 
     [HttpPost]
     public IActionResult UpdateTablero(ModificarTableroViewModel tableroModificadoVM)
     {
-        if(!ModelState.IsValid)
+        try
         {
-            return RedirectToRoute(new {controller = "Home", action = "Index"});
-        } else 
-        {
-            Tablero tableroModificado = new Tablero(tableroModificadoVM.IdUsuarioPropietario, tableroModificadoVM.Nombre, tableroModificadoVM.Descripcion);
-            _tableroRepository.UpdateTablero(tableroModificadoVM.Id, tableroModificado);
-            return RedirectToAction("ListarTableros");
+            if(!ModelState.IsValid)
+            {
+                return RedirectToRoute(new {controller = "Home", action = "Index"});
+            } else 
+            {
+                Tablero tableroModificado = new Tablero(tableroModificadoVM.IdUsuarioPropietario, tableroModificadoVM.Nombre, tableroModificadoVM.Descripcion);
+                _tableroRepository.UpdateTablero(tableroModificadoVM.Id, tableroModificado);
+                return RedirectToAction("ListarTableros");
+            }
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+        }      
     }
 
     [HttpGet]
     public IActionResult EliminarTablero(int idTablero)
     {
-        if (isAdmin())
+        try
         {
-            Tablero tablero = _tableroRepository.GetTableroById(idTablero);
-            return View(tablero);
-        } else
+            if (isAdmin())
+            {
+                Tablero tablero = _tableroRepository.GetTableroById(idTablero);
+                return View(tablero);
+            } else
+            {
+                return RedirectToRoute(new {controller = "Home", action = "Index"});
+            }
+        }
+        catch (Exception ex)
         {
-            return RedirectToRoute(new {controller = "Home", action = "Index"});
+            _logger.LogError(ex.ToString());
+            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
         }
     }
 
     [HttpPost]
     public IActionResult DeleteTablero(Tablero tablero)
     {
-        _tableroRepository.DeleteTablero(tablero.Id);
-        return RedirectToAction("ListarTableros");
+        try
+        {
+            _tableroRepository.DeleteTablero(tablero.Id);
+            return RedirectToAction("ListarTableros");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+        }
     }
 
     private bool isAdmin()
