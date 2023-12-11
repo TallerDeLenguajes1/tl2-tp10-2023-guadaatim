@@ -71,7 +71,13 @@ public class UsuarioRepository : IUsuarioRepository
             }
             connection.Close();
         }
-        return usuarios;
+        if (usuarios == null)
+        {
+            throw new Exception("La lista de usuarios esta vacia");
+        } else
+        {
+            return usuarios;
+        }
     }
     public Usuario GetUsuarioById(int idUsuario)
     {
@@ -96,7 +102,14 @@ public class UsuarioRepository : IUsuarioRepository
             }
         connection.Close();
         }
-        return usuario;
+
+        if(usuario == null)
+        {
+            throw new Exception("El usuario no existe");
+        } else
+        {
+            return usuario;
+        }
     }
     public void DeleteUsuario(int idUsuario)
     {

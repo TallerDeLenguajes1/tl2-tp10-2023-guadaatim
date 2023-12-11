@@ -34,7 +34,7 @@ public class TareaRepository : ITareaRepository
         }
     }
 
-     public void AsignarUsuario(int idUsuario, int idTarea)
+    public void AsignarUsuario(int idUsuario, int idTarea)
     {
         var queryString = @"UPDATE Tarea SET id_usuario_asignado = @idUsuario WHERE id = @idTarea;";
 
@@ -83,7 +83,14 @@ public class TareaRepository : ITareaRepository
             }
             connection.Close();
         }
-        return tareas;
+
+        if(tareas == null)
+        {
+            throw new Exception("La lista de tareas esta vacia");
+        } else
+        {
+            return tareas;
+        }
     }
 
     public List<Tarea> GetAllTareasByTablero(int idTablero)
@@ -120,7 +127,14 @@ public class TareaRepository : ITareaRepository
             }
             connection.Close();
         }
-        return tareas;
+
+        if (tareas == null)
+        {
+            throw new Exception("El tablero todavia no tiene tareas asignadas");
+        } else
+        {
+            return tareas;
+        }
     }
 
     public List<Tarea> GetAllTareasByUsuario(int idUsuario)
@@ -157,7 +171,14 @@ public class TareaRepository : ITareaRepository
             }
             connection.Close();
         }
-        return tareas;
+
+        if(tareas == null)
+        {
+            throw new Exception("El usuario todavia no tiene tareas asignadas");
+        } else
+        {
+            return tareas;
+        }
     }
 
     public Tarea GetTareaById(int idTarea)
@@ -192,7 +213,14 @@ public class TareaRepository : ITareaRepository
             }
             connection.Close();
         }
-        return tarea;
+
+        if(tarea == null)
+        {
+            throw new Exception("La tarea no existe");
+        } else
+        {
+            return tarea;
+        }
     }
 
     public void UpdateTarea(int idTarea, Tarea tareaModificar)

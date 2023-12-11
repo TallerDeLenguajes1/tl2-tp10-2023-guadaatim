@@ -55,7 +55,14 @@ public class TableroRepository : ITableroRepository
             }
             connection.Close();
         }
-        return tableros;
+
+        if(tableros == null)
+        {
+            throw new Exception("La lista de tableros esta vacia");
+        } else
+        {
+            return tableros;
+        }
     }
     
     public Tablero GetTableroById(int idTablero)
@@ -81,7 +88,14 @@ public class TableroRepository : ITableroRepository
             }
             connection.Close();
         }
-        return tablero;
+
+        if(tablero == null)
+        {
+            throw new Exception("El tablero no existe");
+        } else
+        {
+            return tablero;
+        }
     }
 
     public List<Tablero> GetTableroByUsuario(int idUsuario)
@@ -109,7 +123,14 @@ public class TableroRepository : ITableroRepository
             }
             connection.Close();
         }
-        return tableros;
+
+        if (tableros == null)
+        {
+            throw new Exception("El usuario todavia no tiene tableros asignados");
+        } else
+        {
+            return tableros;
+        }
     }
     
     public void UpdateTablero(int idTablero, Tablero tableroModificar)

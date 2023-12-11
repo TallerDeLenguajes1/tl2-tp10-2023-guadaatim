@@ -54,7 +54,7 @@ public class LoginController : Controller
                     {
                         loggearUsuario(usuarioLoggeado);
                         _logger.LogInformation("El usuario " + usuario.NombreDeUsuario + " ingreso correctamente!");
-                        return RedirectToRoute(new { controller = "Login", action = "Index"});
+                        return RedirectToRoute(new { controller = "Home", action = "Index"});
                     }
                 }
                 catch (Exception ex)
