@@ -1,3 +1,5 @@
+using Kanban.ViewModels;
+
 namespace Kanban.Models;
 
 public enum EstadoTarea
