@@ -8,8 +8,8 @@ namespace Kanban.ViewModels;
 public class CrearTableroViewModel
 {
     private int idUsuarioPropietario;
-    private string? nombre;
-    private string descripcion;
+    private string nombre;
+    private string? descripcion;
 
     public CrearTableroViewModel()
     {
@@ -29,10 +29,10 @@ public class CrearTableroViewModel
     [Required(ErrorMessage = "Complete el campo")]
     [MaxLength(10, ErrorMessage = "El nombre debe tener hasta 10 caracteres")]
     [Display(Name = "Nombre")]
-    public string? Nombre { get => nombre; set => nombre = value; }
+    public string Nombre { get => nombre; set => nombre = value; }
 
-    [Required(ErrorMessage = "Complete el campo")]
+    //[Required(ErrorMessage = "Complete el campo")]
     [MaxLength(50, ErrorMessage = "La descripcion debe tener hasta 50 caracteres")]
     [Display(Name = "Descripcion")]
-    public string Descripcion { get => descripcion; set => descripcion = value; }
+    public string? Descripcion { get => descripcion; set => descripcion = value; }
 }

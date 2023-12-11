@@ -10,8 +10,8 @@ public class TareaViewModel
     private int idTablero;
     private string nombre;
     private EstadoTarea estado;
-    private string descripcion;
-    private string color;
+    private string? descripcion;
+    private string? color;
     private int idUsuarioAsignado;
 
     public TareaViewModel()

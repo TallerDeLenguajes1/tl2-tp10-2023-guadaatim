@@ -9,9 +9,9 @@ public class CrearTareaViewModel
     private int idTablero;
     private string nombre;
     private EstadoTarea estado;
-    private string descripcion;
-    private string color;
-    private int idUsuarioAsignado;
+    private string? descripcion;
+    private string? color;
+    private int? idUsuarioAsignado;
 
     public CrearTareaViewModel()
     {
@@ -41,12 +41,12 @@ public class CrearTareaViewModel
     
     [MaxLength(50, ErrorMessage = "La descripcion debe tener hasta 50 caracteres")]
     [Display(Name = "Descripcion")]
-    public string Descripcion { get => descripcion; set => descripcion = value; }
+    public string? Descripcion { get => descripcion; set => descripcion = value; }
 
     [Display(Name = "Color")]
-    public string Color { get => color; set => color = value; }
+    public string? Color { get => color; set => color = value; }
 
-    [Required(ErrorMessage = "Complete el campo")]
+    //[Required(ErrorMessage = "Complete el campo")]
     [Display(Name = "Id Usuario Asignado")]
-    public int IdUsuarioAsignado { get => idUsuarioAsignado; set => idUsuarioAsignado = value; }
+    public int? IdUsuarioAsignado { get => idUsuarioAsignado; set => idUsuarioAsignado = value; }
 }

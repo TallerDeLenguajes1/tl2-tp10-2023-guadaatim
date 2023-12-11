@@ -8,8 +8,8 @@ public class ModificarTableroViewModel
 {
     private int id;
     private int idUsuarioPropietario;
-    private string? nombre;
-    private string descripcion;
+    private string nombre;
+    private string? descripcion;
 
     public ModificarTableroViewModel()
     {
@@ -35,10 +35,10 @@ public class ModificarTableroViewModel
     [Required(ErrorMessage = "Este campo no puede estar vacio")]
     [MaxLength(10, ErrorMessage = "El nombre debe tener hasta 10 caracteres")]
     [Display(Name = "Nombre")]
-    public string? Nombre { get => nombre; set => nombre = value; }
+    public string Nombre { get => nombre; set => nombre = value; }
 
-    [Required(ErrorMessage = "Este campo no puede estar vacio")]
+    //[Required(ErrorMessage = "Este campo no puede estar vacio")]
     [MaxLength(50, ErrorMessage = "La descripcion debe tener hasta 50 caracteres")]
     [Display(Name = "Descripcion")]
-    public string Descripcion { get => descripcion; set => descripcion = value; }
+    public string? Descripcion { get => descripcion; set => descripcion = value; }
 }

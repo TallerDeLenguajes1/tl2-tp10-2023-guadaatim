@@ -5,14 +5,14 @@ using Kanban.Models;
 namespace Kanban.ViewModels;
 
 public class ModificarTareaViewModel
-{
+{ //idusuario acepta null??
     private int id;
     private int idTablero;
     private string nombre;
     private EstadoTarea estado;
-    private string descripcion;
-    private string color;
-    private int idUsuarioAsignado;
+    private string? descripcion;
+    private string? color;
+    private int? idUsuarioAsignado;
 
     public ModificarTareaViewModel()
     {
@@ -45,16 +45,16 @@ public class ModificarTareaViewModel
     [Display(Name = "Estado Tarea")]
     public EstadoTarea Estado { get => estado; set => estado = value; }
 
-    [Required(ErrorMessage = "Este campo no puede estar vacio")]
+    //[Required(ErrorMessage = "Este campo no puede estar vacio")]
     [MaxLength(50, ErrorMessage = "La descripcion debe tener hasta 50 caracteres")]
     [Display(Name = "Descripcion")]
     public string Descripcion { get => descripcion; set => descripcion = value; }
 
-    [Required(ErrorMessage = "Este campo no puede estar vacio")]
+    //[Required(ErrorMessage = "Este campo no puede estar vacio")]
     [Display(Name = "Color")]
     public string Color { get => color; set => color = value; }
 
     [Required(ErrorMessage = "Este campo no puede estar vacio")]
     [Display(Name = "Id Usuario Asignado")]
-    public int IdUsuarioAsignado { get => idUsuarioAsignado; set => idUsuarioAsignado = value; }
+    public int? IdUsuarioAsignado { get => idUsuarioAsignado; set => idUsuarioAsignado = value; }
 }
