@@ -71,7 +71,7 @@ public class TableroController : Controller
         {
             if (isAdmin())
             {
-                return View(new TableroViewModel());
+                return View(new CrearTableroViewModel());
             } else
             {
                 return RedirectToRoute(new {controller = "Home", action = "Index"});
@@ -85,7 +85,7 @@ public class TableroController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateTablero(TableroViewModel tableroNuevoVM)
+    public IActionResult CreateTablero(CrearTableroViewModel tableroNuevoVM)
     {
         try
         {

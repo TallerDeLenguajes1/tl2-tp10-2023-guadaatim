@@ -58,7 +58,7 @@ public class TareaController : Controller
         {
             if(isAdmin())
             {
-                return View(new TareaViewModel());
+                return View(new CrearTareaViewModel());
             } else
             {
                 return RedirectToRoute(new {controller = "Home", action = "Index"});
@@ -72,7 +72,7 @@ public class TareaController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateTarea(TareaViewModel tareaNuevaVM)
+    public IActionResult CreateTarea(CrearTareaViewModel tareaNuevaVM)
     {
         try
         {
@@ -81,7 +81,7 @@ public class TareaController : Controller
                 return RedirectToRoute(new {controller = "Home", action = "Index"});
             } else
             {
-                Tarea tareaNueva = new Tarea(tareaNuevaVM.IdTablero, tareaNuevaVM.Nombre, tareaNuevaVM.Descripcion, tareaNuevaVM.Color, tareaNuevaVM.IdUsuarioAsignado, tareaNuevaVM.Estado);
+                Tarea tareaNueva = new Tarea(tareaNuevaVM.IdTablero, tareaNuevaVM.Nombre, tareaNuevaVM.Descripcion, tareaNuevaVM.Color, tareaNuevaVM.IdUsuarioAsignado.GetValueOrDefault(), tareaNuevaVM.Estado);
                 _tareaRepository.CreateTarea(tareaNuevaVM.IdTablero, tareaNueva);
                 return RedirectToAction("ListarTareas");
             } 
@@ -124,7 +124,7 @@ public class TareaController : Controller
                 return RedirectToRoute(new {controller = "Home", action = "Index"});
             } else
             {
-                Tarea tareaModificada = new Tarea(tareaModificadaVM.IdTablero, tareaModificadaVM.Nombre, tareaModificadaVM.Descripcion, tareaModificadaVM.Color, tareaModificadaVM.IdUsuarioAsignado, tareaModificadaVM.Estado);
+                Tarea tareaModificada = new Tarea(tareaModificadaVM.IdTablero, tareaModificadaVM.Nombre, tareaModificadaVM.Descripcion, tareaModificadaVM.Color,tareaModificadaVM.IdUsuarioAsignado.GetValueOrDefault(), tareaModificadaVM.Estado);
                 _tareaRepository.UpdateTarea(tareaModificadaVM.Id, tareaModificada);
                 return RedirectToAction("ListarTareas");
             }
