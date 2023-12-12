@@ -40,7 +40,7 @@ public class UsuarioController : Controller
             {
                 return View(usuarios);
             } else
-            { // otro try catch ??
+            {
                 if (HttpContext.Session.GetString("Rol") == "Operador")
                 {
                     return RedirectToAction("ListarUsuariosOperador");
@@ -79,7 +79,7 @@ public class UsuarioController : Controller
         }
     }
 
-    [HttpGet] //donde va si no es admin
+    [HttpGet]
     public IActionResult AltaUsuario()
     {
         try
@@ -106,14 +106,14 @@ public class UsuarioController : Controller
         {
             if(!ModelState.IsValid)
             {
-            return RedirectToRoute(new {controller = "Home", action = "Index"});
+                return RedirectToRoute(new {controller = "Home", action = "Index"});
             } else 
             {
                 Usuario usuarioNuevo = new Usuario(usuarioNuevoVM.NombreDeUsuario, usuarioNuevoVM.Contrasenia, usuarioNuevoVM.Rol);
                 _usuarioRepository.CreateUsuario(usuarioNuevo);
                 return RedirectToAction("ListarUsuarios");
             }
-        } // esta bien los try catch??
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());

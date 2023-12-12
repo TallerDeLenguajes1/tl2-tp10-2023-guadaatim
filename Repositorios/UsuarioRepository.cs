@@ -82,7 +82,7 @@ public class UsuarioRepository : IUsuarioRepository
     public Usuario GetUsuarioById(int idUsuario)
     {
         var queryString = @"SELECT * FROM Usuario WHERE id = @idUsuario;";
-        Usuario usuario = new Usuario();
+        Usuario usuario = null;
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
@@ -94,6 +94,7 @@ public class UsuarioRepository : IUsuarioRepository
             {
                 while (reader.Read())
                 {
+                    usuario = new Usuario();
                     usuario.Id = Convert.ToInt32(reader["id"]);
                     usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
                     usuario.Contrasenia = reader["contrasenia"].ToString();

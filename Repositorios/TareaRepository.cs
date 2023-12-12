@@ -83,7 +83,7 @@ public class TareaRepository : ITareaRepository
             }
             connection.Close();
         }
-
+        //CONTROLARRRRR
         if(tareas == null)
         {
             throw new Exception("La lista de tareas esta vacia");
@@ -127,7 +127,7 @@ public class TareaRepository : ITareaRepository
             }
             connection.Close();
         }
-
+    
         if (tareas == null)
         {
             throw new Exception("El tablero todavia no tiene tareas asignadas");
