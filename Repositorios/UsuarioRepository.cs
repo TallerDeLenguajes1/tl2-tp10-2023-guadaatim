@@ -28,7 +28,37 @@ public class UsuarioRepository : IUsuarioRepository
             connection.Close();
         }
     }
-    public void UpdateUsuario(int idUsuario, Usuario usuarioModificar)
+
+    public bool ExisteUsuario(string nombreUsuario)
+    {
+        var queryString = @"SELECT COUNT(id) as existe FROM Usuario WHERE nombre_de_usuario = @nombreUsuario;";
+        bool existe = false;
+
+        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+
+            command.Parameters.Add(new SQLiteParameter("@nombreUsuario", nombreUsuario));
+
+            using(SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int contador = Convert.ToInt32(reader["existe"]);
+
+                    if (contador == 1)
+                    {
+                        existe = true;
+                    }
+                }
+            }
+            connection.Close();
+        }
+        return existe;
+    }
+
+    public void UpdateUsuario(Usuario usuarioModificar)
     {
         var queryString = @"UPDATE Usuario SET nombre_de_usuario = @nombre, contrasenia = @contrasenia, rol = @rol WHERE id = @idUsuario;";
 
@@ -37,7 +67,7 @@ public class UsuarioRepository : IUsuarioRepository
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
 
-            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", usuarioModificar.Id));
             command.Parameters.Add(new SQLiteParameter("@nombre", usuarioModificar.NombreDeUsuario));
             command.Parameters.Add(new SQLiteParameter("@contrasenia", usuarioModificar.Contrasenia));
             command.Parameters.Add(new SQLiteParameter("@rol", usuarioModificar.Rol));
@@ -50,7 +80,7 @@ public class UsuarioRepository : IUsuarioRepository
     public List<Usuario> GetAllUsuarios()
     {
         var queryString = @"SELECT * FROM Usuario;";
-        List<Usuario> usuarios = new List<Usuario>();
+        List<Usuario> usuarios = null;
         
         using(SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
@@ -61,6 +91,10 @@ public class UsuarioRepository : IUsuarioRepository
             {
                 while(reader.Read())
                 {
+                    if(usuarios == null)
+                    {
+                        usuarios = new List<Usuario>();
+                    }
                     Usuario usuario = new Usuario();
                     usuario.Id = Convert.ToInt32(reader["id"]);
                     usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
@@ -79,6 +113,40 @@ public class UsuarioRepository : IUsuarioRepository
             return usuarios;
         }
     }
+    public Usuario GetUsuarioByNombre(string nombreUsuario)
+    {
+        var queryString = @"SELECT * FROM Usuario WHERE nombre_de_usuario = @nombreUsuario;";
+        Usuario usuario = null;
+
+        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        {
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+            connection.Open();
+            command.Parameters.Add(new SQLiteParameter("@nombreUsuario", nombreUsuario));
+
+            using (SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    usuario = new Usuario();
+                    usuario.Id = Convert.ToInt32(reader["id"]);
+                    usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
+                    usuario.Contrasenia = reader["contrasenia"].ToString();
+                    usuario.Rol = (Rol)Convert.ToInt32(reader["rol"]);
+                }
+            }
+            connection.Close();
+        }
+
+        if(usuario == null)
+        {
+            throw new Exception("El usuario no existe");
+        } else
+        {
+            return usuario;
+        }
+    }
+
     public Usuario GetUsuarioById(int idUsuario)
     {
         var queryString = @"SELECT * FROM Usuario WHERE id = @idUsuario;";
@@ -101,7 +169,7 @@ public class UsuarioRepository : IUsuarioRepository
                     usuario.Rol = (Rol)Convert.ToInt32(reader["rol"]);
                 }
             }
-        connection.Close();
+            connection.Close();
         }
 
         if(usuario == null)
@@ -112,6 +180,7 @@ public class UsuarioRepository : IUsuarioRepository
             return usuario;
         }
     }
+
     public void DeleteUsuario(int idUsuario)
     {
         var queryString = @"DELETE FROM Usuario WHERE id = @idUsuario;";

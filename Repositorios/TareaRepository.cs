@@ -40,8 +40,8 @@ public class TareaRepository : ITareaRepository
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
-            SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
 
             command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
             command.Parameters.Add(new SQLiteParameter("@idTarea", idTarea));
@@ -53,7 +53,7 @@ public class TareaRepository : ITareaRepository
     public List<Tarea> GetAllTareas()
     {
         var queryString = @"SELECT * FROM Tarea;";
-        List<Tarea> tareas = new List<Tarea>();
+        List<Tarea> tareas = null;
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
@@ -64,6 +64,10 @@ public class TareaRepository : ITareaRepository
             {
                 while (reader.Read())
                 {
+                    if(tareas == null)
+                    {
+                        tareas = new List<Tarea>();
+                    }
                     Tarea tarea = new Tarea();
                     tarea.Id = Convert.ToInt32(reader["id"]);
                     tarea.IdTablero = Convert.ToInt32(reader["id_tablero"]);
@@ -83,7 +87,7 @@ public class TareaRepository : ITareaRepository
             }
             connection.Close();
         }
-        //CONTROLARRRRR
+
         if(tareas == null)
         {
             throw new Exception("La lista de tareas esta vacia");
@@ -96,7 +100,7 @@ public class TareaRepository : ITareaRepository
     public List<Tarea> GetAllTareasByTablero(int idTablero)
     {
         var queryString = @"SELECT * FROM Tarea WHERE id_tablero = @idTablero;";
-        List<Tarea> tareas = new List<Tarea>();
+        List<Tarea> tareas = null;
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
@@ -108,6 +112,10 @@ public class TareaRepository : ITareaRepository
             {
                 while (reader.Read())
                 {
+                    if(tareas == null)
+                    {
+                        tareas = new List<Tarea>();
+                    }
                     Tarea tarea = new Tarea();
                     tarea.Id = Convert.ToInt32(reader["id"]);
                     tarea.IdTablero = Convert.ToInt32(reader["id_tablero"]);
@@ -140,7 +148,7 @@ public class TareaRepository : ITareaRepository
     public List<Tarea> GetAllTareasByUsuario(int idUsuario)
     {
         var queryString = @"SELECT * FROM Tarea WHERE id_usuario_asignado = @idUsuario;";
-        List<Tarea> tareas = new List<Tarea>();
+        List<Tarea> tareas = null;
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
@@ -152,6 +160,10 @@ public class TareaRepository : ITareaRepository
             {
                 while (reader.Read())
                 {
+                    if (tareas == null)
+                    {
+                        tareas = new List<Tarea>();                        
+                    }
                     Tarea tarea = new Tarea();
                     tarea.Id = Convert.ToInt32(reader["id"]);
                     tarea.IdTablero = Convert.ToInt32(reader["id_tablero"]);
@@ -184,7 +196,7 @@ public class TareaRepository : ITareaRepository
     public Tarea GetTareaById(int idTarea)
     {
         var queryString = @"SELECT * FROM Tarea WHERE id = @idTarea;";
-        Tarea tarea = new Tarea();
+        Tarea tarea = null;
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
@@ -196,6 +208,7 @@ public class TareaRepository : ITareaRepository
             {
                 while (reader.Read())
                 {
+                    tarea = new Tarea();
                     tarea.Id = Convert.ToInt32(reader["id"]);
                     tarea.IdTablero = Convert.ToInt32(reader["id_tablero"]);
                     tarea.Nombre = reader["nombre"].ToString();
@@ -223,7 +236,7 @@ public class TareaRepository : ITareaRepository
         }
     }
 
-    public void UpdateTarea(int idTarea, Tarea tareaModificar)
+    public void UpdateTarea(Tarea tareaModificar)
     {
         var queryString = @"UPDATE Tarea SET nombre = @nombre, estado = @estado, descripcion = @descripcion, color = @color, id_usuario_asignado = @idUsuarioAsignado
         WHERE id = @idTarea;";
@@ -233,7 +246,7 @@ public class TareaRepository : ITareaRepository
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
 
-            command.Parameters.Add(new SQLiteParameter("@idTarea", idTarea));
+            command.Parameters.Add(new SQLiteParameter("@idTarea", tareaModificar.Id));
             command.Parameters.Add(new SQLiteParameter("@nombre", tareaModificar.Nombre));
             command.Parameters.Add(new SQLiteParameter("@estado", tareaModificar.Estado));
             command.Parameters.Add(new SQLiteParameter("@descripcion", tareaModificar.Descripcion));

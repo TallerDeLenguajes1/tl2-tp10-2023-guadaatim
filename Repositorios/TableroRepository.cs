@@ -34,7 +34,7 @@ public class TableroRepository : ITableroRepository
     public List<Tablero> GetAllTableros()
     {
         var queryString = @"SELECT * FROM Tablero;";
-        List<Tablero> tableros = new List<Tablero>();
+        List<Tablero> tableros = null;
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
@@ -45,6 +45,10 @@ public class TableroRepository : ITableroRepository
             {
                 while (reader.Read())
                 {
+                    if (tableros == null)
+                    {
+                        tableros = new List<Tablero>();
+                    }
                     Tablero tablero = new Tablero();
                     tablero.Id = Convert.ToInt32(reader["id"]);
                     tablero.Nombre = reader["nombre"].ToString();
@@ -68,7 +72,7 @@ public class TableroRepository : ITableroRepository
     public Tablero GetTableroById(int idTablero)
     {
         var queryString = @"SELECT * FROM Tablero WHERE id = @idTablero;";
-        Tablero tablero = new Tablero();
+        Tablero tablero = null;
 
         using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
@@ -80,6 +84,7 @@ public class TableroRepository : ITableroRepository
             {
                 while (reader.Read())
                 {
+                    tablero = new Tablero();
                     tablero.Id = Convert.ToInt32(reader["id"]);
                     tablero.Nombre = reader["nombre"].ToString();
                     tablero.Descripcion = reader["descripcion"].ToString();
@@ -101,7 +106,7 @@ public class TableroRepository : ITableroRepository
     public List<Tablero> GetTableroByUsuario(int idUsuario)
     {
         var queryString = @"SELECT * FROM Tablero WHERE id_usuario_propietario = @idUsuario;";
-        List<Tablero> tableros = new List<Tablero>();
+        List<Tablero> tableros = null;
 
         using(SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
         {
@@ -113,6 +118,10 @@ public class TableroRepository : ITableroRepository
             {
                 while (reader.Read())
                 {
+                    if(tableros == null)
+                    {
+                        tableros = new List<Tablero>();
+                    }
                     Tablero tablero = new Tablero();
                     tablero.Id = Convert.ToInt32(reader["id"]);
                     tablero.Nombre = reader["nombre"].ToString();
@@ -133,7 +142,7 @@ public class TableroRepository : ITableroRepository
         }
     }
     
-    public void UpdateTablero(int idTablero, Tablero tableroModificar)
+    public void UpdateTablero(Tablero tableroModificar)
     {
         var queryString = @"UPDATE Tablero SET nombre = @nombre, descripcion = @descripcion, id_usuario_propietario = @idUsuario
         WHERE id = @idTablero;";
@@ -143,7 +152,7 @@ public class TableroRepository : ITableroRepository
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
 
-            command.Parameters.Add(new SQLiteParameter("idTablero", idTablero));
+            command.Parameters.Add(new SQLiteParameter("@idTablero", tableroModificar.Id));
             command.Parameters.Add(new SQLiteParameter("@nombre", tableroModificar.Nombre));
             command.Parameters.Add(new SQLiteParameter("@descripcion", tableroModificar.Descripcion));
             command.Parameters.Add(new SQLiteParameter("@idUsuario", tableroModificar.IdUsuarioPropietario));
