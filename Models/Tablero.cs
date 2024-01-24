@@ -11,6 +11,14 @@ public class Tablero
     {
     }
 
+    public Tablero(int id, int idUsuarioPropietario, string nombre, string descripcion)
+    {
+        this.id = id;
+        this.idUsuarioPropietario = idUsuarioPropietario;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
+
     public Tablero(int idUsuarioPropietario, string nombre, string descripcion)
     {
         this.idUsuarioPropietario = idUsuarioPropietario;

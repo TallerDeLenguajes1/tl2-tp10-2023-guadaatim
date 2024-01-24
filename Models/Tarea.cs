@@ -25,6 +25,17 @@ public class Tarea
     {
     }
 
+    public Tarea(int id, int idTablero, string nombre, string descripcion, string color, int idUsuarioAsignado, EstadoTarea estado)
+    {
+        this.id = id;
+        this.idTablero = idTablero;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.color = color;
+        this.idUsuarioAsignado = idUsuarioAsignado;
+        this.estado = estado;
+    }
+
     public Tarea(int idTablero, string nombre, string descripcion, string color, int idUsuarioAsignado, EstadoTarea estado)
     {
         this.idTablero = idTablero;

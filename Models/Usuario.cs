@@ -16,9 +16,17 @@ public class Usuario
     public Usuario()
     {
     }
-
+    
     public Usuario(string nombreDeUsuario, string contrasenia, Rol rol)
     {
+        this.nombreDeUsuario = nombreDeUsuario;
+        this.contrasenia = contrasenia;
+        this.rol = rol;
+    }
+
+    public Usuario(int id, string nombreDeUsuario, string contrasenia, Rol rol)
+    {
+        this.id = id;
         this.nombreDeUsuario = nombreDeUsuario;
         this.contrasenia = contrasenia;
         this.rol = rol;
