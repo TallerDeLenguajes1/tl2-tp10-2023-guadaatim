@@ -5,7 +5,7 @@ namespace Kanban.Repository;
 public interface ITareaRepository
 {
     public void CreateTarea(int idTablero, Tarea tarea);
-    public void UpdateTarea(int idTarea, Tarea tareaModificar);
+    public void UpdateTarea(Tarea tareaModificar);
     public Tarea GetTareaById(int idTarea);
     public List<Tarea> GetAllTareas();
     public List<Tarea> GetAllTareasByUsuario(int idUsuario);
