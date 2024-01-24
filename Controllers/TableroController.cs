@@ -11,12 +11,14 @@ namespace Kanban.Controllers;
 public class TableroController : Controller
 {
     private ITableroRepository _tableroRepository;
+    private IUsuarioRepository _usuarioRepository;
     private readonly ILogger<TableroController> _logger;
 
-    public TableroController(ILogger<TableroController> logger, ITableroRepository tableroRepository)
+    public TableroController(ILogger<TableroController> logger, ITableroRepository tableroRepository, IUsuarioRepository usuarioRepository)
     {
         _logger = logger;
         _tableroRepository = tableroRepository;
+        _usuarioRepository = usuarioRepository;
     }
 
     public IActionResult Index()
@@ -34,10 +36,15 @@ public class TableroController : Controller
     {
         try
         {
-            ListarTablerosViewModel tableros = new ListarTablerosViewModel(_tableroRepository.GetAllTableros());
-        
             if(isAdmin())
             {
+                //dice q esta nulo ????
+                string nombre = HttpContext.Session.GetString("NombreDeUsuario");
+                string rol = HttpContext.Session.GetString("Rol");
+                List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
+                ListarTablerosViewModel tableros = new ListarTablerosViewModel(nombre!, rol!, _tableroRepository.GetAllTableros(), usuarios);
+                int i = 0;
+
                 if(tableros != null)
                 {
                     return View(tableros);
@@ -47,9 +54,9 @@ public class TableroController : Controller
                 }
             } else
             {
-                if (HttpContext.Session.GetString("Rol") == "Operador")
+                if (isOperador())
                 {
-                    tableros = new ListarTablerosViewModel(_tableroRepository.GetTableroByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)));
+                    ListarTablerosViewModel tableros = new ListarTablerosViewModel(HttpContext.Session.GetString("NombreDeUsuario")!, HttpContext.Session.GetString("Rol")!, _tableroRepository.GetTableroByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)), _usuarioRepository.GetAllUsuarios());
                     return View(tableros);
                 } else
                 {
@@ -59,7 +66,7 @@ public class TableroController : Controller
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.ToString());
+            _logger.LogError(ex.ToString()); 
             return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
         }
     }
@@ -89,14 +96,20 @@ public class TableroController : Controller
     {
         try
         {
-            if(!ModelState.IsValid)
+            if (isAdmin())
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"});
+                if(!ModelState.IsValid)
+                {
+                    return RedirectToRoute(new {controller = "Home", action = "Index"});
+                } else
+                {
+                    Tablero tableroNuevo = new Tablero(Convert.ToInt32(HttpContext.Session.GetString("Id")), tableroNuevoVM.Nombre, tableroNuevoVM.Descripcion);
+                    _tableroRepository.CreateTablero(tableroNuevo);
+                    return RedirectToAction("ListarTableros");
+                }
             } else
             {
-                Tablero tableroNuevo = new Tablero(tableroNuevoVM.IdUsuarioPropietario, tableroNuevoVM.Nombre, tableroNuevoVM.Descripcion);
-                _tableroRepository.CreateTablero(tableroNuevo);
-                return RedirectToAction("ListarTableros");
+                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
             }
         }
         catch (Exception ex)
@@ -132,14 +145,20 @@ public class TableroController : Controller
     {
         try
         {
-            if(!ModelState.IsValid)
+            if (isAdmin())
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"});
-            } else 
+                if(!ModelState.IsValid)
+                {
+                    return RedirectToRoute(new {controller = "Home", action = "Index"});
+                } else 
+                {
+                    Tablero tableroModificado = new Tablero(tableroModificadoVM.Id, tableroModificadoVM.IdUsuarioPropietario, tableroModificadoVM.Nombre, tableroModificadoVM.Descripcion);
+                    _tableroRepository.UpdateTablero(tableroModificado);
+                    return RedirectToAction("ListarTableros");
+                }
+            } else
             {
-                Tablero tableroModificado = new Tablero(tableroModificadoVM.IdUsuarioPropietario, tableroModificadoVM.Nombre, tableroModificadoVM.Descripcion);
-                _tableroRepository.UpdateTablero(tableroModificadoVM.Id, tableroModificado);
-                return RedirectToAction("ListarTableros");
+                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
             }
         }
         catch (Exception ex)
@@ -188,6 +207,17 @@ public class TableroController : Controller
     private bool isAdmin()
     {
         if (HttpContext.Session != null && HttpContext.Session.GetString("Rol") == "Administrador")
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
+
+    private bool isOperador()
+    {
+        if(HttpContext.Session != null && HttpContext.Session.GetString("Rol") == "Operador")
         {
             return true;
         } else

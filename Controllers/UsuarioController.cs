@@ -41,7 +41,7 @@ public class UsuarioController : Controller
                 return View(usuarios);
             } else
             {
-                if (HttpContext.Session.GetString("Rol") == "Operador")
+                if (isOperador())
                 {
                     return RedirectToAction("ListarUsuariosOperador");
                 } else
@@ -57,15 +57,14 @@ public class UsuarioController : Controller
         }
     }
 
-    [HttpGet] // mostrar el mismo usuario
+    [HttpGet]
     public IActionResult ListarUsuariosOperador()
     {
         try
         {
-            UsuarioViewModel usuario = new UsuarioViewModel(_usuarioRepository.GetUsuarioById(Int32.Parse(HttpContext.Session.GetString("Id")!)));
-
-            if(HttpContext.Session.GetString("Rol") == "Operador")
+            if(isOperador())
             {
+                UsuarioViewModel usuario = new UsuarioViewModel(_usuarioRepository.GetUsuarioByNombre(HttpContext.Session.GetString("NombreDeUsuario")!));
                 return View(usuario);
             } else
             {
@@ -104,14 +103,20 @@ public class UsuarioController : Controller
     {
         try
         {
-            if(!ModelState.IsValid)
+            if (isAdmin())
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"});
-            } else 
+                if(!ModelState.IsValid)
+                {
+                    return RedirectToRoute(new {controller = "Home", action = "Index"});
+                } else 
+                {
+                    Usuario usuarioNuevo = new Usuario(usuarioNuevoVM.NombreDeUsuario, usuarioNuevoVM.Contrasenia, usuarioNuevoVM.Rol);
+                    _usuarioRepository.CreateUsuario(usuarioNuevo);
+                    return RedirectToAction("ListarUsuarios");
+                }
+            } else
             {
-                Usuario usuarioNuevo = new Usuario(usuarioNuevoVM.NombreDeUsuario, usuarioNuevoVM.Contrasenia, usuarioNuevoVM.Rol);
-                _usuarioRepository.CreateUsuario(usuarioNuevo);
-                return RedirectToAction("ListarUsuarios");
+                return RedirectToRoute(new {controller = "Login", action = "Index"}); //ENVIAR A PAGINA DE ERROR
             }
         }
         catch (Exception ex)
@@ -147,15 +152,21 @@ public class UsuarioController : Controller
     {
         try
         {
-            if(!ModelState.IsValid)
+            if (isAdmin())
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"});
+                if(!ModelState.IsValid)
+                {
+                    return RedirectToRoute(new {controller = "Home", action = "Index"});
+                } else
+                {
+                    Usuario usuarioModificado = new Usuario(usuarioModificadoVM.Id, usuarioModificadoVM.NombreDeUsuario, usuarioModificadoVM.Contrasenia, usuarioModificadoVM.Rol);
+                    _usuarioRepository.UpdateUsuario(usuarioModificado);
+                    return RedirectToAction("ListarUsuarios");
+                }
             } else
             {
-                Usuario usuarioModificado = new Usuario(usuarioModificadoVM.NombreDeUsuario, usuarioModificadoVM.Contrasenia, usuarioModificadoVM.Rol);
-                _usuarioRepository.UpdateUsuario(usuarioModificado.Id, usuarioModificado);
-                return RedirectToAction("ListarUsuarios");
-            }
+                return RedirectToRoute(new {controller = "Login", action = "Index"}); //ENVIAR A PAGINA DE ERROR
+            }  
         }
         catch (Exception ex)
         {
@@ -203,6 +214,17 @@ public class UsuarioController : Controller
     private bool isAdmin()
     {
         if(HttpContext.Session != null && HttpContext.Session.GetString("Rol") == "Administrador")
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
+
+    private bool isOperador()
+    {
+        if(HttpContext.Session != null && HttpContext.Session.GetString("Rol") == "Operador")
         {
             return true;
         } else
