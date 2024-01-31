@@ -1,4 +1,6 @@
-@model Kanban.ViewModels.LoginViewModel
+@using Kanban.ViewModels
+
+@model LoginViewModel
 
 <form asp-controller="Login" asp-action="Login">
     <label asp-for="@Model.NombreDeUsuario">Nombre de usuario</label>
