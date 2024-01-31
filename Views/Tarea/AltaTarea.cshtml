@@ -3,16 +3,15 @@
 @model CrearTareaViewModel
 
 <form asp-controller="Tarea" asp-action="CreateTarea">
-    <label asp-for="@Model.IdTablero">Id Tablero</label>
-        <input asp-for="@Model.IdTablero">
+        <input asp-for="@Model.IdTablero" hidden>
     <label asp-for="@Model.Nombre">Nombre</label>
         <input asp-for="@Model.Nombre">
     <label asp-for="@Model.Descripcion">Descripcion</label>
         <input asp-for="@Model.Descripcion">
     <label asp-for="@Model.Color">Color</label>
         <input asp-for="@Model.Color">
-    <label asp-for="@Model.IdUsuarioAsignado">Id Usuario</label>
-        <input asp-for="@Model.IdUsuarioAsignado">
+    <label asp-for="@Model.IdUsuarioAsignado" hidden>Id Usuario</label>
+        <input asp-for="@Model.IdUsuarioAsignado" hidden>
     <label asp-for="@Model.Estado">Estado</label>
         <input asp-for="@Model.Estado">
     <button type="submit">Crear Tarea</button>
