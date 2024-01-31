@@ -2,12 +2,15 @@
 
 @model ModificarUsuarioViewModel
 
-<form asp-controller="Usuario" asp-action="UpdateUsuario">
-    <label asp-for="@Model.Id">Id</label>
-        <input asp-for="@Model.Id" value="@Model.Id">
+<form asp-controller="Usuario" asp-action="ModificarUsuario">
+        <input asp-for="@Model.Id" value="@Model.Id" hidden>
     <label asp-for="@Model.NombreDeUsuario">Nombre de usuario</label>
         <input asp-for="@Model.NombreDeUsuario" value="@Model.NombreDeUsuario">
     <label asp-for="@Model.Rol">Rol</label>
+        <select asp-for="@Model.Rol">
+            <option value="0">Administrador</option>
+            <option value="1">Operador</option>
+        </select>
         <input asp-for="@Model.Rol" value="@Model.Rol">
     <label asp-for="@Model.Contrasenia">Contraseña</label>
         <input asp-for="@Model.Contrasenia" value="@Model.Contrasenia">
