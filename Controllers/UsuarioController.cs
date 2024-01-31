@@ -79,7 +79,7 @@ public class UsuarioController : Controller
     }
 
     [HttpGet]
-    public IActionResult AltaUsuario()
+    public IActionResult CrearUsuario()
     {
         try
         {
@@ -99,7 +99,7 @@ public class UsuarioController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateUsuario(CrearUsuarioViewModel usuarioNuevoVM)
+    public IActionResult CrearUsuario(CrearUsuarioViewModel usuarioNuevoVM)
     {
         try
         {
@@ -110,9 +110,15 @@ public class UsuarioController : Controller
                     return RedirectToRoute(new {controller = "Home", action = "Index"});
                 } else 
                 {
-                    Usuario usuarioNuevo = new Usuario(usuarioNuevoVM.NombreDeUsuario, usuarioNuevoVM.Contrasenia, usuarioNuevoVM.Rol);
-                    _usuarioRepository.CreateUsuario(usuarioNuevo);
-                    return RedirectToAction("ListarUsuarios");
+                    if(_usuarioRepository.ExisteUsuario(usuarioNuevoVM.NombreDeUsuario))
+                    {
+                        return View(usuarioNuevoVM);
+                    } else
+                    {
+                        Usuario usuarioNuevo = new Usuario(usuarioNuevoVM.NombreDeUsuario, usuarioNuevoVM.Contrasenia, usuarioNuevoVM.Rol);
+                        _usuarioRepository.CreateUsuario(usuarioNuevo);
+                        return RedirectToAction("ListarUsuarios");
+                    }
                 }
             } else
             {
@@ -148,7 +154,7 @@ public class UsuarioController : Controller
     }
 
     [HttpPost]
-    public IActionResult UpdateUsuario(ModificarUsuarioViewModel usuarioModificadoVM)
+    public IActionResult ModificarUsuario(ModificarUsuarioViewModel usuarioModificadoVM)
     {
         try
         {
