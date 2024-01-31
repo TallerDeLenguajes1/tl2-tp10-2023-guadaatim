@@ -3,14 +3,14 @@
 @model Tablero
 
 <form asp-controller="Tablero" asp-action="DeleteTablero">
-    <label asp-for="@Model.Id">Id</label>
-        <input asp-for="@Model.Id" value="@Model.Id">
+    <label asp-for="@Model.Id" hidden>Id</label>
+        <input asp-for="@Model.Id" value="@Model.Id" hidden>
     <label asp-for="@Model.Nombre">Nombre</label>
         <input asp-for="@Model.Nombre" value="@Model.Nombre">
     <label asp-for="@Model.Descripcion">Descripcion</label>
         <input asp-for="@Model.Descripcion" value="@Model.Descripcion">
-    <label asp-for="@Model.IdUsuarioPropietario">Id Usuario</label>
-        <input asp-for="@Model.IdUsuarioPropietario" value="@Model.IdUsuarioPropietario">
+    <label asp-for="@Model.IdUsuarioPropietario" hidden>Id Usuario</label>
+        <input asp-for="@Model.IdUsuarioPropietario" value="@Model.IdUsuarioPropietario" hidden>
     <button type="submit">Eliminar Tablero</button>
     <button type="button"><a asp-controller="Tablero" asp-action="ListarTableros">Cancelar</a></button>
 </form>

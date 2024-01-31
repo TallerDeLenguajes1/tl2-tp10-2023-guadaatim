@@ -3,8 +3,8 @@
 @model CrearTableroViewModel
 
 <form asp-controller="Tablero" asp-action="CreateTablero">
-    <label asp-for="@Model.IdUsuarioPropietario">id usuario propietario</label>
-        <input asp-for="@Model.IdUsuarioPropietario">
+    <label asp-for="@Model.IdUsuarioPropietario" hidden>Id usuario propietario</label>
+        <input asp-for="@Model.IdUsuarioPropietario" hidden>
     <label asp-for="@Model.Nombre">Nombre</label>
         <input asp-for="@Model.Nombre">
     <label asp-for="@Model.Descripcion">Descripcion</label>
