@@ -2,7 +2,7 @@
 
 @model ListarTareasViewModel
 
-<p>TODAS LAS TAREAS</p>
+<p>TAREAS</p>
 <table>
     <thead>
         <tr>
@@ -14,7 +14,7 @@
             <th>Color</th>
             <th hidden>Id Usuario</th>
             <th>Estado</th>
-            <th>Usuario Asignado</th>
+            <td>Usuario Asignado</td>
         </tr>
     </thead>
     <tbody>
@@ -30,14 +30,12 @@
                 <td hidden>@tarea.IdUsuarioAsignado</td>
                 <td>@tarea.Estado</td>
                 <td>@tarea.NombreUsuario</td>
-                <td><a asp-controller="Tarea" asp-action="ModificarTarea" asp-route-idTarea="@tarea.Id">Modificar</a></td>
-                <td><a asp-controller="Tarea" asp-action="EliminarTarea" asp-route-idTarea="@tarea.Id" asp-route-nombreUsuario="@tarea.NombreUsuario">Eliminar</a></td>
             </tr>
         }
     </tbody>
 </table>
 
-<p>TAREAS ASIGNADAS</p>
+<p>TAREAS PROPIAS</p>
 <table>
     <thead>
         <tr>
@@ -50,6 +48,8 @@
             <th hidden>Id Usuario</th>
             <th>Estado</th>
             <th>Usuario Asignado</th>
+            <th>Modificar</th>
+            <th>Eliminar</th>
         </tr>
     </thead>
     <tbody>
@@ -66,7 +66,7 @@
                 <td>@tarea.Estado</td>
                 <td>@tarea.NombreUsuario</td>
                 <td><a asp-controller="Tarea" asp-action="ModificarTarea" asp-route-idTarea="@tarea.Id">Modificar</a></td>
-                <td><a asp-controller="Tarea" asp-action="EliminarTarea" asp-route-idTarea="@tarea.Id" asp-route-nombreUsuario="@tarea.NombreUsuario">Eliminar</a></td>
+                <td><a asp-controller="Tarea" asp-action="EliminarTarea" asp-route-idTarea="@tarea.Id">Eliminar</a></td>
             </tr>
         }
     </tbody>
