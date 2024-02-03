@@ -177,4 +177,92 @@ public class TableroRepository : ITableroRepository
             connection.Close();
         }
     }
+
+    public List<TableroViewModel> GetTablerosViewModel()
+    {
+        var queryString = @"SELECT Tablero.id as idTablero, Tablero.id_usuario_propietario as idUsuario,
+        Tablero.nombre as tablero, Tablero.descripcion as descripcion,
+        Usuario.nombre_de_usuario as usuario
+        FROM Tablero 
+        INNER JOIN Usuario ON Tablero.id_usuario_propietario = Usuario.id;";
+        List<TableroViewModel> tableros = null;
+
+        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+
+            using (SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    if(tableros == null)
+                    {
+                        tableros = new List<TableroViewModel>();
+                    }
+                    TableroViewModel tablero = new TableroViewModel();
+                    tablero.Id = Convert.ToInt32(reader["idTablero"]);
+                    tablero.IdUsuarioPropietario = Convert.ToInt32(reader["idUsuario"]);
+                    tablero.Nombre = reader["tablero"].ToString();
+                    tablero.Descripcion = reader["descripcion"].ToString();
+                    tablero.NombreUsuario = reader["usuario"].ToString();
+                    tableros.Add(tablero);
+                }
+            }
+            connection.Close();
+        }
+
+        if(tableros == null)
+        {
+            throw new Exception("La lista de tableros esta vacia");
+        } else
+        {
+            return tableros;
+        }
+    }
+
+    public List<TableroViewModel> GetTableroViewModelsByUsuario(int idUsuario)
+    {
+        var queryString = @"SELECT Tablero.id as idTablero, Tablero.id_usuario_propietario as idUsuario,
+        Tablero.nombre as tablero, Tablero.descripcion as descripcion,
+        Usuario.nombre_de_usuario as usuario
+        FROM Tablero 
+        INNER JOIN Usuario ON Tablero.id_usuario_propietario = Usuario.id
+        WHERE Usuario.id = @idUsuario;";
+        List<TableroViewModel> tableros = null;
+
+        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+
+            using (SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    if(tableros == null)
+                    {
+                        tableros = new List<TableroViewModel>();
+                    }
+                    TableroViewModel tablero = new TableroViewModel();
+                    tablero.Id = Convert.ToInt32(reader["idTablero"]);
+                    tablero.IdUsuarioPropietario = Convert.ToInt32(reader["idUsuario"]);
+                    tablero.Nombre = reader["tablero"].ToString();
+                    tablero.Descripcion = reader["descripcion"].ToString();
+                    tablero.NombreUsuario = reader["usuario"].ToString();
+                    tableros.Add(tablero);
+                }
+            }
+            connection.Close();
+        }
+
+        if(tableros == null)
+        {
+            throw new Exception("La lista de tableros esta vacia");
+        } else
+        {
+            return tableros;
+        }
+    }
 }
