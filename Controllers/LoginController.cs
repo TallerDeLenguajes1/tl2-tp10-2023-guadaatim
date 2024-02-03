@@ -75,7 +75,7 @@ public class LoginController : Controller
     {
         HttpContext.Session.SetString("NombreDeUsuario", usuario.NombreDeUsuario);
         HttpContext.Session.SetString("Rol", usuario.Rol.ToString());
-        HttpContext.Session.SetString("Id", usuario.Id.ToString());
+        HttpContext.Session.SetInt32("Id", usuario.Id);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
