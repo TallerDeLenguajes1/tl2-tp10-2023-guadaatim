@@ -23,15 +23,6 @@ public class TableroViewModel
         this.descripcion = tablero.Descripcion;
     }
 
-    public TableroViewModel(Tablero tablero, string nombreUsuario)
-    {
-        this.id = tablero.Id;
-        this.idUsuarioPropietario = tablero.IdUsuarioPropietario;
-        this.nombre = tablero.Nombre;
-        this.descripcion = tablero.Descripcion;
-        this.nombreUsuario = nombreUsuario;
-    }
-
     public int Id { get => id; set => id = value; }
     public int IdUsuarioPropietario { get => idUsuarioPropietario; set => idUsuarioPropietario = value; }
     public string Nombre { get => nombre; set => nombre = value; }

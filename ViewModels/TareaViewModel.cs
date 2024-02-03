@@ -30,19 +30,6 @@ public class TareaViewModel
         this.color = tarea.Color;
         this.idUsuarioAsignado = tarea.IdUsuarioAsignado;
     }
-    
-    public TareaViewModel(Tarea tarea, string nombreUsuario, string nombreTablero)
-    {
-        this.id = tarea.Id;
-        this.idTablero = tarea.IdTablero;
-        this.nombre = tarea.Nombre;
-        this.estado = tarea.Estado;
-        this.descripcion = tarea.Descripcion;
-        this.color = tarea.Color;
-        this.IdUsuarioAsignado = tarea.IdUsuarioAsignado;
-        this.nombreUsuario = nombreUsuario;
-        this.nombreTablero = nombreTablero;
-    }
 
     public int Id { get => id; set => id = value; }
     public int IdTablero { get => idTablero; set => idTablero = value; }
