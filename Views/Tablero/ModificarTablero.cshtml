@@ -3,10 +3,10 @@
 @model TableroViewModel
 
 <form asp-controller="Tablero" asp-action="UpdateTablero">
-    <label asp-for="@Model.Id">Id</label>
-        <input asp-for="@Model.Id" value="@Model.Id">
-    <label asp-for="@Model.IdUsuarioPropietario">Id Usuario</label>
-        <input asp-for="@Model.IdUsuarioPropietario" value="@Model.IdUsuarioPropietario">
+    <label asp-for="@Model.Id" hidden>Id</label>
+        <input asp-for="@Model.Id" value="@Model.Id" hidden>
+    <label asp-for="@Model.IdUsuarioPropietario" hidden>Id Usuario</label>
+        <input asp-for="@Model.IdUsuarioPropietario" value="@Model.IdUsuarioPropietario" hidden>
     <label asp-for="@Model.Nombre">Nombre</label>
         <input asp-for="@Model.Nombre" value="@Model.Nombre">
     <label asp-for="@Model.Descripcion">Descripcion</label>
