@@ -6,18 +6,29 @@ namespace Kanban.ViewModels;
 
 public class ListarTablerosViewModel
 {
-    List<TableroViewModel> tablerosVM;
+    private List<TableroViewModel> tablerosVM;
+    private List<TableroViewModel> tablerosPropiosVM;
 
-    public ListarTablerosViewModel(List<Tablero> tableros)
+    public ListarTablerosViewModel()
+    {
+    }
+
+    public ListarTablerosViewModel(List<TableroViewModel> tableros, List<TableroViewModel> tablerosPropios)
     {
         tablerosVM = new List<TableroViewModel>();
+        tablerosPropiosVM = new List<TableroViewModel>();
 
         foreach (var tablero in tableros)
         {
-            TableroViewModel tableroNuevo = new TableroViewModel(tablero);
-            tablerosVM.Add(tableroNuevo);
+            tablerosVM.Add(tablero);
+        }
+
+        foreach (var tablero in tablerosPropios)
+        {
+            tablerosPropiosVM.Add(tablero);
         }
     }
 
     public List<TableroViewModel> TablerosVM { get => tablerosVM; set => tablerosVM = value; }
+    public List<TableroViewModel> TablerosPropiosVM { get => tablerosPropiosVM; set => tablerosPropiosVM = value; }
 }
