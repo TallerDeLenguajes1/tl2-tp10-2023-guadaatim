@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Kanban.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Kanban.ViewModels;
 
@@ -11,10 +12,17 @@ public class CrearTareaViewModel
     private EstadoTarea estado;
     private string? descripcion;
     private string? color;
-    private int? idUsuarioAsignado;
+    private int idUsuarioAsignado;
+    private ListarUsuariosViewModel usuarios;
 
     public CrearTareaViewModel()
     {
+    }
+
+    public CrearTareaViewModel(int idTablero, ListarUsuariosViewModel usuarios)
+    {
+        this.idTablero = idTablero;
+        this.usuarios = usuarios;
     }
 
     public CrearTareaViewModel(Tarea tarea)
@@ -22,6 +30,7 @@ public class CrearTareaViewModel
         this.idTablero = tarea.IdTablero;
         this.nombre = tarea.Nombre;
         this.estado = tarea.Estado;
+        this.descripcion = tarea.Descripcion;
         this.color = tarea.Color;
         this.IdUsuarioAsignado = tarea.IdUsuarioAsignado;
     }
@@ -48,5 +57,8 @@ public class CrearTareaViewModel
 
     //[Required(ErrorMessage = "Complete el campo")]
     [Display(Name = "Id Usuario Asignado")]
-    public int? IdUsuarioAsignado { get => idUsuarioAsignado; set => idUsuarioAsignado = value; }
+    public int IdUsuarioAsignado { get => idUsuarioAsignado; set => idUsuarioAsignado = value; }
+
+    [ValidateNever]
+    public ListarUsuariosViewModel Usuarios { get => usuarios; set => usuarios = value; }
 }
