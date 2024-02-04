@@ -34,11 +34,14 @@ public class UsuarioController : Controller
     {
         try
         {
-            ListarUsuariosViewModel usuarios = new ListarUsuariosViewModel(_usuarioRepository.GetAllUsuarios());
-
             if (isAdmin())
             {
-                return View(usuarios);
+                Usuario usuario = _usuarioRepository.GetUsuarioByNombre(HttpContext.Session.GetString("NombreDeUsuario").ToString());
+                UsuarioViewModel usuarioVM = new UsuarioViewModel(usuario);
+                List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
+                usuarios = usuarios.FindAll(u => u.NombreDeUsuario != usuarioVM.NombreDeUsuario);
+                ListarUsuariosViewModel usuariosVM = new ListarUsuariosViewModel(usuarios, usuarioVM);
+                return View(usuariosVM);
             } else
             {
                 if (isOperador())
