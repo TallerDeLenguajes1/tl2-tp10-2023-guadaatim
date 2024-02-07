@@ -5,11 +5,11 @@ namespace Kanban.Repository;
 
 public class TareaRepository : ITareaRepository
 {
-    private string cadenaConexion;
+    private string _cadenaConexion;
 
     public TareaRepository(string CadenaDeConexion)
     {
-        cadenaConexion = CadenaDeConexion;
+        _cadenaConexion = CadenaDeConexion;
     } 
 
     public void CreateTarea(int idTablero, Tarea tarea) 
@@ -17,7 +17,7 @@ public class TareaRepository : ITareaRepository
         var queryString = @"INSERT INTO Tarea (id_tablero, nombre, estado, descripcion, color, id_usuario_asignado) 
         VALUES (@idTablero, @nombre, @estado, @descripcion, @color, @idUsuarioAsignado);";
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
 
@@ -35,29 +35,12 @@ public class TareaRepository : ITareaRepository
         }
     }
 
-    public void AsignarUsuario(int idUsuario, int idTarea)
-    {
-        var queryString = @"UPDATE Tarea SET id_usuario_asignado = @idUsuario WHERE id = @idTarea;";
-
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
-        {
-            connection.Open();
-            SQLiteCommand command = new SQLiteCommand(queryString, connection);
-
-            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
-            command.Parameters.Add(new SQLiteParameter("@idTarea", idTarea));
-
-            command.ExecuteNonQuery();
-            connection.Close();
-        }
-    }
-
     public List<Tarea> GetAllTareas()
     {
         var queryString = @"SELECT * FROM Tarea;";
         List<Tarea> tareas = null;
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
@@ -99,12 +82,18 @@ public class TareaRepository : ITareaRepository
         }
     }
 
-    public List<Tarea> GetAllTareasByTablero(int idTablero)
+    public List<TareaViewModel> GetAllTareasByTablero(int idTablero)
     {
-        var queryString = @"SELECT * FROM Tarea WHERE id_tablero = @idTablero;";
-        List<Tarea> tareas = null;
+        var queryString = @"SELECT Tarea.id as idTarea, Tarea.nombre as nombre, Tarea.descripcion as descripcion,
+        estado, id_tablero, id_usuario_asignado, color, 
+        Tablero.nombre as tablero, Usuario.nombre_de_usuario as usuario
+        FROM Tarea 
+        INNER JOIN Tablero ON Tarea.id_tablero = Tablero.id 
+        INNER JOIN Usuario ON Tarea.id_usuario_asignado = Usuario.id
+        WHERE id_tablero = @idTablero;";
+        List<TareaViewModel> tareas = null;
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
@@ -116,15 +105,17 @@ public class TareaRepository : ITareaRepository
                 {
                     if(tareas == null)
                     {
-                        tareas = new List<Tarea>();
+                        tareas = new List<TareaViewModel>();
                     }
-                    Tarea tarea = new Tarea();
-                    tarea.Id = Convert.ToInt32(reader["id"]);
+                    TareaViewModel tarea = new TareaViewModel();
+                    tarea.Id = Convert.ToInt32(reader["idTarea"]);
                     tarea.IdTablero = Convert.ToInt32(reader["id_tablero"]);
                     tarea.Nombre = reader["nombre"].ToString();
                     tarea.Estado = (EstadoTarea)Convert.ToInt32(reader["estado"]);
                     tarea.Descripcion = reader["descripcion"].ToString();
                     tarea.Color = reader["color"].ToString();
+                    tarea.NombreTablero = reader["tablero"].ToString();
+                    tarea.NombreUsuario = reader["usuario"].ToString();
                     if (reader["id_usuario_asignado"] == DBNull.Value)
                     {
                         tarea.IdUsuarioAsignado = 0;   
@@ -152,7 +143,7 @@ public class TareaRepository : ITareaRepository
         var queryString = @"SELECT * FROM Tarea WHERE id_usuario_asignado = @idUsuario;";
         List<Tarea> tareas = null;
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
@@ -200,7 +191,7 @@ public class TareaRepository : ITareaRepository
         var queryString = @"SELECT * FROM Tarea WHERE id = @idTarea;";
         Tarea tarea = null;
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
@@ -243,7 +234,7 @@ public class TareaRepository : ITareaRepository
         var queryString = @"UPDATE Tarea SET nombre = @nombre, estado = @estado, descripcion = @descripcion, color = @color, id_usuario_asignado = @idUsuarioAsignado
         WHERE id = @idTarea;";
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
@@ -264,7 +255,7 @@ public class TareaRepository : ITareaRepository
     {
         var queryString = @"DELETE FROM Tarea WHERE id = @idTarea;";
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
 
@@ -287,7 +278,7 @@ public class TareaRepository : ITareaRepository
         INNER JOIN Usuario ON Tarea.id_usuario_asignado = Usuario.id;";
         List<TareaViewModel> tareas = null;
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
@@ -324,7 +315,7 @@ public class TareaRepository : ITareaRepository
         }
     }
 
-    public List<TareaViewModel> GetTareaViewModelByUsuario(int idTarea)
+    public List<TareaViewModel> GetTareasViewModelByUsuario(int idUsuario)
     {
         var queryString = @"SELECT Tarea.id as idTarea, Tablero.id as idTablero,
         Tarea.estado as estado, Tarea.descripcion as descripcion, 
@@ -333,14 +324,14 @@ public class TareaRepository : ITareaRepository
         FROM Tarea 
         INNER JOIN Tablero ON Tarea.id_tablero = Tablero.id
         INNER JOIN Usuario ON Tarea.id_usuario_asignado = Usuario.id
-        WHERE @idTarea = Usuario.id;";
+        WHERE @idUsuario = Usuario.id;";
         List<TareaViewModel> tareas = null;
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
-            command.Parameters.Add(new SQLiteParameter("@idTarea", idTarea));
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
 
             using (SQLiteDataReader reader = command.ExecuteReader())
             {
@@ -371,6 +362,55 @@ public class TareaRepository : ITareaRepository
         } else
         {
             throw new Exception("La lista de tareas esta vacia");
+        }
+    }
+
+    public TareaViewModel GetTareaViewModel(int idUsuario, int idTablero)
+    {
+        var queryString = @"SELECT Tarea.id as idTarea, Tablero.id as idTablero,
+        Tarea.estado as estado, Tarea.descripcion as descripcion, 
+        Tarea.color as color, Tarea.id_usuario_asignado as idUsuario, 
+        Tarea.nombre as tarea, Tablero.nombre as tablero, Usuario.nombre_de_usuario as usuario
+        FROM Tarea 
+        INNER JOIN Tablero ON Tarea.id_tablero = Tablero.id
+        INNER JOIN Usuario ON Tarea.id_usuario_asignado = Usuario.id
+        WHERE Tarea.id_usuario_asignado = @idUsuario AND Tarea.id_tablero = @idTablero;";
+        TareaViewModel tarea = null;
+
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+            command.Parameters.Add(new SQLiteParameter("@idTablero", idTablero));
+
+            using (SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    if(tarea == null)
+                    {
+                        tarea = new TareaViewModel();
+                    }
+                    tarea.Id = Convert.ToInt32(reader["idTarea"]);
+                    tarea.IdTablero = Convert.ToInt32(reader["idTablero"]);
+                    tarea.Nombre = reader["tarea"].ToString();
+                    tarea.Estado = (EstadoTarea)Convert.ToInt32(reader["estado"]);
+                    tarea.Descripcion = reader["descripcion"].ToString();
+                    tarea.Color = reader["color"].ToString();
+                    tarea.IdUsuarioAsignado = Convert.ToInt32(reader["idUsuario"]);
+                    tarea.NombreTablero = reader["tablero"].ToString();
+                    tarea.NombreUsuario = reader["usuario"].ToString();
+                }
+            }
+            connection.Close();
+        }
+        if (tarea == null)
+        {
+            throw new Exception("La tarea no existe");
+        } else
+        {
+            return tarea;
         }
     }
 }
