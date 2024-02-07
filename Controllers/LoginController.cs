@@ -25,13 +25,7 @@ public class LoginController : Controller
         return View(new LoginViewModel());
     }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
     [HttpPost]
-    
     public IActionResult Login(Usuario usuario)
     {
         try
@@ -43,15 +37,15 @@ public class LoginController : Controller
             {
                 try
                 {
-                    List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
-                    Usuario usuarioLoggeado = usuarios.FirstOrDefault(u => u.NombreDeUsuario == usuario.NombreDeUsuario && u.Contrasenia == usuario.Contrasenia);
+                    bool existeUsuario = _usuarioRepository.ExisteUsuarioLogin(usuario);
 
-                    if (usuarioLoggeado == null)
+                    if (!existeUsuario)
                     {
                         _logger.LogWarning("Intento de acceso invalido - Usuario: " + usuario.NombreDeUsuario + " - Clave ingresada: " + usuario.Contrasenia);
                         return RedirectToAction("Index");
                     } else
                     {
+                        Usuario usuarioLoggeado = _usuarioRepository.GetUsuarioByNombre(usuario.NombreDeUsuario);
                         loggearUsuario(usuarioLoggeado);
                         _logger.LogInformation("El usuario " + usuario.NombreDeUsuario + " ingreso correctamente!");
                         return RedirectToRoute(new { controller = "Home", action = "Index"});
