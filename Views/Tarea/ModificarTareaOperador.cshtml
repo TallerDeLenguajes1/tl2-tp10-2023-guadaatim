@@ -1,8 +1,13 @@
 @using Kanban.ViewModels
 
+@{
+    ViewBag.Title = "Modificar Tarea";
+    Layout = "~/Views/Shared/_LayoutOperador.cshtml";
+}
+
 @model ModificarTareaViewModel
 
-<form asp-controller="Tarea" asp-action="UpdateTarea">
+<form asp-controller="Tarea" asp-action="UpdateTarea" method="post">
         <input asp-for="@Model.Id" value="@Model.Id" hidden>
         <input asp-for="@Model.IdTablero" value="@Model.IdTablero" hidden>
     <label asp-for="@Model.Nombre">Nombre</label>
@@ -20,10 +25,11 @@
         <option value="4">Done</option>
        </select>
     <label asp-for="@Model.IdUsuarioAsignado">Asignar Usuario</label>
-        <select asp-for="@Model.IdUsuarioAsignado">
+        <input asp-for="@Model.IdUsuarioAsignado" hidden>
+        <select asp-for="@Model.IdUsuarioAsignado" disabled>
             @foreach(var u in Model.Usuarios.UsuariosVM)
             {
-                <option value="@u.Id">@u.NombreDeUsuario</option>
+                <option value="@u.Id" readonly>@u.NombreDeUsuario</option>
             }
         </select>
     <button type="submit">Modificar Tarea</button>
