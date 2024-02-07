@@ -1,0 +1,41 @@
+@using Kanban.ViewModels
+
+@{
+    ViewBag.Title = "Tarea";
+    Layout = "~/Views/Shared/_LayoutOperador.cshtml";
+}
+
+@model TareaViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <table class="table caption-top">
+                <caption>Mi Tarea</caption>
+                <thead>
+                    <tr>
+                        <th hidden>Id</th>
+                        <th hidden>Id Tablero</th>
+                        <th>Tablero</th>
+                        <th>Nombre</th>
+                        <th>Descripcion</th>
+                        <th>Color</th>
+                        <th hidden>Id Usuario</th>
+                        <th>Estado</th>
+                        <td>Modificar</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.NombreTablero</td>
+                        <td>@Model.Nombre</td>
+                        <td>@Model.Descripcion</td>
+                        <td>@Model.Color</td>
+                        <td>@Model.Estado</td>
+                        <td><a asp-controller="Tarea" asp-action="ModificarTarea" asp-route-idTarea="@Model.Id">Modificar</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
