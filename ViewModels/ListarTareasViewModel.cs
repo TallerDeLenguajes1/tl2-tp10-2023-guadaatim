@@ -13,6 +13,16 @@ public class ListarTareasViewModel
     {
     }
 
+    public ListarTareasViewModel(List<TareaViewModel> tareas)
+    {
+        tareasVM = new List<TareaViewModel>();
+
+        foreach (var tarea in tareas)
+        {
+            tareasVM.Add(tarea);
+        }
+    }
+
     public ListarTareasViewModel(List<TareaViewModel> tareas, List<TareaViewModel> tareasPropias)
     {
         tareasVM = new List<TareaViewModel>();
