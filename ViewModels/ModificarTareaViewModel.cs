@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Kanban.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Kanban.ViewModels;
 
@@ -12,20 +13,23 @@ public class ModificarTareaViewModel
     private EstadoTarea estado;
     private string? descripcion;
     private string? color;
-    private int? idUsuarioAsignado;
+    private int idUsuarioAsignado;
+    private ListarUsuariosViewModel? usuarios;
 
     public ModificarTareaViewModel()
     {
     }
 
-    public ModificarTareaViewModel(Tarea tarea)
+    public ModificarTareaViewModel(Tarea tarea, ListarUsuariosViewModel usuarios)
     {
         this.id = tarea.Id;
         this.idTablero = tarea.IdTablero;
         this.nombre = tarea.Nombre;
         this.estado = tarea.Estado;
+        this.descripcion = tarea.Descripcion;
         this.color = tarea.Color;
-        this.IdUsuarioAsignado = tarea.IdUsuarioAsignado;
+        this.idUsuarioAsignado = tarea.IdUsuarioAsignado;
+        this.usuarios = usuarios;
     }
 
     [Required(ErrorMessage = "Este campo no puede estar vacio")]
@@ -45,16 +49,17 @@ public class ModificarTareaViewModel
     [Display(Name = "Estado Tarea")]
     public EstadoTarea Estado { get => estado; set => estado = value; }
 
-    //[Required(ErrorMessage = "Este campo no puede estar vacio")]
+    [Required(ErrorMessage = "Este campo no puede estar vacio")]
     [MaxLength(50, ErrorMessage = "La descripcion debe tener hasta 50 caracteres")]
     [Display(Name = "Descripcion")]
     public string Descripcion { get => descripcion; set => descripcion = value; }
 
-    //[Required(ErrorMessage = "Este campo no puede estar vacio")]
+    [Required(ErrorMessage = "Este campo no puede estar vacio")]
     [Display(Name = "Color")]
     public string Color { get => color; set => color = value; }
 
     [Required(ErrorMessage = "Este campo no puede estar vacio")]
     [Display(Name = "Id Usuario Asignado")]
-    public int? IdUsuarioAsignado { get => idUsuarioAsignado; set => idUsuarioAsignado = value; }
+    public int IdUsuarioAsignado { get => idUsuarioAsignado; set => idUsuarioAsignado = value; }
+    public ListarUsuariosViewModel? Usuarios { get => usuarios; set => usuarios = value; }
 }
