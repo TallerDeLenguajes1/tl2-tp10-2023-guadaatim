@@ -4,11 +4,11 @@ namespace Kanban.Repository;
 
 public class TableroRepository : ITableroRepository
 {
-    private string cadenaConexion;
+    private string _cadenaConexion;
 
     public TableroRepository(string CadenaDeConexion)
     {
-        cadenaConexion = CadenaDeConexion;
+        _cadenaConexion = CadenaDeConexion;
     }
     
     public void CreateTablero(Tablero tablero)
@@ -16,7 +16,7 @@ public class TableroRepository : ITableroRepository
         var queryString = @"INSERT INTO Tablero (id_usuario_propietario, nombre, descripcion) 
         VALUES (@idUsuario, @nombre, @descripcion);";
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
 
@@ -36,7 +36,7 @@ public class TableroRepository : ITableroRepository
         var queryString = @"SELECT * FROM Tablero;";
         List<Tablero> tableros = null;
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
@@ -74,7 +74,7 @@ public class TableroRepository : ITableroRepository
         var queryString = @"SELECT * FROM Tablero WHERE id = @idTablero;";
         Tablero tablero = null;
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
@@ -108,7 +108,7 @@ public class TableroRepository : ITableroRepository
         var queryString = @"SELECT * FROM Tablero WHERE id_usuario_propietario = @idUsuario;";
         List<Tablero> tableros = null;
 
-        using(SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using(SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
@@ -147,7 +147,7 @@ public class TableroRepository : ITableroRepository
         var queryString = @"UPDATE Tablero SET nombre = @nombre, descripcion = @descripcion, id_usuario_propietario = @idUsuario
         WHERE id = @idTablero;";
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
@@ -166,7 +166,7 @@ public class TableroRepository : ITableroRepository
     {
         var queryString = @"DELETE FROM Tablero WHERE id = @idTablero;";
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
 
@@ -187,7 +187,7 @@ public class TableroRepository : ITableroRepository
         INNER JOIN Usuario ON Tablero.id_usuario_propietario = Usuario.id;";
         List<TableroViewModel> tableros = null;
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
@@ -221,7 +221,7 @@ public class TableroRepository : ITableroRepository
         }
     }
 
-    public List<TableroViewModel> GetTableroViewModelsByUsuario(int idUsuario)
+    public List<TableroViewModel> GetTablerosViewModelByUsuario(int idUsuario)
     {
         var queryString = @"SELECT Tablero.id as idTablero, Tablero.id_usuario_propietario as idUsuario,
         Tablero.nombre as tablero, Tablero.descripcion as descripcion,
@@ -231,7 +231,7 @@ public class TableroRepository : ITableroRepository
         WHERE Usuario.id = @idUsuario;";
         List<TableroViewModel> tableros = null;
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
@@ -264,5 +264,77 @@ public class TableroRepository : ITableroRepository
         {
             return tableros;
         }
+    }
+
+    public List<TableroViewModel> GetTablerosViewModelByTarea(int idUsuario)
+    {
+        var queryString = @"SELECT Tablero.id as idTablero, Tablero.id_usuario_propietario as idUsuario,
+        Tablero.nombre as tablero, Tablero.descripcion as descripcion,
+        Usuario.nombre_de_usuario as usuario
+        FROM Tablero INNER JOIN Tarea ON Tablero.id = Tarea.id_tablero
+        INNER JOIN Usuario ON Usuario.id = Tablero.id_usuario_propietario
+        WHERE Tarea.id_usuario_asignado = @idUsuario;";
+        List<TableroViewModel> tableros = null;
+
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+
+            using(SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    if(tableros == null)
+                    {
+                        tableros = new List<TableroViewModel>();
+                    }
+                    TableroViewModel tablero = new TableroViewModel();
+                    tablero.Id = Convert.ToInt32(reader["idTablero"]);
+                    tablero.IdUsuarioPropietario = Convert.ToInt32(reader["idUsuario"]);
+                    tablero.Nombre = reader["tablero"].ToString();
+                    tablero.Descripcion = reader["descripcion"].ToString();
+                    tablero.NombreUsuario = reader["usuario"].ToString();
+                    tableros.Add(tablero);
+                }
+            }
+            connection.Close();
+        }
+        if(tableros == null)
+        {
+            throw new Exception("La lista de tableros esta vacia");
+        } else
+        {
+            return tableros;
+        }
+    }
+
+    public bool PerteneceTablero(int idUsuario, int idTablero)
+    {
+        var queryString = @"SELECT COUNT (id) as pertenece FROM Tablero 
+        WHERE id_usuario_propietario = @idUsuario AND id = @idTablero;";
+        bool pertenece = false;
+
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+            command.Parameters.Add(new SQLiteParameter("@idTablero", idTablero));
+
+            using (SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    if(Convert.ToInt32(reader["pertenece"]) == 1)
+                    {
+                        pertenece = true;
+                    }
+                }
+            }
+            connection.Close();
+        } 
+        return pertenece;
     }
 }
