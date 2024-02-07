@@ -13,7 +13,7 @@ public class CrearTareaViewModel
     private string? descripcion;
     private string? color;
     private int idUsuarioAsignado;
-    private ListarUsuariosViewModel usuarios;
+    private ListarUsuariosViewModel? usuarios;
 
     public CrearTareaViewModel()
     {
@@ -22,7 +22,7 @@ public class CrearTareaViewModel
     public CrearTareaViewModel(int idTablero, ListarUsuariosViewModel usuarios)
     {
         this.idTablero = idTablero;
-        this.usuarios = usuarios;
+        this.Usuarios = usuarios;
     }
 
     public CrearTareaViewModel(Tarea tarea)
@@ -55,10 +55,7 @@ public class CrearTareaViewModel
     [Display(Name = "Color")]
     public string? Color { get => color; set => color = value; }
 
-    //[Required(ErrorMessage = "Complete el campo")]
     [Display(Name = "Id Usuario Asignado")]
     public int IdUsuarioAsignado { get => idUsuarioAsignado; set => idUsuarioAsignado = value; }
-
-    [ValidateNever]
-    public ListarUsuariosViewModel Usuarios { get => usuarios; set => usuarios = value; }
+    public ListarUsuariosViewModel? Usuarios { get => usuarios; set => usuarios = value; }
 }
