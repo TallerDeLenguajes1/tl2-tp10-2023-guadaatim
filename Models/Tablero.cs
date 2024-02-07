@@ -1,3 +1,5 @@
+using Kanban.ViewModels;
+
 namespace Kanban.Models;
 
 public class Tablero
@@ -11,19 +13,19 @@ public class Tablero
     {
     }
 
-    public Tablero(int id, int idUsuarioPropietario, string nombre, string descripcion)
+    public Tablero(CrearTableroViewModel tableroVM)
     {
-        this.id = id;
-        this.idUsuarioPropietario = idUsuarioPropietario;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
+        this.idUsuarioPropietario = tableroVM.IdUsuarioPropietario;
+        this.nombre = tableroVM.Nombre;
+        this.descripcion = tableroVM.Descripcion;
     }
 
-    public Tablero(int idUsuarioPropietario, string nombre, string descripcion)
+    public Tablero(ModificarTableroViewModel tableroVM)
     {
-        this.idUsuarioPropietario = idUsuarioPropietario;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
+        this.id = tableroVM.Id;
+        this.idUsuarioPropietario = tableroVM.IdUsuarioPropietario;
+        this.nombre = tableroVM.Nombre;
+        this.descripcion = tableroVM.Descripcion;
     }
 
     public int Id { get => id; set => id = value; }

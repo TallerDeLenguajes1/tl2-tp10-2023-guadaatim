@@ -1,3 +1,5 @@
+using Kanban.ViewModels;
+
 namespace Kanban.Models;
 
 public enum Rol
@@ -16,20 +18,20 @@ public class Usuario
     public Usuario()
     {
     }
-    
-    public Usuario(string nombreDeUsuario, string contrasenia, Rol rol)
+
+    public Usuario(CrearUsuarioViewModel usuarioVM)
     {
-        this.nombreDeUsuario = nombreDeUsuario;
-        this.contrasenia = contrasenia;
-        this.rol = rol;
+        this.nombreDeUsuario = usuarioVM.NombreDeUsuario;
+        this.contrasenia = usuarioVM.Contrasenia;
+        this.rol = usuarioVM.Rol;
     }
 
-    public Usuario(int id, string nombreDeUsuario, string contrasenia, Rol rol)
+    public Usuario(ModificarUsuarioViewModel usuarioVM)
     {
-        this.id = id;
-        this.nombreDeUsuario = nombreDeUsuario;
-        this.contrasenia = contrasenia;
-        this.rol = rol;
+        this.id = usuarioVM.Id;
+        this.nombreDeUsuario = usuarioVM.NombreDeUsuario;
+        this.contrasenia = usuarioVM.Contrasenia;
+        this.rol = usuarioVM.Rol;
     }
 
     public int Id { get => id; set => id = value; }

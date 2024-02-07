@@ -25,25 +25,25 @@ public class Tarea
     {
     }
 
-    public Tarea(int id, int idTablero, string nombre, string descripcion, string color, int idUsuarioAsignado, EstadoTarea estado)
+    public Tarea(CrearTareaViewModel tareaVM)
     {
-        this.id = id;
-        this.idTablero = idTablero;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.color = color;
-        this.idUsuarioAsignado = idUsuarioAsignado;
-        this.estado = estado;
+        this.idTablero = tareaVM.IdTablero;
+        this.nombre = tareaVM.Nombre;
+        this.descripcion = tareaVM.Descripcion;
+        this.color = tareaVM.Color;
+        this.idUsuarioAsignado = tareaVM.IdUsuarioAsignado;
+        this.estado = tareaVM.Estado;
     }
 
-    public Tarea(int idTablero, string nombre, string descripcion, string color, int idUsuarioAsignado, EstadoTarea estado)
+    public Tarea(ModificarTareaViewModel tareaVM)
     {
-        this.idTablero = idTablero;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.color = color;
-        this.idUsuarioAsignado = idUsuarioAsignado;
-        this.estado = estado;
+        this.id = tareaVM.Id;
+        this.idTablero = tareaVM.IdTablero;
+        this.nombre = tareaVM.Nombre;
+        this.descripcion = tareaVM.Descripcion;
+        this.color = tareaVM.Color;
+        this.idUsuarioAsignado = tareaVM.IdUsuarioAsignado;
+        this.estado = tareaVM.Estado;
     }
 
     public int Id { get => id; set => id = value; }
