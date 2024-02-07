@@ -1,0 +1,20 @@
+@using Kanban.ViewModels
+
+@{
+    ViewBag.Title = "Modificar Usuario";
+}
+
+@model ModificarUsuarioViewModel
+
+<form asp-controller="Usuario" asp-action="ModificarUsuario" method="post">
+        <input asp-for="@Model.Id" value="@Model.Id" hidden>
+    <label asp-for="@Model.NombreDeUsuario">Nombre de usuario</label>
+        <input asp-for="@Model.NombreDeUsuario" value="@Model.NombreDeUsuario">
+        <input asp-for="@Model.Rol" value="@Model.Rol" hidden>
+    <label asp-for="@Model.Contrasenia">Contraseña</label>
+        <input asp-for="@Model.Contrasenia" value="@Model.Contrasenia">
+    <button type="submit">Modificar Usuario</button>
+    <button><a asp-controller="Usuario" asp-action="ListarUsuarios">Cancelar</a></button>
+</form>
+
+@section Scripts {<partial name="_ValidationScriptsPartial"/>}
