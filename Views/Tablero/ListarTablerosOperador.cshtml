@@ -1,8 +1,14 @@
 @using Kanban.ViewModels
 
+@{
+    ViewBag.Title = "Listar Tableros";
+    Layout = "~/Views/Shared/_LayoutOperador.cshtml";
+}
+
 @model ListarTablerosViewModel
 
-<p>TODOS LOS TABLEROS</p>
+
+<p>TABLEROS DONDE TIENE TAREAS</p>
 <table>
     <thead>
         <tr>
@@ -11,25 +17,27 @@
             <th>Nombre Usuario Propietario</th>
             <th>Nombre</th>
             <th>Descripcion</th>
-            <th>Modificar</th>
-            <th>Eliminar</th>
         </tr>
     </thead>
     <tbody>
         @foreach(var tablero in @Model.TablerosVM)
         {
+            <tr>
             <td hidden>@tablero.Id</td>
             <td hidden>@tablero.IdUsuarioPropietario</td>
             <td>@tablero.NombreUsuario</td>
             <td>@tablero.Nombre</td>
             <td>@tablero.Descripcion</td>
+            <td><a asp-controller="Tarea" asp-action="ListarTareasPorTablero" asp-route-idTablero="@tablero.Id">ListarTareas</a></td>
+            <td><a asp-controller="Tarea" asp-action="MostrarTarea" asp-route-idTablero="@tablero.Id">Mi Tarea</a></td>
+            </tr>
         }
     </tbody>
 </table>
 
 <p>TABLEROS PROPIOS</p>
 
-<p>TODOS LOS TABLEROS</p>
+<p>TODOS SUS TABLEROS</p>
 <table>
     <thead>
         <tr>
@@ -43,8 +51,9 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(var tablero in @Model.TablerosVM)
+        @foreach(var tablero in @Model.TablerosPropiosVM)
         {
+            <tr>
             <td hidden>@tablero.Id</td>
             <td hidden>@tablero.IdUsuarioPropietario</td>
             <td>@tablero.NombreUsuario</td>
@@ -52,7 +61,9 @@
             <td>@tablero.Descripcion</td>
             <td><a asp-controller="Tablero" asp-action="ModificarTablero" asp-route-idTablero="@tablero.Id">Modificar</a></td>
             <td><a asp-controller="Tablero" asp-action="EliminarTablero" asp-route-idTablero="@tablero.Id">Eliminar</a></td>
+            <td><a asp-controller="Tarea" asp-action="ListarTareasPorTablero" asp-route-idTablero="@tablero.Id">Listar Tareas</a> </td>
             <td><a asp-controller="Tarea" asp-action="AltaTarea" asp-route-idTablero="@tablero.Id">Agregar Tarea</a></td>
+            </tr>
         }
     </tbody>
 </table>
