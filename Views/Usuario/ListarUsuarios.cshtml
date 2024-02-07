@@ -1,26 +1,43 @@
 @using Kanban.ViewModels
 
+@{
+    ViewBag.Title = "Listar Usuario";
+}
+
 @model ListarUsuariosViewModel
 
-<table>
-    <thead>
-        <th>Nombre de Usuario</th>
-        <th>Rol</th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>@Model.UsuarioLoggeado.NombreDeUsuario</td>
-            <td>@Model.UsuarioLoggeado.Rol</td>
-            <td><a asp-controller="Usuario" asp-action="ModificarUsuario" asp-route-idUsuario="@Model.UsuarioLoggeado.Id">Modificar</a></td>
-        </tr>
-        @foreach(UsuarioViewModel usuario in @Model.UsuariosVM)
-        {
-            <tr>
-                <td>@usuario.NombreDeUsuario</td>
-                <td>@usuario.Rol</td>
-                <td><a asp-controller="Usuario" asp-action="ModificarUsuario" asp-route-idUsuario="@usuario.Id">Modificar</a></td>
-                <td><a asp-controller="Usuario" asp-action="EliminarUsuario" asp-route-idUsuario="@usuario.Id">Eliminar</a></td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <table class="table caption-top">
+                <caption>Lista De Usuarios</caption>
+                <thead>
+                    <tr>
+                        <th>Nombre de Usuario</th>
+                        <th>Rol</th>
+                        <th>Modificar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.UsuarioLoggeado.NombreDeUsuario</td>
+                        <td>@Model.UsuarioLoggeado.Rol</td>
+                        <td><a asp-controller="Usuario" asp-action="ModificarUsuario" asp-route-idUsuario="@Model.UsuarioLoggeado.Id">Modificar</a></td>
+                        <td>No disponible</td>
+                    </tr>
+                    @foreach(UsuarioViewModel usuario in @Model.UsuariosVM)
+                    {
+                        <tr>
+                            <td>@usuario.NombreDeUsuario</td>
+                            <td>@usuario.Rol</td>
+                            <td><a asp-controller="Usuario" asp-action="ModificarUsuario" asp-route-idUsuario="@usuario.Id">Modificar</a></td>
+                            <td><a asp-controller="Usuario" asp-action="EliminarUsuario" asp-route-idUsuario="@usuario.Id">Eliminar</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

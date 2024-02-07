@@ -1,16 +1,30 @@
 @using Kanban.ViewModels
 
+@{
+    ViewBag.Title = "Mis datos";
+    Layout = "~/Views/Shared/_LayoutOperador.cshtml";
+}
+
 @model UsuarioViewModel
 
-<table>
-    <thead>
-        <th>Nombre de Usuario</th>
-        <th>Rol</th>
-    </thead>
-    <tbody>
-            <tr>
-                <td>@Model.NombreDeUsuario</td>
-                <td>@Model.Rol</td>
-            </tr>
-    </tbody>
-</table>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <table class="table caption-top">
+                <caption>Mis datos</caption>
+                <thead>
+                    <tr>
+                        <th>Nombre de Usuario</th>
+                        <th>Rol</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.NombreDeUsuario</td>
+                        <td>@Model.Rol</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
