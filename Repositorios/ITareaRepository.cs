@@ -10,9 +10,9 @@ public interface ITareaRepository
     public List<Tarea> GetAllTareas();
     public Tarea GetTareaById(int idTarea);
     public List<Tarea> GetAllTareasByUsuario(int idUsuario);
-    public List<Tarea> GetAllTareasByTablero(int idTablero);
+    public List<TareaViewModel> GetAllTareasByTablero(int idTablero);
     public List<TareaViewModel> GetTareasViewModel();
-    public List<TareaViewModel> GetTareaViewModelByUsuario(int idTarea);
-    public void AsignarUsuario(int idUsuario, int idTarea);
+    public List<TareaViewModel> GetTareasViewModelByUsuario(int idUsuario);
+    public TareaViewModel GetTareaViewModel(int idUsuario, int idTablero);
     public void DeleteTarea(int idTarea);
 }
