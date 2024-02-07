@@ -1,8 +1,12 @@
 @using Kanban.ViewModels
 
+@{
+    ViewBag.Title = "Modificar Tablero";
+}
+
 @model TableroViewModel
 
-<form asp-controller="Tablero" asp-action="UpdateTablero">
+<form asp-controller="Tablero" asp-action="UpdateTablero" method="post">
     <label asp-for="@Model.Id" hidden>Id</label>
         <input asp-for="@Model.Id" value="@Model.Id" hidden>
     <label asp-for="@Model.IdUsuarioPropietario" hidden>Id Usuario</label>
