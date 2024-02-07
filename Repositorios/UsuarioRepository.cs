@@ -4,18 +4,18 @@ namespace Kanban.Repository;
 
 public class UsuarioRepository : IUsuarioRepository
 {
-    private string cadenaConexion;
+    private string _cadenaConexion;
     
     public UsuarioRepository(string CadenaDeConexion)
     {
-        cadenaConexion = CadenaDeConexion;
+        _cadenaConexion = CadenaDeConexion;
     }
 
     public void CreateUsuario(Usuario usuarioNuevo)
     {
         var queryString = @"INSERT INTO Usuario (nombre_de_usuario, contrasenia, rol) VALUES(@nombre, @contrasenia, @rol);";
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
 
@@ -34,7 +34,7 @@ public class UsuarioRepository : IUsuarioRepository
         var queryString = @"SELECT COUNT(id) as existe FROM Usuario WHERE nombre_de_usuario = @nombreUsuario;";
         bool existe = false;
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
@@ -62,7 +62,7 @@ public class UsuarioRepository : IUsuarioRepository
     {
         var queryString = @"UPDATE Usuario SET nombre_de_usuario = @nombre, contrasenia = @contrasenia, rol = @rol WHERE id = @idUsuario;";
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
@@ -82,7 +82,7 @@ public class UsuarioRepository : IUsuarioRepository
         var queryString = @"SELECT * FROM Usuario;";
         List<Usuario> usuarios = null;
         
-        using(SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using(SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
@@ -118,7 +118,7 @@ public class UsuarioRepository : IUsuarioRepository
         var queryString = @"SELECT * FROM Usuario WHERE nombre_de_usuario = @nombreUsuario;";
         Usuario usuario = null;
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
@@ -152,7 +152,7 @@ public class UsuarioRepository : IUsuarioRepository
         var queryString = @"SELECT * FROM Usuario WHERE id = @idUsuario;";
         Usuario usuario = null;
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             SQLiteCommand command = new SQLiteCommand(queryString, connection);
             connection.Open();
@@ -185,7 +185,7 @@ public class UsuarioRepository : IUsuarioRepository
     {
         var queryString = @"DELETE FROM Usuario WHERE id = @idUsuario;";
 
-        using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion))
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
             connection.Open();
             
@@ -195,6 +195,71 @@ public class UsuarioRepository : IUsuarioRepository
             command.ExecuteNonQuery();
 
             connection.Close();
+        }
+    }
+
+    public bool ExisteUsuarioLogin(Usuario usuario)
+    {
+        var queryString = @"SELECT COUNT(id) as existe FROM Usuario WHERE nombre_de_usuario = @nombreUsuario AND contrasenia = @contrasenia;";
+        bool existe = false;
+
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+            command.Parameters.Add(new SQLiteParameter("@nombreUsuario", usuario.NombreDeUsuario));
+            command.Parameters.Add(new SQLiteParameter("@contrasenia", usuario.Contrasenia));
+            
+            using (SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    if (Convert.ToInt32(reader["existe"]) == 1)
+                    {
+                        existe = true;
+                    }
+                }
+            }
+            connection.Close();
+        }
+        return existe;
+    }
+
+    public List<Usuario> GetAllUsuariosExcept(int idUsuario)
+    {
+        var queryString = @"SELECT * FROM Usuario WHERE id <> @idUsuario;";
+        List<Usuario> usuarios = null;
+
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+
+            using (SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    if (usuarios == null)
+                    {
+                        usuarios = new List<Usuario>();
+                    }
+                    Usuario usuario = new Usuario();
+                    usuario.Id = Convert.ToInt32(reader["id"]);
+                    usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
+                    usuario.Contrasenia = reader["contrasenia"].ToString();
+                    usuario.Rol = (Rol) Convert.ToInt32(reader["rol"]);
+                    usuarios.Add(usuario);
+                }
+            }
+            connection.Close();
+        }
+        if(usuarios == null)
+        {
+            throw new Exception("La lista de usuarios esta vacia");
+        } else
+        {
+            return usuarios;
         }
     }
 }
