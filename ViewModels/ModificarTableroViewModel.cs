@@ -37,7 +37,6 @@ public class ModificarTableroViewModel
     [Display(Name = "Nombre")]
     public string Nombre { get => nombre; set => nombre = value; }
 
-    //[Required(ErrorMessage = "Este campo no puede estar vacio")]
     [MaxLength(50, ErrorMessage = "La descripcion debe tener hasta 50 caracteres")]
     [Display(Name = "Descripcion")]
     public string? Descripcion { get => descripcion; set => descripcion = value; }
