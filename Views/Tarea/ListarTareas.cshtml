@@ -1,5 +1,9 @@
 @using Kanban.ViewModels
 
+@{
+    ViewBag.Title = "Listar Tarea";
+}
+
 @model ListarTareasViewModel
 
 <p>TODAS LAS TAREAS</p>
@@ -30,8 +34,8 @@
                 <td hidden>@tarea.IdUsuarioAsignado</td>
                 <td>@tarea.Estado</td>
                 <td>@tarea.NombreUsuario</td>
-                <td><a asp-controller="Tarea" asp-action="ModificarTarea" asp-route-idTarea="@tarea.Id">Modificar</a></td>
-                <td><a asp-controller="Tarea" asp-action="EliminarTarea" asp-route-idTarea="@tarea.Id" asp-route-nombreUsuario="@tarea.NombreUsuario">Eliminar</a></td>
+                <td><a asp-controller="Tarea" asp-action="ModificarTarea" asp-route-idTarea="@tarea.Id" asp-route-idTablero="@tarea.IdTablero">Modificar</a></td>
+                <td><a asp-controller="Tarea" asp-action="EliminarTarea" asp-route-idTarea="@tarea.Id">Eliminar</a></td>
             </tr>
         }
     </tbody>
