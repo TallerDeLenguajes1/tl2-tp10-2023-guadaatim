@@ -11,22 +11,15 @@ namespace Kanban.Controllers;
 public class TableroController : Controller
 {
     private ITableroRepository _tableroRepository;
-    private IUsuarioRepository _usuarioRepository;
     private readonly ILogger<TableroController> _logger;
 
-    public TableroController(ILogger<TableroController> logger, ITableroRepository tableroRepository, IUsuarioRepository usuarioRepository)
+    public TableroController(ILogger<TableroController> logger, ITableroRepository tableroRepository)
     {
         _logger = logger;
         _tableroRepository = tableroRepository;
-        _usuarioRepository = usuarioRepository;
     }
 
     public IActionResult Index()
-    {
-        return View();
-    }
-
-    public IActionResult Privacy()
     {
         return View();
     }
@@ -38,31 +31,45 @@ public class TableroController : Controller
         {
             if(isAdmin())
             {
-                //dice q esta nulo ????
-                string nombre = HttpContext.Session.GetString("NombreDeUsuario");
-                string rol = HttpContext.Session.GetString("Rol");
-                List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
-                ListarTablerosViewModel tableros = new ListarTablerosViewModel(nombre!, rol!, _tableroRepository.GetAllTableros(), usuarios);
-                int i = 0;
-
-                if(tableros != null)
-                {
-                    return View(tableros);
-                } else
-                {
-                    return NotFound();
-                }
+                int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
+                List<TableroViewModel> tablerosVM = _tableroRepository.GetTablerosViewModel();
+                List<TableroViewModel> tablerosPropiosVM = _tableroRepository.GetTablerosViewModelByUsuario(id);
+                ListarTablerosViewModel tableros = new ListarTablerosViewModel(tablerosVM, tablerosPropiosVM);
+                return View(tableros);
             } else
             {
                 if (isOperador())
                 {
-                    ListarTablerosViewModel tableros = new ListarTablerosViewModel(HttpContext.Session.GetString("NombreDeUsuario")!, HttpContext.Session.GetString("Rol")!, _tableroRepository.GetTableroByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)), _usuarioRepository.GetAllUsuarios());
-                    return View(tableros);
+                    return RedirectToAction("ListarTablerosOperador");
                 } else
                 {
-                    return NotFound();
+                    return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString()); 
+            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+        }
+    }
+
+    [HttpGet]
+    public IActionResult ListarTablerosOperador()
+    {
+        try
+        {
+            if (isOperador())
+            {
+                int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
+                List<TableroViewModel> tablerosVM = _tableroRepository.GetTablerosViewModelByTarea(id);
+                List<TableroViewModel> tablerosPropiosVM = _tableroRepository.GetTablerosViewModelByUsuario(id);
+                ListarTablerosViewModel tableros = new ListarTablerosViewModel(tablerosVM, tablerosPropiosVM);
+                return View(tableros);
+            } else
+            {
+                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            }  
         }
         catch (Exception ex)
         {
@@ -76,7 +83,7 @@ public class TableroController : Controller
     {
         try
         {
-            if (isAdmin())
+            if (isAdmin() || isOperador())
             {
                 return View(new CrearTableroViewModel());
             } else
@@ -96,14 +103,15 @@ public class TableroController : Controller
     {
         try
         {
-            if (isAdmin())
+            if (isAdmin() || isOperador())
             {
                 if(!ModelState.IsValid)
                 {
                     return RedirectToRoute(new {controller = "Home", action = "Index"});
                 } else
                 {
-                    Tablero tableroNuevo = new Tablero(Convert.ToInt32(HttpContext.Session.GetString("Id")), tableroNuevoVM.Nombre, tableroNuevoVM.Descripcion);
+                    Tablero tableroNuevo = new Tablero(tableroNuevoVM);
+                    tableroNuevo.IdUsuarioPropietario = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
                     _tableroRepository.CreateTablero(tableroNuevo);
                     return RedirectToAction("ListarTableros");
                 }
@@ -124,7 +132,7 @@ public class TableroController : Controller
     {
         try
         {
-            if (isAdmin())
+            if (isAdmin() || isOperador())
             {
                 TableroViewModel tablero = new TableroViewModel(_tableroRepository.GetTableroById(idTablero));
                 return View(tablero);
@@ -145,14 +153,14 @@ public class TableroController : Controller
     {
         try
         {
-            if (isAdmin())
+            if (isAdmin() || isOperador())
             {
                 if(!ModelState.IsValid)
                 {
                     return RedirectToRoute(new {controller = "Home", action = "Index"});
                 } else 
                 {
-                    Tablero tableroModificado = new Tablero(tableroModificadoVM.Id, tableroModificadoVM.IdUsuarioPropietario, tableroModificadoVM.Nombre, tableroModificadoVM.Descripcion);
+                    Tablero tableroModificado = new Tablero(tableroModificadoVM);
                     _tableroRepository.UpdateTablero(tableroModificado);
                     return RedirectToAction("ListarTableros");
                 }
@@ -173,9 +181,9 @@ public class TableroController : Controller
     {
         try
         {
-            if (isAdmin())
+            if (isAdmin() || isOperador())
             {
-                Tablero tablero = _tableroRepository.GetTableroById(idTablero);
+                TableroViewModel tablero = new TableroViewModel(_tableroRepository.GetTableroById(idTablero));
                 return View(tablero);
             } else
             {
@@ -190,12 +198,19 @@ public class TableroController : Controller
     }
 
     [HttpPost]
-    public IActionResult DeleteTablero(Tablero tablero)
+    public IActionResult DeleteTablero(TableroViewModel tablero)
     {
         try
         {
-            _tableroRepository.DeleteTablero(tablero.Id);
-            return RedirectToAction("ListarTableros");
+            if (isAdmin() || isOperador())
+            {
+                _tableroRepository.DeleteTablero(tablero.Id);
+                return RedirectToAction("ListarTableros");
+            } else
+            {
+                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR    
+            }
+            
         }
         catch (Exception ex)
         {
