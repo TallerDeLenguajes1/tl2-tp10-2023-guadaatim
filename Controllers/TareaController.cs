@@ -28,11 +28,6 @@ public class TareaController : Controller
         return View();
     }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
     [HttpGet]
     public IActionResult ListarTareas()
     {
@@ -40,14 +35,16 @@ public class TareaController : Controller
         {
             if(isAdmin())
             {
-                ListarTareasViewModel tareas = new ListarTareasViewModel(_tareaRepository.GetAllTareas(), _usuarioRepository.GetAllUsuarios(), _tableroRepository.GetAllTableros(), HttpContext.Session.GetString("Rol")!, HttpContext.Session.GetString("NombreDeUsuario")!);
-                return View(tareas);
+                int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
+                List<TareaViewModel> tareas = _tareaRepository.GetTareasViewModel();
+                List<TareaViewModel> tareasPropias = _tareaRepository.GetTareasViewModelByUsuario(id);
+                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, tareasPropias);
+                return View(tareasVM);
             } else
             {
                 if (isOperador())
                 {
-                    ListarTareasViewModel tareas = new ListarTareasViewModel(_tareaRepository.GetAllTareasByUsuario(Int32.Parse(HttpContext.Session.GetString("Id")!)), _usuarioRepository.GetAllUsuarios(), _tableroRepository.GetAllTableros(), HttpContext.Session.GetString("Rol")!, HttpContext.Session.GetString("NombreDeUsuario")!);
-                    return View(tareas);
+                    return RedirectToAction("ListarTareasOperador");
                 } else
                 {
                     return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR        
@@ -58,6 +55,31 @@ public class TareaController : Controller
         {
             _logger.LogError(ex.ToString());            
             return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+        }
+    }
+
+    [HttpGet]
+    public IActionResult ListarTareasOperador()
+    {
+        try
+        {
+            if(isOperador())
+            {
+
+                int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
+                List<TareaViewModel> tareas = _tareaRepository.GetTareasViewModel();
+                List<TareaViewModel> tareasPropias = _tareaRepository.GetTareasViewModelByUsuario(id);
+                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, tareasPropias);
+                return View(tareasVM);
+            } else
+            {
+                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR        
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR        
         }
     }
 
