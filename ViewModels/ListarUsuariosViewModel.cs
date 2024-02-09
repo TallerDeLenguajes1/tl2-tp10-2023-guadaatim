@@ -11,7 +11,7 @@ public class ListarUsuariosViewModel
     
     public ListarUsuariosViewModel(List<Usuario> usuarios, UsuarioViewModel usuarioLoggeado)
     {
-        this.UsuarioLoggeado = usuarioLoggeado;
+        this.usuarioLoggeado = usuarioLoggeado;
         usuariosVM = new List<UsuarioViewModel>();
 
         foreach (var usuario in usuarios)
