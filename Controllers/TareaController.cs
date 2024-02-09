@@ -112,7 +112,7 @@ public class TareaController : Controller
         try
         {
             int idUsuario = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
-            if (isAdmin() _tableroRepository.PerteneceTablero(idUsuario, idTablero))
+            if (isAdmin() || _tableroRepository.PerteneceTablero(idUsuario, idTablero))
             {
                 List<TareaViewModel> tareas = _tareaRepository.GetAllTareasByTablero(idTablero);
                 ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas);
@@ -151,14 +151,14 @@ public class TareaController : Controller
     }
 
     [HttpGet]
-    public IActionResult AltaTarea()
+    public IActionResult AltaTarea(int idTablero)
     {
         try
         {
             if(isAdmin() || isOperador())
             {
                 ListarUsuariosViewModel usuarios = new ListarUsuariosViewModel(_usuarioRepository.GetAllUsuarios());
-                return View(new CrearTareaViewModel());
+                return View(new CrearTareaViewModel(idTablero, usuarios));
             } else
             {
                 return RedirectToRoute(new {controller = "Home", action = "Index"});
@@ -183,7 +183,7 @@ public class TareaController : Controller
                     return RedirectToRoute(new {controller = "Home", action = "Index"});
                 } else
                 {
-                    Tarea tareaNueva = new Tarea(tareaNuevaVM.IdTablero, tareaNuevaVM.Nombre, tareaNuevaVM.Descripcion, tareaNuevaVM.Color, Convert.ToInt32(HttpContext.Session.GetString("Id")), tareaNuevaVM.Estado);
+                    Tarea tareaNueva = new Tarea(tareaNuevaVM);
                     _tareaRepository.CreateTarea(tareaNuevaVM.IdTablero, tareaNueva);
                     return RedirectToAction("ListarTareas");
                 } 
@@ -200,7 +200,7 @@ public class TareaController : Controller
     }
 
     [HttpGet]
-    public IActionResult ModificarTarea(int idTarea, string nombreUsuario)
+    public IActionResult ModificarTarea(int idTarea, int idTablero)
     {
         try
         {
@@ -229,7 +229,7 @@ public class TareaController : Controller
     }
 
     [HttpGet]
-    public IActionResult ModificarTareaOperador(int idTarea, string nombreUsuario)
+    public IActionResult ModificarTareaOperador(int idTarea)
     {
         try
         {
@@ -259,13 +259,10 @@ public class TareaController : Controller
             {
                 if(!ModelState.IsValid)
                 {
-                    var errors = ModelState.Select(x => x.Value.Errors)
-                    .Where(y => y.Count > 0)
-                    .ToList();
                     return RedirectToRoute(new {controller = "Home", action = "Index"});
                 } else
                 {
-                    Tarea tareaModificada = new Tarea(tareaModificadaVM.Id, tareaModificadaVM.IdTablero, tareaModificadaVM.Nombre, tareaModificadaVM.Descripcion, tareaModificadaVM.Color, tareaModificadaVM.IdUsuarioAsignado.GetValueOrDefault(), tareaModificadaVM.Estado);
+                    Tarea tareaModificada = new Tarea(tareaModificadaVM);
                     _tareaRepository.UpdateTarea(tareaModificada);
                     return RedirectToAction("ListarTareas");
                 }
@@ -286,9 +283,9 @@ public class TareaController : Controller
     {
         try
         {
-            if(isAdmin())
+            if(isAdmin() || isOperador())
             {
-                Tarea tarea = _tareaRepository.GetTareaById(idTarea);
+                TareaViewModel tarea = new TareaViewModel(_tareaRepository.GetTareaById(idTarea));
                 return View(tarea); 
             } else
             {
@@ -303,12 +300,18 @@ public class TareaController : Controller
     }
 
     [HttpPost]
-    public IActionResult DeleteTarea(Tarea tarea)
+    public IActionResult DeleteTarea(TareaViewModel tarea)
     {
         try
         {
-            _tareaRepository.DeleteTarea(tarea.Id);
-            return RedirectToAction("ListarTareas");
+            if (isAdmin() || isOperador())
+            {
+                _tareaRepository.DeleteTarea(tarea.Id);
+                return RedirectToAction("ListarTareas");
+            } else
+            {
+                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            }
         }
         catch (Exception ex)
         {
