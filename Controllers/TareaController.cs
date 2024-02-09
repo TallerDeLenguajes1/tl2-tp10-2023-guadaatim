@@ -84,6 +84,29 @@ public class TareaController : Controller
     }
 
     [HttpGet]
+    public IActionResult MostrarTarea(int idTablero)
+    {
+        try
+        {
+            if (isOperador()) //operador y admin ?? 
+            {
+                int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
+                TareaViewModel tarea = _tareaRepository.GetTareaViewModel(id, idTablero);
+                return View(tarea);
+            } else
+            {
+                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR        
+        }
+        
+    }
+
+    [HttpGet]
     public IActionResult ListarTareasPorTablero(int idTablero)
     {
         if (isAdmin())
