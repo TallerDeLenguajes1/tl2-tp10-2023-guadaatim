@@ -155,9 +155,9 @@ public class TareaController : Controller
     {
         try
         {
-            ListarUsuariosViewModel usuarios = new ListarUsuariosViewModel(_usuarioRepository.GetAllUsuarios());
-            if(isAdmin())
+            if(isAdmin() || isOperador())
             {
+                ListarUsuariosViewModel usuarios = new ListarUsuariosViewModel(_usuarioRepository.GetAllUsuarios());
                 return View(new CrearTareaViewModel());
             } else
             {
@@ -196,60 +196,6 @@ public class TareaController : Controller
         {
             _logger.LogError(ex.ToString());            
             return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
-        }
-    }
-
-    [HttpGet]
-    public IActionResult AsignarUsuario(int idTarea, string nombreUsuario)
-    {
-        try
-        {
-            if (isAdmin() || isOperador())
-            {
-                if(HttpContext.Session.GetString("NombreDeUsuario") == nombreUsuario)
-                {
-                    AsignarUsuarioViewModel usuarios = new AsignarUsuarioViewModel(_usuarioRepository.GetAllUsuarios(), _tareaRepository.GetTareaById(idTarea));
-                    return View(usuarios);
-                } else
-                {
-                    return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
-                }
-            } else
-            {
-                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
-        }
-    }
-
-    [HttpGet]
-    public IActionResult AssignUsuario(int idTarea, int idUsuario)
-    {
-        try
-        {
-            if(isAdmin() || isOperador())
-            {
-                if(Convert.ToInt32(HttpContext.Session.GetString("Id")) != idUsuario)
-                {
-                    _tareaRepository.AsignarUsuario(idUsuario, idTarea);
-                    return RedirectToAction("ListarTareas");
-                } else
-                {
-                    return RedirectToAction("ListarTareas");
-                }
-            } else
-            {
-                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
-            }
-        }
-        catch (Exception ex)
-        {     
-           _logger.LogError(ex.ToString());
-           return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
         }
     }
 
