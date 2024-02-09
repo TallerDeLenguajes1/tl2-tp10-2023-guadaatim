@@ -135,7 +135,20 @@ public class TareaController : Controller
         }
     }
 
-    
+    [HttpGet]
+    public IActionResult ListarTareasPorTableroOperador(int idTablero)
+    {
+        if (isOperador())
+        {
+            int idUsuario = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
+            List<TareaViewModel> tareas = _tareaRepository.GetAllTareasByTablero(idTablero);
+            ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas);
+            return View(tareasVM);
+        } else
+        {
+            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+        }
+    }
 
     [HttpGet]
     public IActionResult AltaTarea()
