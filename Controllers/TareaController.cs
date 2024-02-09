@@ -109,22 +109,33 @@ public class TareaController : Controller
     [HttpGet]
     public IActionResult ListarTareasPorTablero(int idTablero)
     {
-        if (isAdmin())
+        try
         {
-            ListarTareasViewModel tareas = new ListarTareasViewModel(_tareaRepository.GetAllTareasByTablero(idTablero), _usuarioRepository.GetAllUsuarios(), _tableroRepository.GetAllTableros(), HttpContext.Session.GetString("Rol")!, HttpContext.Session.GetString("NombreDeUsuario")!);
-            return View(tareas);
-        } else
-        {
-            if(isOperador())
+            int idUsuario = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
+            if (isAdmin() _tableroRepository.PerteneceTablero(idUsuario, idTablero))
             {
-                ListarTareasViewModel tareas = new ListarTareasViewModel(_tareaRepository.GetAllTareasByTablero(idTablero), _usuarioRepository.GetAllUsuarios(), _tableroRepository.GetAllTableros(), HttpContext.Session.GetString("Rol")!, HttpContext.Session.GetString("NombreDeUsuario")!);
-                return View(tareas); //otra vista q no pueda modificar tareas q no son de el usuario
+                List<TareaViewModel> tareas = _tareaRepository.GetAllTareasByTablero(idTablero);
+                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas);
+                return View(tareasVM);
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+                if(isOperador())
+                {
+                    return RedirectToAction("ListarTareasPorTableroOperador", new {idTablero = idTablero});
+                } else
+                {
+                    return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+                }
             }
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR        
+        }
     }
+
+    
 
     [HttpGet]
     public IActionResult AltaTarea()
