@@ -7,8 +7,45 @@
 
 @model ListarTareasViewModel
 
-<p>TAREAS</p>
 <table>
+    <caption>Mis Tareas</caption>
+    <thead>
+        <tr>
+            <th>Tablero</th>
+            <th hidden>Id</th>
+            <th hidden>Id Tablero</th>
+            <th>Nombre</th>
+            <th>Descripcion</th>
+            <th>Color</th>
+            <th hidden>Id Usuario</th>
+            <th>Estado</th>
+            <th>Usuario Asignado</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(TareaViewModel tarea in @Model.TareasPropiasVM)
+        {
+            <tr>
+                <td>@tarea.NombreTablero</td>
+                <td hidden>@tarea.Id</td>
+                <td hidden>@tarea.IdTablero</td>
+                <td>@tarea.Nombre</td>
+                <td>@tarea.Descripcion</td>
+                <td>@tarea.Color</td>
+                <td hidden>@tarea.IdUsuarioAsignado</td>
+                <td>@tarea.Estado</td>
+                <td>@tarea.NombreUsuario</td>
+                <td><a asp-controller="Tarea" asp-action="ModificarTarea" asp-route-idTarea="@tarea.Id" asp-route-idTablero="@tarea.IdTablero">Modificar</a></td>
+                <td><a asp-controller="Tarea" asp-action="EliminarTarea" asp-route-idTarea="@tarea.Id">Eliminar</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<table>
+    <caption>Todas las Tareas</caption>
     <thead>
         <tr>
             <th>Tablero</th>
@@ -35,43 +72,6 @@
                 <td hidden>@tarea.IdUsuarioAsignado</td>
                 <td>@tarea.Estado</td>
                 <td>@tarea.NombreUsuario</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<p>TAREAS PROPIAS</p>
-<table>
-    <thead>
-        <tr>
-            <th>Tablero</th>
-            <th hidden>Id</th>
-            <th hidden>Id Tablero</th>
-            <th>Nombre</th>
-            <th>Descripcion</th>
-            <th>Color</th>
-            <th hidden>Id Usuario</th>
-            <th>Estado</th>
-            <th>Usuario Asignado</th>
-            <th>Modificar</th>
-            <th>Eliminar</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(TareaViewModel tarea in @Model.TareasPropiasVM)
-        {
-            <tr>
-                <td>@tarea.NombreTablero</td>
-                <td hidden>@tarea.Id</td>
-                <td hidden>@tarea.IdTablero</td>
-                <td>@tarea.Nombre</td>
-                <td>@tarea.Descripcion</td>
-                <td>@tarea.Color</td>
-                <td hidden>@tarea.IdUsuarioAsignado</td>
-                <td>@tarea.Estado</td>
-                <td>@tarea.NombreUsuario</td>
-                <td><a asp-controller="Tarea" asp-action="ModificarTarea" asp-route-idTarea="@tarea.Id" asp-route-idTablero="@tarea.IdTablero">Modificar</a></td>
-                <td><a asp-controller="Tarea" asp-action="EliminarTarea" asp-route-idTarea="@tarea.Id">Eliminar</a></td>
             </tr>
         }
     </tbody>

@@ -6,8 +6,9 @@
 
 @model ListarTablerosViewModel
 
-<p>TODOS LOS TABLEROS</p>
+
 <table>
+    <caption>Mis Tableros</caption>
     <thead>
         <tr>
             <th hidden>Id</th>
@@ -20,7 +21,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(TableroViewModel tablero in @Model.TablerosVM)
+        @foreach(TableroViewModel tablero in @Model.TablerosPropiosVM)
         {
             <tr>
                 <td hidden>@tablero.Id</td>
@@ -37,8 +38,8 @@
     </tbody>
 </table>
 
-<p>TABLEROS PROPIOS</p>
 <table>
+    <caption>Todos los tableros</caption>
     <thead>
         <tr>
             <th hidden>Id</th>
@@ -51,7 +52,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(TableroViewModel tablero in @Model.TablerosPropiosVM)
+        @foreach(TableroViewModel tablero in @Model.TablerosVM)
         {
             <tr>
                 <td hidden>@tablero.Id</td>

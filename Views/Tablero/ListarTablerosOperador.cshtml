@@ -7,38 +7,8 @@
 
 @model ListarTablerosViewModel
 
-
-<p>TABLEROS DONDE TIENE TAREAS</p>
 <table>
-    <thead>
-        <tr>
-            <th hidden>Id</th>
-            <th hidden>Id Usuario Propietario</th>
-            <th>Nombre Usuario Propietario</th>
-            <th>Nombre</th>
-            <th>Descripcion</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(var tablero in @Model.TablerosVM)
-        {
-            <tr>
-            <td hidden>@tablero.Id</td>
-            <td hidden>@tablero.IdUsuarioPropietario</td>
-            <td>@tablero.NombreUsuario</td>
-            <td>@tablero.Nombre</td>
-            <td>@tablero.Descripcion</td>
-            <td><a asp-controller="Tarea" asp-action="ListarTareasPorTablero" asp-route-idTablero="@tablero.Id">ListarTareas</a></td>
-            <td><a asp-controller="Tarea" asp-action="MostrarTarea" asp-route-idTablero="@tablero.Id">Mi Tarea</a></td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<p>TABLEROS PROPIOS</p>
-
-<p>TODOS SUS TABLEROS</p>
-<table>
+    <caption>Mis Tableros</caption>
     <thead>
         <tr>
             <th hidden>Id</th>
@@ -63,6 +33,33 @@
             <td><a asp-controller="Tablero" asp-action="EliminarTablero" asp-route-idTablero="@tablero.Id">Eliminar</a></td>
             <td><a asp-controller="Tarea" asp-action="ListarTareasPorTablero" asp-route-idTablero="@tablero.Id">Listar Tareas</a> </td>
             <td><a asp-controller="Tarea" asp-action="AltaTarea" asp-route-idTablero="@tablero.Id">Agregar Tarea</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<table>
+    <caption>Tableros donde tiene tareas asignadas</caption>
+    <thead>
+        <tr>
+            <th hidden>Id</th>
+            <th hidden>Id Usuario Propietario</th>
+            <th>Nombre Usuario Propietario</th>
+            <th>Nombre</th>
+            <th>Descripcion</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var tablero in @Model.TablerosVM)
+        {
+            <tr>
+            <td hidden>@tablero.Id</td>
+            <td hidden>@tablero.IdUsuarioPropietario</td>
+            <td>@tablero.NombreUsuario</td>
+            <td>@tablero.Nombre</td>
+            <td>@tablero.Descripcion</td>
+            <td><a asp-controller="Tarea" asp-action="ListarTareasPorTablero" asp-route-idTablero="@tablero.Id">ListarTareas</a></td>
+            <td><a asp-controller="Tarea" asp-action="MostrarTarea" asp-route-idTablero="@tablero.Id">Mi Tarea</a></td>
             </tr>
         }
     </tbody>
