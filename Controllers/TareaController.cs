@@ -204,10 +204,11 @@ public class TareaController : Controller
     {
         try
         {
-            if(isAdmin())
+            int idUsuario = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
+            if(isAdmin() || _tableroRepository.PerteneceTablero(idUsuario, idTablero))
             {
-                string nombreSession =  HttpContext.Session.GetString("NombreDeUsuario");
-                ModificarTareaViewModel tarea = new ModificarTareaViewModel(_tareaRepository.GetTareaById(idTarea));
+                ListarUsuariosViewModel usuarios = new ListarUsuariosViewModel(_usuarioRepository.GetAllUsuarios());
+                ModificarTareaViewModel tarea = new ModificarTareaViewModel(_tareaRepository.GetTareaById(idTarea), usuarios);
                 return View(tarea);
             } else
             {
@@ -234,8 +235,8 @@ public class TareaController : Controller
         {
             if(isOperador())
             {
-                string nombreSession =  HttpContext.Session.GetString("NombreDeUsuario");
-                ModificarTareaViewModel tarea = new ModificarTareaViewModel(_tareaRepository.GetTareaById(idTarea));
+                ListarUsuariosViewModel usuarios = new ListarUsuariosViewModel(_usuarioRepository.GetAllUsuarios());
+                ModificarTareaViewModel tarea = new ModificarTareaViewModel(_tareaRepository.GetTareaById(idTarea), usuarios);
                 return View(tarea);
             } else
             {
