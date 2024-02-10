@@ -49,14 +49,14 @@ public class TareaController : Controller
                     return RedirectToAction("ListarTareasOperador");
                 } else
                 {
-                    return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR        
+                    return RedirectToAction("Error"); 
                 }   
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());            
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error");        
         }
     }
 
@@ -76,13 +76,13 @@ public class TareaController : Controller
                 return View(tareasVM);
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR        
+                return RedirectToAction("Error"); 
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR        
+            return RedirectToAction("Error"); 
         }
     }
 
@@ -94,20 +94,20 @@ public class TareaController : Controller
             if (isOperador()) //operador y admin ?? 
             {
                 int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
-                Tarea tarea = _tareaRepository.GetTareaById(id);
+                Tarea tarea = _tareaRepository.GetTareaByUsuarioAndTablero(id, idTablero);
                 TareaViewModel tareaVM = new TareaViewModel(tarea);
-                List<Tablero> tableros = _tableroRepository.GetAllTableros();
-                tareaVM.NombreTablero = tableros.FirstOrDefault(t => t.Id == tareaVM.IdTablero).Nombre;
+                Tablero tablero = _tableroRepository.GetTableroById(idTablero);
+                tareaVM.NombreTablero = tablero.Nombre;
                 return View(tareaVM);
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+                return RedirectToAction("Error"); 
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR        
+            return RedirectToAction("Error"); 
         }
         
     }
@@ -132,30 +132,38 @@ public class TareaController : Controller
                     return RedirectToAction("ListarTareasPorTableroOperador", new {idTablero = idTablero});
                 } else
                 {
-                    return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+                    return RedirectToAction("Error"); 
                 }
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR        
+            return RedirectToAction("Error"); 
         }
     }
 
     [HttpGet]
     public IActionResult ListarTareasPorTableroOperador(int idTablero)
     {
-        if (isOperador())
+        try
         {
-            List<Tarea> tareas = _tareaRepository.GetAllTareasByTablero(idTablero);
-            List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
-            List<Tablero> tableros = _tableroRepository.GetAllTableros();
-            ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, usuarios, tableros);
-            return View(tareasVM);
-        } else
+            if (isOperador())
+            {
+                List<Tarea> tareas = _tareaRepository.GetAllTareasByTablero(idTablero);
+                List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
+                List<Tablero> tableros = _tableroRepository.GetAllTableros();
+                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, usuarios, tableros);
+                return View(tareasVM);
+            } else
+            {
+                return RedirectToAction("Error"); 
+            }
+        }
+        catch (Exception ex)
         {
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            _logger.LogError(ex.ToString());
+            return RedirectToAction("Error"); 
         }
     }
 
@@ -170,13 +178,13 @@ public class TareaController : Controller
                 return View(new CrearTareaViewModel(idTablero, usuarios));
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"});
+                return RedirectToAction("Error"); 
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error"); 
         }
     }
 
@@ -189,7 +197,7 @@ public class TareaController : Controller
             {
                 if(!ModelState.IsValid)
                 {
-                    return RedirectToRoute(new {controller = "Home", action = "Index"});
+                    return RedirectToAction("Error"); 
                 } else
                 {
                     Tarea tareaNueva = new Tarea(tareaNuevaVM);
@@ -198,13 +206,13 @@ public class TareaController : Controller
                 } 
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+                return RedirectToAction("Error"); 
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());            
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error"); 
         }
     }
 
@@ -226,14 +234,14 @@ public class TareaController : Controller
                     return RedirectToAction("ModificarTareaOperador", new {idTarea = idTarea});
                 } else
                 {
-                    return RedirectToRoute(new {controller = "Home", action = "Index"});
+                    return RedirectToAction("Error"); 
                 }
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error"); 
         }
     }
 
@@ -249,13 +257,13 @@ public class TareaController : Controller
                 return View(tarea);
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"});
+               return RedirectToAction("Error"); 
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error"); 
         }
     }
 
@@ -268,7 +276,7 @@ public class TareaController : Controller
             {
                 if(!ModelState.IsValid)
                 {
-                    return RedirectToRoute(new {controller = "Home", action = "Index"});
+                    return RedirectToAction("Error"); 
                 } else
                 {
                     Tarea tareaModificada = new Tarea(tareaModificadaVM);
@@ -277,13 +285,13 @@ public class TareaController : Controller
                 }
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+                return RedirectToAction("Error"); 
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error"); 
         }
     }
 
@@ -298,13 +306,13 @@ public class TareaController : Controller
                 return View(tarea); 
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"});
+                return RedirectToAction("Error"); 
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error"); 
         }  
     }
 
@@ -319,13 +327,13 @@ public class TareaController : Controller
                 return RedirectToAction("ListarTareas");
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+                return RedirectToAction("Error"); 
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error"); 
         }   
     }
 
