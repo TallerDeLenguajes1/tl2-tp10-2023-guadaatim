@@ -87,6 +87,7 @@ public class TableroRepository : ITableroRepository
     public List<Tablero> GetTableroByUsuario(int idUsuario)
     {
         var queryString = @"SELECT * FROM Tablero WHERE id_usuario_propietario = @idUsuario;";
+        
         List<Tablero> tableros = new List<Tablero>();
 
         using(SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -150,8 +151,8 @@ public class TableroRepository : ITableroRepository
 
     public List<Tablero> GetTablerosByTarea(int idUsuario)
     {
-        var queryString = @"SELECT Tablero.id as idTablero, Tablero.id_usuario_propietario as idUsuario,
-        Tablero.nombre as tablero, Tablero.descripcion as descripcion,
+        var queryString = @"SELECT DISTINCT Tablero.id as idTablero, Tablero.id_usuario_propietario as idUsuario,
+        Tablero.nombre as tablero, Tablero.descripcion as descripcion
         FROM Tablero INNER JOIN Tarea ON Tablero.id = Tarea.id_tablero
         WHERE Tarea.id_usuario_asignado = @idUsuario;";
         List<Tablero> tableros = new List<Tablero>();
