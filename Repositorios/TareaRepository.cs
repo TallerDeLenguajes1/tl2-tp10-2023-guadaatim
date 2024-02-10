@@ -219,4 +219,40 @@ public class TareaRepository : ITareaRepository
             connection.Close();
         }
     }
+
+    public Tarea GetTareaByUsuarioAndTablero(int idUsuario, int idTablero)
+    {
+        var queryString = @"SELECT Tarea.id as idTarea, Tablero.id as idTablero,
+        Tarea.estado as estado, Tarea.descripcion as descripcion, 
+        Tarea.color as color, Tarea.id_usuario_asignado as idUsuario, Tarea.nombre as tarea
+        FROM Tarea 
+        INNER JOIN Tablero ON Tarea.id_tablero = Tablero.id
+        INNER JOIN Usuario ON Tarea.id_usuario_asignado = Usuario.id
+        WHERE Tarea.id_usuario_asignado = @idUsuario AND Tarea.id_tablero = @idTablero;";
+        Tarea tarea = new Tarea();
+
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+            command.Parameters.Add(new SQLiteParameter("@idTablero", idTablero));
+
+            using (SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    tarea.Id = Convert.ToInt32(reader["idTarea"]);
+                    tarea.IdTablero = Convert.ToInt32(reader["idTablero"]);
+                    tarea.Nombre = reader["tarea"].ToString();
+                    tarea.Estado = (EstadoTarea)Convert.ToInt32(reader["estado"]);
+                    tarea.Descripcion = reader["descripcion"].ToString();
+                    tarea.Color = reader["color"].ToString();
+                    tarea.IdUsuarioAsignado = Convert.ToInt32(reader["idUsuario"]);
+                }
+            }
+            connection.Close();
+        }
+        return tarea;
+    }
 }
