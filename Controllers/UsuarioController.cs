@@ -43,14 +43,14 @@ public class UsuarioController : Controller
                     return RedirectToAction("ListarUsuariosOperador");
                 } else
                 {
-                    return RedirectToRoute(new {controller = "Login", action = "Index"});
+                    return RedirectToAction("Error"); 
                 }
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Login", action = "Index"}); //ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error"); 
         }
     }
 
@@ -66,13 +66,13 @@ public class UsuarioController : Controller
                 return View(usuarioVM);
             } else
             {
-                return RedirectToRoute(new {controller = "Login", action = "Index"});
+               return RedirectToAction("Error"); 
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Login", action = "Index"}); //ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error"); 
         }
     }
 
@@ -86,13 +86,13 @@ public class UsuarioController : Controller
                 return View(new CrearUsuarioViewModel());
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"});
+                return RedirectToAction("Error"); 
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Login", action = "Index"}); //ENVIAR A PAGINA DE ERROR 
+            return RedirectToAction("Error"); 
         }
     }
 
@@ -105,7 +105,7 @@ public class UsuarioController : Controller
             {
                 if(!ModelState.IsValid)
                 {
-                    return RedirectToRoute(new {controller = "Home", action = "Index"});
+                    return RedirectToAction("Error"); 
                 } else 
                 {
                     if(_usuarioRepository.ExisteUsuario(usuarioNuevoVM.NombreDeUsuario))
@@ -121,13 +121,13 @@ public class UsuarioController : Controller
                 }
             } else
             {
-                return RedirectToRoute(new {controller = "Login", action = "Index"}); //ENVIAR A PAGINA DE ERROR
+                return RedirectToAction("Error"); 
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Login", action = "Index"}); //ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error"); 
         }
     }
 
@@ -150,13 +150,13 @@ public class UsuarioController : Controller
                 }
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"});
+                return RedirectToAction("Error"); 
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Login", action = "Index"}); //ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error"); 
         }
     }
 
@@ -169,7 +169,7 @@ public class UsuarioController : Controller
             {
                 if(!ModelState.IsValid)
                 {
-                    return RedirectToRoute(new {controller = "Home", action = "Index"});
+                    return RedirectToAction("Error"); 
                 } else
                 {
                     Usuario usuarioModificado = new Usuario(usuarioModificadoVM);
@@ -178,13 +178,13 @@ public class UsuarioController : Controller
                 }
             } else
             {
-                return RedirectToRoute(new {controller = "Login", action = "Index"}); //ENVIAR A PAGINA DE ERROR
+                return RedirectToAction("Error"); 
             }  
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Login", action = "Index"}); //ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error"); 
         }
     }
 
@@ -199,13 +199,13 @@ public class UsuarioController : Controller
                 return View(usuario);
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"});
+                return RedirectToAction("Error"); 
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Login", action = "Index"}); //ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error"); 
         }
     }
 
@@ -220,13 +220,13 @@ public class UsuarioController : Controller
                 return RedirectToAction("ListarUsuarios");
             } else
             {
-                return RedirectToRoute(new {controller = "Login", action = "Index"}); //ENVIAR A PAGINA DE ERROR
+                return RedirectToAction("Error"); 
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Login", action = "Index"}); //ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error"); 
         }
     }
 
