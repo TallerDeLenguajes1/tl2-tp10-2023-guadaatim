@@ -36,9 +36,11 @@ public class TareaController : Controller
             if(isAdmin())
             {
                 int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
-                List<TareaViewModel> tareas = _tareaRepository.GetTareasViewModel();
-                List<TareaViewModel> tareasPropias = _tareaRepository.GetTareasViewModelByUsuario(id);
-                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, tareasPropias);
+                List<Tarea> tareas = _tareaRepository.GetAllTareas();
+                List<Tarea> tareasPropias = _tareaRepository.GetAllTareasByUsuario(id);
+                List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
+                List<Tablero> tableros = _tableroRepository.GetAllTableros();
+                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, tareasPropias, usuarios, tableros);
                 return View(tareasVM);
             } else
             {
@@ -65,11 +67,12 @@ public class TareaController : Controller
         {
             if(isOperador())
             {
-
                 int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
-                List<TareaViewModel> tareas = _tareaRepository.GetTareasViewModel();
-                List<TareaViewModel> tareasPropias = _tareaRepository.GetTareasViewModelByUsuario(id);
-                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, tareasPropias);
+                List<Tarea> tareas = _tareaRepository.GetAllTareas();
+                List<Tarea> tareasPropias = _tareaRepository.GetAllTareasByUsuario(id);
+                List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
+                List<Tablero> tableros = _tableroRepository.GetAllTableros();
+                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, tareasPropias, usuarios, tableros);
                 return View(tareasVM);
             } else
             {
@@ -91,8 +94,11 @@ public class TareaController : Controller
             if (isOperador()) //operador y admin ?? 
             {
                 int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
-                TareaViewModel tarea = _tareaRepository.GetTareaViewModel(id, idTablero);
-                return View(tarea);
+                Tarea tarea = _tareaRepository.GetTareaById(id);
+                TareaViewModel tareaVM = new TareaViewModel(tarea);
+                List<Tablero> tableros = _tableroRepository.GetAllTableros();
+                tareaVM.NombreTablero = tableros.FirstOrDefault(t => t.Id == tareaVM.IdTablero).Nombre;
+                return View(tareaVM);
             } else
             {
                 return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
@@ -114,8 +120,10 @@ public class TareaController : Controller
             int idUsuario = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
             if (isAdmin() || _tableroRepository.PerteneceTablero(idUsuario, idTablero))
             {
-                List<TareaViewModel> tareas = _tareaRepository.GetAllTareasByTablero(idTablero);
-                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas);
+                List<Tarea> tareas = _tareaRepository.GetAllTareasByTablero(idTablero);
+                List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
+                List<Tablero> tableros = _tableroRepository.GetAllTableros();
+                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, usuarios, tableros);
                 return View(tareasVM);
             } else
             {
@@ -140,9 +148,10 @@ public class TareaController : Controller
     {
         if (isOperador())
         {
-            int idUsuario = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
-            List<TareaViewModel> tareas = _tareaRepository.GetAllTareasByTablero(idTablero);
-            ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas);
+            List<Tarea> tareas = _tareaRepository.GetAllTareasByTablero(idTablero);
+            List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
+            List<Tablero> tableros = _tableroRepository.GetAllTableros();
+            ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, usuarios, tableros);
             return View(tareasVM);
         } else
         {

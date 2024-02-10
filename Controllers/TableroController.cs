@@ -10,13 +10,15 @@ namespace Kanban.Controllers;
 
 public class TableroController : Controller
 {
-    private ITableroRepository _tableroRepository;
     private readonly ILogger<TableroController> _logger;
+    private ITableroRepository _tableroRepository;
+    private IUsuarioRepository _usuarioRepository;
 
-    public TableroController(ILogger<TableroController> logger, ITableroRepository tableroRepository)
+    public TableroController(ILogger<TableroController> logger, ITableroRepository tableroRepository, IUsuarioRepository usuarioRepository)
     {
         _logger = logger;
         _tableroRepository = tableroRepository;
+        _usuarioRepository = usuarioRepository;
     }
 
     public IActionResult Index()
@@ -32,9 +34,10 @@ public class TableroController : Controller
             if(isAdmin())
             {
                 int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
-                List<TableroViewModel> tablerosVM = _tableroRepository.GetTablerosViewModel();
-                List<TableroViewModel> tablerosPropiosVM = _tableroRepository.GetTablerosViewModelByUsuario(id);
-                ListarTablerosViewModel tableros = new ListarTablerosViewModel(tablerosVM, tablerosPropiosVM);
+                List<Tablero> tablerosVM = _tableroRepository.GetAllTableros();
+                List<Tablero> tablerosPropiosVM = _tableroRepository.GetTableroByUsuario(id);
+                List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
+                ListarTablerosViewModel tableros = new ListarTablerosViewModel(tablerosVM, tablerosPropiosVM, usuarios);
                 return View(tableros);
             } else
             {
@@ -62,9 +65,10 @@ public class TableroController : Controller
             if (isOperador())
             {
                 int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
-                List<TableroViewModel> tablerosVM = _tableroRepository.GetTablerosViewModelByTarea(id);
-                List<TableroViewModel> tablerosPropiosVM = _tableroRepository.GetTablerosViewModelByUsuario(id);
-                ListarTablerosViewModel tableros = new ListarTablerosViewModel(tablerosVM, tablerosPropiosVM);
+                List<Tablero> tablerosVM = _tableroRepository.GetAllTableros();
+                List<Tablero> tablerosPropiosVM = _tableroRepository.GetTableroByUsuario(id);
+                List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
+                ListarTablerosViewModel tableros = new ListarTablerosViewModel(tablerosVM, tablerosPropiosVM, usuarios);
                 return View(tableros);
             } else
             {
