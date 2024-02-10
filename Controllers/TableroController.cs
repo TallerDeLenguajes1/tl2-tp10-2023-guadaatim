@@ -46,14 +46,14 @@ public class TableroController : Controller
                     return RedirectToAction("ListarTablerosOperador");
                 } else
                 {
-                    return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+                    return RedirectToAction("Error");
                 }
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString()); 
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error");
         }
     }
 
@@ -65,20 +65,20 @@ public class TableroController : Controller
             if (isOperador())
             {
                 int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
-                List<Tablero> tablerosVM = _tableroRepository.GetAllTableros();
+                List<Tablero> tablerosVM = _tableroRepository.GetTablerosByTarea(id);
                 List<Tablero> tablerosPropiosVM = _tableroRepository.GetTableroByUsuario(id);
                 List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
                 ListarTablerosViewModel tableros = new ListarTablerosViewModel(tablerosVM, tablerosPropiosVM, usuarios);
                 return View(tableros);
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+                return RedirectToAction("Error");
             }  
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString()); 
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error");
         }
     }
 
@@ -92,13 +92,13 @@ public class TableroController : Controller
                 return View(new CrearTableroViewModel());
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"});
+                return RedirectToAction("Error");
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error");
         }
     }
 
@@ -111,7 +111,7 @@ public class TableroController : Controller
             {
                 if(!ModelState.IsValid)
                 {
-                    return RedirectToRoute(new {controller = "Home", action = "Index"});
+                    return RedirectToAction("Error");
                 } else
                 {
                     Tablero tableroNuevo = new Tablero(tableroNuevoVM);
@@ -121,13 +121,13 @@ public class TableroController : Controller
                 }
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+                return RedirectToAction("Error");
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error");
         }
     }
 
@@ -142,13 +142,13 @@ public class TableroController : Controller
                 return View(tablero);
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"});
+                return RedirectToAction("Error");
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error");
         }
     }
 
@@ -161,7 +161,7 @@ public class TableroController : Controller
             {
                 if(!ModelState.IsValid)
                 {
-                    return RedirectToRoute(new {controller = "Home", action = "Index"});
+                    return RedirectToAction("Error");
                 } else 
                 {
                     Tablero tableroModificado = new Tablero(tableroModificadoVM);
@@ -170,13 +170,13 @@ public class TableroController : Controller
                 }
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+                return RedirectToAction("Error");
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error");
         }      
     }
 
@@ -191,13 +191,13 @@ public class TableroController : Controller
                 return View(tablero);
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"});
+                return RedirectToAction("Error");
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error");
         }
     }
 
@@ -212,14 +212,14 @@ public class TableroController : Controller
                 return RedirectToAction("ListarTableros");
             } else
             {
-                return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR    
+                return RedirectToAction("Error");
             }
             
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return RedirectToRoute(new {controller = "Home", action = "Index"}); // ENVIAR A PAGINA DE ERROR
+            return RedirectToAction("Error");
         }
     }
 
