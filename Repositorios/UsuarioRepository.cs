@@ -80,7 +80,7 @@ public class UsuarioRepository : IUsuarioRepository
     public List<Usuario> GetAllUsuarios()
     {
         var queryString = @"SELECT * FROM Usuario;";
-        List<Usuario> usuarios = null;
+        List<Usuario> usuarios = new List<Usuario>();
         
         using(SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
@@ -91,10 +91,6 @@ public class UsuarioRepository : IUsuarioRepository
             {
                 while(reader.Read())
                 {
-                    if(usuarios == null)
-                    {
-                        usuarios = new List<Usuario>();
-                    }
                     Usuario usuario = new Usuario();
                     usuario.Id = Convert.ToInt32(reader["id"]);
                     usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
@@ -105,18 +101,12 @@ public class UsuarioRepository : IUsuarioRepository
             }
             connection.Close();
         }
-        if (usuarios == null)
-        {
-            throw new Exception("La lista de usuarios esta vacia");
-        } else
-        {
-            return usuarios;
-        }
+        return usuarios;
     }
     public Usuario GetUsuarioByNombre(string nombreUsuario)
     {
         var queryString = @"SELECT * FROM Usuario WHERE nombre_de_usuario = @nombreUsuario;";
-        Usuario usuario = null;
+        Usuario usuario = new Usuario();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
@@ -128,7 +118,6 @@ public class UsuarioRepository : IUsuarioRepository
             {
                 while (reader.Read())
                 {
-                    usuario = new Usuario();
                     usuario.Id = Convert.ToInt32(reader["id"]);
                     usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
                     usuario.Contrasenia = reader["contrasenia"].ToString();
@@ -137,20 +126,13 @@ public class UsuarioRepository : IUsuarioRepository
             }
             connection.Close();
         }
-
-        if(usuario == null)
-        {
-            throw new Exception("El usuario no existe");
-        } else
-        {
-            return usuario;
-        }
+        return usuario;
     }
 
     public Usuario GetUsuarioById(int idUsuario)
     {
         var queryString = @"SELECT * FROM Usuario WHERE id = @idUsuario;";
-        Usuario usuario = null;
+        Usuario usuario = new Usuario();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
@@ -171,14 +153,7 @@ public class UsuarioRepository : IUsuarioRepository
             }
             connection.Close();
         }
-
-        if(usuario == null)
-        {
-            throw new Exception("El usuario no existe");
-        } else
-        {
-            return usuario;
-        }
+        return usuario;
     }
 
     public void DeleteUsuario(int idUsuario)
@@ -228,7 +203,7 @@ public class UsuarioRepository : IUsuarioRepository
     public List<Usuario> GetAllUsuariosExcept(int idUsuario)
     {
         var queryString = @"SELECT * FROM Usuario WHERE id <> @idUsuario;";
-        List<Usuario> usuarios = null;
+        List<Usuario> usuarios = new List<Usuario>();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
@@ -240,10 +215,6 @@ public class UsuarioRepository : IUsuarioRepository
             {
                 while (reader.Read())
                 {
-                    if (usuarios == null)
-                    {
-                        usuarios = new List<Usuario>();
-                    }
                     Usuario usuario = new Usuario();
                     usuario.Id = Convert.ToInt32(reader["id"]);
                     usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
@@ -254,12 +225,6 @@ public class UsuarioRepository : IUsuarioRepository
             }
             connection.Close();
         }
-        if(usuarios == null)
-        {
-            throw new Exception("La lista de usuarios esta vacia");
-        } else
-        {
-            return usuarios;
-        }
+        return usuarios;
     }
 }
