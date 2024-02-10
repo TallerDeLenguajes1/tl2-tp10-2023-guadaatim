@@ -6,24 +6,43 @@
 
 @model CrearTareaViewModel
 
-<form asp-controller="Tarea" asp-action="CreateTarea" method="post">
-        <input asp-for="@Model.IdTablero" hidden>
-    <label asp-for="@Model.Nombre">Nombre</label>
-        <input asp-for="@Model.Nombre">
-    <label asp-for="@Model.Descripcion">Descripcion</label>
-        <input asp-for="@Model.Descripcion">
-    <label asp-for="@Model.Color">Color</label>
-        <input asp-for="@Model.Color">
-    <label asp-for="@Model.IdUsuarioAsignado">Asignar usuario</label>
-        <select asp-for="@Model.IdUsuarioAsignado">
-            @foreach(var usuario in @Model.Usuarios.UsuariosVM)
-            {
-                <option value="@usuario.Id">@usuario.NombreDeUsuario</option>
-            }
-        </select>
-    <label asp-for="@Model.Estado">Estado</label>
-        <input asp-for="@Model.Estado">
-    <button type="submit">Crear Tarea</button>
-</form>
+<div class="container">
+    <form asp-controller="Tarea" asp-action="CreateTarea" class="row">
+        <div class="col-6">
+            <label asp-for="@Model.Nombre" class="form-label">Nombre</label>
+                <input asp-for="@Model.Nombre" class="form-control">
+        </div>
+        <div class="col-6">
+            <label asp-for="@Model.Descripcion" class="form-label">Descripcion</label>
+                <input asp-for="@Model.Descripcion" class="form-control">
+        </div>
+        <div class="col-6">
+            <label asp-for="@Model.Color" class="form-label">Color</label>
+                <input asp-for="@Model.Color" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.IdUsuarioAsignado">Asignar usuario</label>
+                <select asp-for="@Model.IdUsuarioAsignado" class="form-select">
+                    @foreach(var usuario in @Model.Usuarios.UsuariosVM)
+                    {
+                        <option value="@usuario.Id">@usuario.NombreDeUsuario</option>
+                    }
+                </select>
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.Estado">Estado</label>
+                <select asp-for="@Model.Estado" class="form-select">
+                    <option value="0">Ideas</option>
+                    <option value="1">ToDo</option>
+                    <option value="2">Doing</option>
+                    <option value="3">Review</option>
+                    <option value="4">Done</option>
+                </select>
+        </div>
+        <div class="col-6">
+            <button type="submit" class="btn btn-primary btn-lg">Crear Tarea</button>
+        </div>
+    </form>
+</div>
 
 @section Scripts {<partial name="_ValidationScriptsPartial"/>} 

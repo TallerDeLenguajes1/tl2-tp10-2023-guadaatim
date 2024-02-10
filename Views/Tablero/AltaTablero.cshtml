@@ -6,14 +6,21 @@
 
 @model CrearTableroViewModel
 
-<form asp-controller="Tablero" asp-action="CreateTablero" method="post">
-    <label asp-for="@Model.IdUsuarioPropietario" hidden>Id usuario propietario</label>
+<div class="container">
+    <form asp-controller="Tablero" asp-action="CreateTablero" class="row">
         <input asp-for="@Model.IdUsuarioPropietario" hidden>
-    <label asp-for="@Model.Nombre">Nombre</label>
-        <input asp-for="@Model.Nombre">
-    <label asp-for="@Model.Descripcion">Descripcion</label>
-        <input asp-for="@Model.Descripcion">
-    <button type="submit">Crear Tablero</button>
-</form>
+        <div class="col-6">
+            <label asp-for="@Model.Nombre" class="form-label">Nombre</label>
+                <input asp-for="@Model.Nombre" class="form-control">
+        </div>
+        <div class="col-6">
+            <label asp-for="@Model.Descripcion" class="form-label">Descripcion</label>
+                <input asp-for="@Model.Descripcion" class="form-control">
+        </div>
+        <div class="col-6">
+            <button type="submit" class="btn btn-primary btn-lg">Crear Tablero</button>
+        </div>
+    </form>
+</div>
 
 @section Scripts {<partial name="_ValidationScriptsPartial"/>}

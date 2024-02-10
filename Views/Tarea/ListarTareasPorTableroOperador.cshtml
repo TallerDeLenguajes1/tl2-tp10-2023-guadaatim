@@ -44,6 +44,10 @@
                             {
                             <td><a asp-controller="Tarea" asp-action="ModificarTarea" asp-route-idTarea="@tarea.Id" asp-route-idTablero="@tarea.IdTablero">Modificar</a></td>
                             <td><a asp-controller="Tarea" asp-action="EliminarTarea" asp-route-idTarea="@tarea.Id">Eliminar</a></td>
+                            } else
+                            {
+                            <td></td>
+                            <td></td>
                             }
                         </tr>
                     }

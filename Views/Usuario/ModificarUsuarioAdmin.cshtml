@@ -6,15 +6,26 @@
 
 @model ModificarUsuarioViewModel
 
-<form asp-controller="Usuario" asp-action="ModificarUsuario" method="post">
-        <input asp-for="@Model.Id" value="@Model.Id" hidden>
-    <label asp-for="@Model.NombreDeUsuario">Nombre de usuario</label>
-        <input asp-for="@Model.NombreDeUsuario" value="@Model.NombreDeUsuario">
-        <input asp-for="@Model.Rol" value="@Model.Rol" hidden>
-    <label asp-for="@Model.Contrasenia">Contraseña</label>
-        <input asp-for="@Model.Contrasenia" value="@Model.Contrasenia">
-    <button type="submit">Modificar Usuario</button>
-    <button><a asp-controller="Usuario" asp-action="ListarUsuarios">Cancelar</a></button>
-</form>
+<div class="container">
+    <form asp-controller="Usuario" asp-action="ModificarUsuario" class="row">
+            <input asp-for="@Model.Id" value="@Model.Id" hidden>
+            <div class="col-6">
+                <label asp-for="@Model.NombreDeUsuario" class="form-label">Nombre de usuario</label>
+                    <input asp-for="@Model.NombreDeUsuario" value="@Model.NombreDeUsuario" class="form-control">
+            </div>
+            <input asp-for="@Model.Rol" value="@Model.Rol" hidden>
+        <div class="col-6">
+            <label asp-for="@Model.Contrasenia" class="form-label">Contraseña</label>
+                <input asp-for="@Model.Contrasenia" value="@Model.Contrasenia" class="form-control">
+        </div>
+        <div class="col-6">
+            <button type="submit" class="btn btn-primary btn-lg">Modificar Usuario</button>
+        </div>
+        <div class="col-6">
+            <button type="button" class="btn btn-primary btn-lg"><a asp-controller="Usuario" asp-action="ListarUsuarios">Cancelar</a></button>
+        </div>
+    </form>
+</div>
+
 
 @section Scripts {<partial name="_ValidationScriptsPartial"/>}

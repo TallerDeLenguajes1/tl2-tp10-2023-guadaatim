@@ -6,14 +6,22 @@
 
 @model TableroViewModel
 
-<form asp-controller="Tablero" asp-action="DeleteTablero" method="post">
-    <label asp-for="@Model.Id" hidden>Id</label>
+<div class="container">
+    <form asp-controller="Tablero" asp-action="DeleteTablero" class="row">
         <input asp-for="@Model.Id" value="@Model.Id" hidden>
-    <label asp-for="@Model.Nombre">Nombre</label>
-        <input asp-for="@Model.Nombre" value="@Model.Nombre">
-    <label asp-for="@Model.Descripcion">Descripcion</label>
-        <input asp-for="@Model.Descripcion" value="@Model.Descripcion">
-        <input asp-for="@Model.IdUsuarioPropietario" value="@Model.IdUsuarioPropietario" hidden>
-    <button type="submit">Eliminar Tablero</button>
-    <button type="button"><a asp-controller="Tablero" asp-action="ListarTableros">Cancelar</a></button>
-</form>
+        <div class="col-6">
+            <label asp-for="@Model.Nombre" class="form-label">Nombre</label>
+                <input asp-for="@Model.Nombre" value="@Model.Nombre" class="form-control">
+        </div>
+        <div class="col-6">
+            <label asp-for="@Model.Descripcion" class="form-label">Descripcion</label>
+                <input asp-for="@Model.Descripcion" value="@Model.Descripcion" class="form-control">
+        </div>
+        <div class="col-6">
+            <button type="submit" class="btn btn-primary btn-lg">Eliminar Tablero</button>
+        </div>
+        <div class="col-6">
+            <button type="button" class="btn btn-primary btn-lg"><a asp-controller="Tablero" asp-action="ListarTableros">Cancelar</a></button>
+        </div>
+    </form>
+</div>
