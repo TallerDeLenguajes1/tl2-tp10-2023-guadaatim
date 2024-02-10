@@ -175,7 +175,8 @@ public class UsuarioRepository : IUsuarioRepository
 
     public bool ExisteUsuarioLogin(Usuario usuario)
     {
-        var queryString = @"SELECT COUNT(id) as existe FROM Usuario WHERE nombre_de_usuario = @nombreUsuario AND contrasenia = @contrasenia;";
+        var queryString = @"SELECT COUNT(id) as existe FROM Usuario 
+        WHERE nombre_de_usuario = @nombreUsuario AND contrasenia = @contrasenia;";
         bool existe = false;
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -202,7 +203,7 @@ public class UsuarioRepository : IUsuarioRepository
 
     public List<Usuario> GetAllUsuariosExcept(int idUsuario)
     {
-        var queryString = @"SELECT * FROM Usuario WHERE id <> @idUsuario;";
+        var queryString = @"SELECT * FROM Usuario WHERE id IS NOT @idUsuario;";
         List<Usuario> usuarios = new List<Usuario>();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))

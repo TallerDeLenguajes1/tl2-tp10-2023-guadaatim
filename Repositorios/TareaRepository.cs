@@ -74,7 +74,7 @@ public class TareaRepository : ITareaRepository
     public List<Tarea> GetAllTareasByTablero(int idTablero)
     {
         var queryString = @"SELECT id, nombre, descripcion,
-        estado, id_tablero, id_usuario_asignado, color, 
+        estado, id_tablero, id_usuario_asignado, color 
         FROM Tarea WHERE id_tablero = @idTablero;";
         List<Tarea> tareas = new List<Tarea>();
 
