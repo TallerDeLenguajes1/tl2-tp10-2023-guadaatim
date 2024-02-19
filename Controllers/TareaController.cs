@@ -108,8 +108,7 @@ public class TareaController : Controller
         {
             _logger.LogError(ex.ToString());
             return RedirectToAction("Error"); 
-        }
-        
+        } 
     }
 
     [HttpGet]
@@ -193,7 +192,7 @@ public class TareaController : Controller
     {
         try
         {
-            if (isAdmin())
+            if (isAdmin() || isOperador())
             {
                 if(!ModelState.IsValid)
                 {
