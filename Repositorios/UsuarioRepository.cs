@@ -79,6 +79,7 @@ public class UsuarioRepository : IUsuarioRepository
             connection.Close();
         }
     }
+    
     public List<Usuario> GetAllUsuarios()
     {
         var queryString = @"SELECT * FROM Usuario WHERE activo = 1 AND id <> 0;";
@@ -105,6 +106,7 @@ public class UsuarioRepository : IUsuarioRepository
         }
         return usuarios;
     }
+
     public Usuario GetUsuarioByNombre(string nombreUsuario)
     {
         var queryString = @"SELECT * FROM Usuario WHERE nombre_de_usuario = @nombreUsuario 

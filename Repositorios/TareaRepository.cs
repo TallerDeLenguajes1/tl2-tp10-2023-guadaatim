@@ -228,7 +228,7 @@ public class TareaRepository : ITareaRepository
         FROM Tarea 
         INNER JOIN Tablero ON Tarea.id_tablero = Tablero.id
         INNER JOIN Usuario ON Tarea.id_usuario_asignado = Usuario.id
-        WHERE Tarea.id_usuario_asignado = @idUsuario AND Tarea.id_tablero = @idTablero AND activo = 1;";
+        WHERE Tarea.id_usuario_asignado = @idUsuario AND Tarea.id_tablero = @idTablero AND Tarea.activo = 1;";
         Tarea tarea = new Tarea();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -286,6 +286,7 @@ public class TareaRepository : ITareaRepository
             connection.Close();
         }
     }
+    
     public void UpdateTareaAsignada(int idUsuario)
     {
         var queryString = @"UPDATE Tarea SET id_usuario_asignado = 0 
