@@ -273,7 +273,23 @@ public class TareaRepository : ITareaRepository
 
     public void DeleteByUsuario(int idUsuario)
     {
-        var queryString = @"UPDATE Tarea SET id_usuario_asignado = 0 WHERE id_usuario_asignado = @idUsuario;";
+        var queryString = @"UPDATE Tarea SET activo = 0
+        WHERE id_tablero = (SELECT id FROM Tablero WHERE id_usuario_propietario= @idUsuario);";
+
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+    }
+    public void UpdateTareaAsignada(int idUsuario)
+    {
+        var queryString = @"UPDATE Tarea SET id_usuario_asignado = 0 
+        WHERE id_usuario_asignado = @idUsuario;";
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
