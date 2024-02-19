@@ -37,7 +37,7 @@ public class TareaRepository : ITareaRepository
 
     public List<Tarea> GetAllTareas()
     {
-        var queryString = @"SELECT * FROM Tarea;";
+        var queryString = @"SELECT * FROM Tarea WHERE activo = 1;";
         List<Tarea> tareas = new List<Tarea>();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -75,7 +75,7 @@ public class TareaRepository : ITareaRepository
     {
         var queryString = @"SELECT id, nombre, descripcion,
         estado, id_tablero, id_usuario_asignado, color 
-        FROM Tarea WHERE id_tablero = @idTablero;";
+        FROM Tarea WHERE id_tablero = @idTablero AND activo = 1;";
         List<Tarea> tareas = new List<Tarea>();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -112,7 +112,7 @@ public class TareaRepository : ITareaRepository
 
     public List<Tarea> GetAllTareasByUsuario(int idUsuario)
     {
-        var queryString = @"SELECT * FROM Tarea WHERE id_usuario_asignado = @idUsuario;";
+        var queryString = @"SELECT * FROM Tarea WHERE id_usuario_asignado = @idUsuario AND activo = 1;";
         List<Tarea> tareas = new List<Tarea>();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -149,7 +149,7 @@ public class TareaRepository : ITareaRepository
 
     public Tarea GetTareaById(int idTarea)
     {
-        var queryString = @"SELECT * FROM Tarea WHERE id = @idTarea;";
+        var queryString = @"SELECT * FROM Tarea WHERE id = @idTarea AND activo = 1;";
         Tarea tarea = new Tarea();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -206,7 +206,7 @@ public class TareaRepository : ITareaRepository
     
     public void DeleteTarea(int idTarea)
     {
-        var queryString = @"DELETE FROM Tarea WHERE id = @idTarea;";
+        var queryString = @"UPDATE Tarea SET activo = 0 WHERE id = @idTarea;";
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
@@ -228,7 +228,7 @@ public class TareaRepository : ITareaRepository
         FROM Tarea 
         INNER JOIN Tablero ON Tarea.id_tablero = Tablero.id
         INNER JOIN Usuario ON Tarea.id_usuario_asignado = Usuario.id
-        WHERE Tarea.id_usuario_asignado = @idUsuario AND Tarea.id_tablero = @idTablero;";
+        WHERE Tarea.id_usuario_asignado = @idUsuario AND Tarea.id_tablero = @idTablero AND activo = 1;";
         Tarea tarea = new Tarea();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -254,5 +254,35 @@ public class TareaRepository : ITareaRepository
             connection.Close();
         }
         return tarea;
+    }
+
+    public void DeleteTareaByTablero(int idTablero)
+    {
+        var queryString = @"UPDATE Tarea SET activo = 0 WHERE id_tablero = @idTablero;";
+
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+
+            command.Parameters.Add(new SQLiteParameter("@idTablero", idTablero));
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+    }
+
+    public void DeleteByUsuario(int idUsuario)
+    {
+        var queryString = @"UPDATE Tarea SET id_usuario_asignado = 0 WHERE id_usuario_asignado = @idUsuario;";
+
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
     }
 }
