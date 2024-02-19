@@ -8,6 +8,7 @@
 
 <div class="container">
     <form asp-controller="Tarea" asp-action="CreateTarea" class="row">
+        <input asp-for="@Model.IdTablero" value="@Model.IdTablero" hidden>
         <div class="col-6">
             <label asp-for="@Model.Nombre" class="form-label">Nombre</label>
                 <input asp-for="@Model.Nombre" class="form-control">
@@ -23,6 +24,7 @@
         <div class="mb-3">
             <label asp-for="@Model.IdUsuarioAsignado">Asignar usuario</label>
                 <select asp-for="@Model.IdUsuarioAsignado" class="form-select">
+                    <option value="0">No asignada</option>
                     @foreach(var usuario in @Model.Usuarios.UsuariosVM)
                     {
                         <option value="@usuario.Id">@usuario.NombreDeUsuario</option>
@@ -40,7 +42,7 @@
                 </select>
         </div>
         <div class="col-6">
-            <button type="submit" class="btn btn-primary btn-lg">Crear Tarea</button>
+            <button type="submit" class="btn btn-primary mt-3">Crear Tarea</button>
         </div>
     </form>
 </div>

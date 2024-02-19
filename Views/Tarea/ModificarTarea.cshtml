@@ -35,6 +35,7 @@
         <div class="mb-3">
             <label asp-for="@Model.IdUsuarioAsignado" class="form-label">Asignar Usuario</label>
                     <select asp-for="@Model.IdUsuarioAsignado" class="form-select">
+                        <option value="0">No asignada</option>
                         @foreach(var usuario in @Model.Usuarios.UsuariosVM)
                         {
                             <option value="@usuario.Id">@usuario.NombreDeUsuario</option>
