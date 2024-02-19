@@ -25,10 +25,12 @@
                 <input asp-for="@Model.Contrasenia" value="@Model.Contrasenia" class="form-control">
         </div>
         <div class="col-6">
-            <button type="submit" class="btn btn-primary btn-lg">Modificar Usuario</button>
+            <button type="submit" class="btn btn-primary mt-3">Modificar Usuario</button>
         </div>
         <div class="col-6">
-            <button type="button" class="btn btn-primary btn-lg"><a asp-controller="Usuario" asp-action="ListarUsuarios">Cancelar</a></button>
+            <button type="button" class="btn btn-primary mt-3">
+                <a asp-controller="Usuario" asp-action="ListarUsuarios">Cancelar</a>
+            </button>
         </div>
     </form>
 </div>

@@ -26,10 +26,12 @@
                 <input asp-for="@Model.Estado" value="@Model.Estado" class="form-control">
         </div>
         <div class="col-6">
-            <button type="submit" class="btn btn-primary btn-lg">Eliminar Tarea</button>
+            <button type="submit" class="btn btn-primary mt-3">Eliminar Tarea</button>
         </div>
         <div class="col-6">
-            <button type="button" class="btn btn-primary btn-lg"><a asp-controller="Tarea" asp-action="ListarTareas">Cancelar</a></button>
+            <button type="button" class="btn btn-primary mt-3">
+                <a asp-controller="Tarea" asp-action="ListarTareas">Cancelar</a>
+            </button>
         </div>
     </form>
 </div>
