@@ -33,7 +33,7 @@ public class TableroRepository : ITableroRepository
     
     public List<Tablero> GetAllTableros()
     {
-        var queryString = @"SELECT * FROM Tablero;";
+        var queryString = @"SELECT * FROM Tablero WHERE activo = 1;";
         List<Tablero> tableros = new List<Tablero>();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -60,7 +60,7 @@ public class TableroRepository : ITableroRepository
     
     public Tablero GetTableroById(int idTablero)
     {
-        var queryString = @"SELECT * FROM Tablero WHERE id = @idTablero;";
+        var queryString = @"SELECT * FROM Tablero WHERE id = @idTablero AND activo = 1;";
         Tablero tablero = new Tablero();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -86,7 +86,7 @@ public class TableroRepository : ITableroRepository
 
     public List<Tablero> GetTableroByUsuario(int idUsuario)
     {
-        var queryString = @"SELECT * FROM Tablero WHERE id_usuario_propietario = @idUsuario;";
+        var queryString = @"SELECT * FROM Tablero WHERE id_usuario_propietario = @idUsuario AND activo = 1;";
         
         List<Tablero> tableros = new List<Tablero>();
 
@@ -135,7 +135,7 @@ public class TableroRepository : ITableroRepository
     
     public void DeleteTablero(int idTablero)
     {
-        var queryString = @"DELETE FROM Tablero WHERE id = @idTablero;";
+        var queryString = @"UPDATE Tablero SET activo = 0 WHERE id = @idTablero;";
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
@@ -154,7 +154,7 @@ public class TableroRepository : ITableroRepository
         var queryString = @"SELECT DISTINCT Tablero.id as idTablero, Tablero.id_usuario_propietario as idUsuario,
         Tablero.nombre as tablero, Tablero.descripcion as descripcion
         FROM Tablero INNER JOIN Tarea ON Tablero.id = Tarea.id_tablero
-        WHERE Tarea.id_usuario_asignado = @idUsuario;";
+        WHERE Tarea.id_usuario_asignado = @idUsuario AND activo = 1;";
         List<Tablero> tableros = new List<Tablero>();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -183,7 +183,7 @@ public class TableroRepository : ITableroRepository
     public bool PerteneceTablero(int idUsuario, int idTablero)
     {
         var queryString = @"SELECT COUNT (id) as pertenece FROM Tablero 
-        WHERE id_usuario_propietario = @idUsuario AND id = @idTablero;";
+        WHERE id_usuario_propietario = @idUsuario AND id = @idTablero AND activo = 1;";
         bool pertenece = false;
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -206,5 +206,20 @@ public class TableroRepository : ITableroRepository
             connection.Close();
         } 
         return pertenece;
+    }
+
+    public void DeleteTableroByUsuario(int idUsuario)
+    {
+        var queryString = @"UPDATE Tablero SET activo = 0 WHERE id_usuario_propietario = @idUsuario;";
+
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
     }
 }
