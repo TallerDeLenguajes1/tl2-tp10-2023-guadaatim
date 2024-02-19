@@ -11,38 +11,38 @@
 }
 
 .link-primary {
-  color: #0d6efd;
+  color: #5f129a;
 }
 .link-primary:hover, .link-primary:focus {
-  color: #0a58ca;
+  color: #8e4ae1;
 }
 
 .link-secondary {
-  color: #6c757d;
+  color: #8a1553;
 }
 .link-secondary:hover, .link-secondary:focus {
-  color: #565e64;
+  color: #db6b9e;
 }
 
 .link-success {
-  color: #198754;
+  color: #1a0c5f;
 }
 .link-success:hover, .link-success:focus {
-  color: #146c43;
+  color: #4e36ca;
 }
 
 .link-info {
-  color: #0dcaf0;
+  color: #0c8989;
 }
 .link-info:hover, .link-info:focus {
-  color: #3dd5f3;
+  color: #36c3c3;
 }
 
 .link-warning {
-  color: #ffc107;
+  color: #7d0c8d;
 }
 .link-warning:hover, .link-warning:focus {
-  color: #ffcd39;
+  color: #cc69d8;
 }
 
 .link-danger {

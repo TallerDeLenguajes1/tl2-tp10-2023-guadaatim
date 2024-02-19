@@ -176,11 +176,11 @@ sup {
 }
 
 a {
-  color: #0d6efd;
+  color: #c21772;
   text-decoration: underline;
 }
 a:hover {
-  color: #0a58ca;
+  color: #ca578d;
 }
 
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
@@ -250,7 +250,7 @@ table {
 caption {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  color: #6c757d;
+  color: #921dd1;
   text-align: left;
 }
 
