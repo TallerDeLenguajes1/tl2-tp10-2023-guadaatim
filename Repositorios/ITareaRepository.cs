@@ -7,6 +7,7 @@ public interface ITareaRepository
 {
     public void CreateTarea(int idTablero, Tarea tarea);
     public void UpdateTarea(Tarea tareaModificar);
+    public void UpdateTareaAsignada(int idUsuario);
     public List<Tarea> GetAllTareas();
     public Tarea GetTareaById(int idTarea);
     public Tarea GetTareaByUsuarioAndTablero(int idUsuario, int idTablero);
