@@ -13,4 +13,7 @@ public interface ITareaRepository
     public List<Tarea> GetAllTareasByUsuario(int idUsuario);
     public List<Tarea> GetAllTareasByTablero(int idTablero);
     public void DeleteTarea(int idTarea);
+    public void DeleteTareaByTablero(int idTablero);
+    public void DeleteByUsuario(int idUsuario);
+    
 }
