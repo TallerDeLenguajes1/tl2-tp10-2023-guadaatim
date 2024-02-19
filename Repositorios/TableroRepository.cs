@@ -154,7 +154,7 @@ public class TableroRepository : ITableroRepository
         var queryString = @"SELECT DISTINCT Tablero.id as idTablero, Tablero.id_usuario_propietario as idUsuario,
         Tablero.nombre as tablero, Tablero.descripcion as descripcion
         FROM Tablero INNER JOIN Tarea ON Tablero.id = Tarea.id_tablero
-        WHERE Tarea.id_usuario_asignado = @idUsuario AND activo = 1;";
+        WHERE Tarea.id_usuario_asignado = @idUsuario AND Tablero.activo = 1;";
         List<Tablero> tableros = new List<Tablero>();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
