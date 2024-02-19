@@ -13,7 +13,8 @@ public class UsuarioRepository : IUsuarioRepository
 
     public void CreateUsuario(Usuario usuarioNuevo)
     {
-        var queryString = @"INSERT INTO Usuario (nombre_de_usuario, contrasenia, rol) VALUES(@nombre, @contrasenia, @rol);";
+        var queryString = @"INSERT INTO Usuario (nombre_de_usuario, contrasenia, rol) 
+        VALUES(@nombre, @contrasenia, @rol);";
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
@@ -31,7 +32,8 @@ public class UsuarioRepository : IUsuarioRepository
 
     public bool ExisteUsuario(string nombreUsuario)
     {
-        var queryString = @"SELECT COUNT(id) as existe FROM Usuario WHERE nombre_de_usuario = @nombreUsuario;";
+        var queryString = @"SELECT COUNT(id) as existe FROM Usuario 
+        WHERE nombre_de_usuario = @nombreUsuario AND activo = 1 AND id <> 0;";
         bool existe = false;
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -79,7 +81,7 @@ public class UsuarioRepository : IUsuarioRepository
     }
     public List<Usuario> GetAllUsuarios()
     {
-        var queryString = @"SELECT * FROM Usuario;";
+        var queryString = @"SELECT * FROM Usuario WHERE activo = 1 AND id <> 0;";
         List<Usuario> usuarios = new List<Usuario>();
         
         using(SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -105,7 +107,8 @@ public class UsuarioRepository : IUsuarioRepository
     }
     public Usuario GetUsuarioByNombre(string nombreUsuario)
     {
-        var queryString = @"SELECT * FROM Usuario WHERE nombre_de_usuario = @nombreUsuario;";
+        var queryString = @"SELECT * FROM Usuario WHERE nombre_de_usuario = @nombreUsuario 
+        AND activo = 1 AND id <> 0;";
         Usuario usuario = new Usuario();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -131,7 +134,7 @@ public class UsuarioRepository : IUsuarioRepository
 
     public Usuario GetUsuarioById(int idUsuario)
     {
-        var queryString = @"SELECT * FROM Usuario WHERE id = @idUsuario;";
+        var queryString = @"SELECT * FROM Usuario WHERE id = @idUsuario AND activo = 1 AND id <> 0;";
         Usuario usuario = new Usuario();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -158,7 +161,7 @@ public class UsuarioRepository : IUsuarioRepository
 
     public void DeleteUsuario(int idUsuario)
     {
-        var queryString = @"DELETE FROM Usuario WHERE id = @idUsuario;";
+        var queryString = @"UPDATE Usuario SET activo = 0 WHERE id = @idUsuario;";
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
         {
@@ -176,7 +179,8 @@ public class UsuarioRepository : IUsuarioRepository
     public bool ExisteUsuarioLogin(Usuario usuario)
     {
         var queryString = @"SELECT COUNT(id) as existe FROM Usuario 
-        WHERE nombre_de_usuario = @nombreUsuario AND contrasenia = @contrasenia;";
+        WHERE nombre_de_usuario = @nombreUsuario AND contrasenia = @contrasenia
+        AND activo = 1 AND id <> 0;";
         bool existe = false;
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -203,7 +207,7 @@ public class UsuarioRepository : IUsuarioRepository
 
     public List<Usuario> GetAllUsuariosExcept(int idUsuario)
     {
-        var queryString = @"SELECT * FROM Usuario WHERE id IS NOT @idUsuario;";
+        var queryString = @"SELECT * FROM Usuario WHERE id IS NOT @idUsuario AND activo = 1 AND id <> 0;";
         List<Usuario> usuarios = new List<Usuario>();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
