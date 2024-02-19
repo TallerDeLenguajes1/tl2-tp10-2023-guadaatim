@@ -11,12 +11,16 @@ namespace Kanban.Controllers;
 public class UsuarioController : Controller
 {
     private IUsuarioRepository _usuarioRepository;
+    private ITableroRepository _tableroRepository;
+    private ITareaRepository _tareaRepository;
     private ILogger<UsuarioController> _logger;
 
-    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioRepository usuarioRepository)
+    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioRepository usuarioRepository, ITableroRepository tableroRepository, ITareaRepository tareaRepository)
     {
         _logger = logger;
         _usuarioRepository = usuarioRepository;
+        _tableroRepository = tableroRepository;
+        _tareaRepository = tareaRepository;
     }
 
     public IActionResult Index()
@@ -216,6 +220,9 @@ public class UsuarioController : Controller
         {
             if(isAdmin())
             {
+                _tareaRepository.UpdateTareaAsignada(usuario.Id);
+                _tareaRepository.DeleteByUsuario(usuario.Id);
+                _tableroRepository.DeleteTableroByUsuario(usuario.Id);
                 _usuarioRepository.DeleteUsuario(usuario.Id);
                 return RedirectToAction("ListarUsuarios");
             } else
