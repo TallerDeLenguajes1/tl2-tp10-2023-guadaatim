@@ -1,0 +1,53 @@
+@using Kanban.ViewModels
+
+@{
+    ViewBag.Title = "Mis Tableros";
+    @if(Context.Session.GetString("Rol") == "Administrador")
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    } else 
+    {
+        Layout = "~/Views/Shared/_LayoutOperador.cshtml";
+    }
+}
+
+@model ListarTablerosViewModel
+
+<div class="column">
+    <div class="row">
+        <div class="col">
+            <table class="table caption-top">
+                <caption>Mis Tableros</caption>
+                <thead>
+                    <tr>
+                        <th hidden>Id</th>
+                        <th hidden>Id Usuario Propietario</th>
+                        <th>Nombre Usuario Propietario</th>
+                        <th>Nombre</th>
+                        <th>Descripcion</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(TableroViewModel tablero in @Model.TablerosVM)
+                    {
+                        <tr>
+                            <td hidden>@tablero.Id</td>
+                            <td hidden>@tablero.IdUsuarioPropietario</td>
+                            <td>@tablero.NombreUsuario</td>
+                            <td>@tablero.Nombre</td>
+                            <td>@tablero.Descripcion</td>
+                            <td><button type="button" class="btn btn-outline-modificar"><a class="btn-outline-modificar" asp-controller="Tablero" asp-action="ModificarTablero" asp-route-idTablero="@tablero.Id">Modificar</a></button></td>
+                            <td><button type="button" class="btn btn-outline-eliminar"><a class="btn-outline-eliminar" asp-controller="Tablero" asp-action="EliminarTablero" asp-route-idTablero="@tablero.Id">Eliminar</a></button></td>
+                            <td><button type="button" class="btn btn-outline-listar"><a class="btn-outline-listar" asp-controller="Tarea" asp-action="ListarTareasPorTablero" asp-route-idTablero="@tablero.Id">Listar Tareas</a></button></td>
+                            <td><button type="button" class="btn btn-outline-agregar"><a class="btn-outline-agregar" asp-controller="Tarea" asp-action="AltaTarea" asp-route-idTablero="@tablero.Id">Agregar Tarea</a></button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
