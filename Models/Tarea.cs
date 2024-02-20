@@ -20,6 +20,8 @@ public class Tarea
     private string? color;
     private int idUsuarioAsignado;
     private EstadoTarea estado;
+    private string nombreUsuario;
+    private string nombreTablero;
 
     public Tarea()
     {
@@ -53,4 +55,6 @@ public class Tarea
     public string? Color { get => color; set => color = value; }
     public int IdUsuarioAsignado { get => idUsuarioAsignado; set => idUsuarioAsignado = value; }
     public EstadoTarea Estado { get => estado; set => estado = value; }
+    public string NombreUsuario { get => nombreUsuario; set => nombreUsuario = value; }
+    public string NombreTablero { get => nombreTablero; set => nombreTablero = value; }
 }
