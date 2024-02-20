@@ -23,7 +23,6 @@ public class CrearTableroViewModel
     }
 
     [Required(ErrorMessage = "Complete el campo")]
-    [Display(Name = "Id Usuario Propietario")]
     public int IdUsuarioPropietario { get => idUsuarioPropietario; set => idUsuarioPropietario = value; }
     
     [Required(ErrorMessage = "Complete el campo")]

@@ -52,6 +52,7 @@ public class CrearTareaViewModel
     [Display(Name = "Descripcion")]
     public string? Descripcion { get => descripcion; set => descripcion = value; }
 
+    [Required(ErrorMessage = "Complete el campo")]
     [Display(Name = "Color")]
     public string? Color { get => color; set => color = value; }
 
