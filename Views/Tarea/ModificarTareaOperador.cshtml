@@ -21,7 +21,7 @@
         </div>
         <div class="col-6">
             <label asp-for="@Model.Color" class="form-label">Color</label>
-                <input asp-for="@Model.Color" value="@Model.Color" class="form-control" readonly>    
+                <input type="color" asp-for="@Model.Color" value="@Model.Color" class="form-control" readonly>    
         </div>
         <div class="col-6">
             <label asp-for="@Model.Estado" class="form-label">Estado</label>
@@ -32,8 +32,9 @@
                 <option value="3">Review</option>
                 <option value="4">Done</option>
             </select>
+            <span asp-validation-for="@Model.Estado" class="validation"></span>
         </div>
-        <div class="col-6">
+        <div class="mb-3">
             <label asp-for="@Model.IdUsuarioAsignado" class="form-label">Asignar Usuario</label>
                 <input asp-for="@Model.IdUsuarioAsignado" hidden>
                 <select asp-for="@Model.IdUsuarioAsignado" class="form-select" disabled>
@@ -44,15 +45,14 @@
                 </select>
         </div>
         <div class="col-6">
-            <button type="submit" class="btn btn-primary mt-3">Modificar Tarea</button>
+            <button type="submit" class="btn btn-modificar mt-3">Modificar Tarea</button>
         </div>
         <div class="col-6">
-            <button type="button" class="btn btn-primary mt-3">
-                <a asp-controller="Tarea" asp-action="ListarTareas">Cancelar</a>
+            <button type="button" class="btn btn-cancelar mt-3">
+                <a class="btn-link" asp-controller="Tarea" asp-action="ListarTareas">Cancelar</a>
             </button>
         </div>
     </form>
 </div>
-
 
 @section Scripts {<partial name="_ValidationScriptsPartial"/>}

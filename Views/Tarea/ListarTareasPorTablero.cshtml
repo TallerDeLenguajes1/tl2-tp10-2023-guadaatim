@@ -35,12 +35,12 @@
                             <td hidden>@tarea.IdTablero</td>
                             <td>@tarea.Nombre</td>
                             <td>@tarea.Descripcion</td>
-                            <td>@tarea.Color</td>
+                            <td style="background-color: @tarea.Color" class="text-white">@tarea.Color</td>
                             <td hidden>@tarea.IdUsuarioAsignado</td>
                             <td>@tarea.Estado</td>
                             <td>@tarea.NombreUsuario</td>
-                            <td><a asp-controller="Tarea" asp-action="ModificarTarea" asp-route-idTarea="@tarea.Id" asp-route-idTablero="@tarea.IdTablero">Modificar</a></td>
-                            <td><a asp-controller="Tarea" asp-action="EliminarTarea" asp-route-idTarea="@tarea.Id">Eliminar</a></td>
+                            <td><button type="button" class="btn btn-outline-modificar"><a class="btn-outline-modificar" asp-controller="Tarea" asp-action="ModificarTarea" asp-route-idTarea="@tarea.Id" asp-route-idTablero="@tarea.IdTablero">Modificar</a></button></td>
+                            <td><button type="button" class="btn btn-outline-modificar"><a class="btn-outline-eliminar" asp-controller="Tarea" asp-action="EliminarTarea" asp-route-idTarea="@tarea.Id">Eliminar</a></button></td>
                         </tr>
                     }
                 </tbody>

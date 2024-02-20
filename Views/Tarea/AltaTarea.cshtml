@@ -2,6 +2,13 @@
 
 @{
     ViewBag.Title = "Crear Tarea";
+    @if(Context.Session.GetString("Rol") == "Administrador")
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    } else 
+    {
+        Layout = "~/Views/Shared/_LayoutOperador.cshtml";
+    }
 }
 
 @model CrearTareaViewModel
@@ -12,14 +19,17 @@
         <div class="col-6">
             <label asp-for="@Model.Nombre" class="form-label">Nombre</label>
                 <input asp-for="@Model.Nombre" class="form-control">
+                <span asp-validation-for="@Model.Nombre" class="validation"></span>
         </div>
         <div class="col-6">
             <label asp-for="@Model.Descripcion" class="form-label">Descripcion</label>
                 <input asp-for="@Model.Descripcion" class="form-control">
+                <span asp-validation-for="@Model.Descripcion" class="validation"></span>
         </div>
-        <div class="col-6">
+        <div class="col-3">
             <label asp-for="@Model.Color" class="form-label">Color</label>
-                <input asp-for="@Model.Color" class="form-control">
+                <input asp-for="@Model.Color" type="color" class="form-control">
+                <span asp-validation-for="@Model.Color" class="validation"></span>
         </div>
         <div class="mb-3">
             <label asp-for="@Model.IdUsuarioAsignado">Asignar usuario</label>
@@ -40,9 +50,10 @@
                     <option value="3">Review</option>
                     <option value="4">Done</option>
                 </select>
+                <span asp-validation-for="@Model.Estado" class="validation"></span>
         </div>
         <div class="col-6">
-            <button type="submit" class="btn btn-primary mt-3">Crear Tarea</button>
+            <button type="submit" class="btn btn-crear mt-3">Crear Tarea</button>
         </div>
     </form>
 </div>

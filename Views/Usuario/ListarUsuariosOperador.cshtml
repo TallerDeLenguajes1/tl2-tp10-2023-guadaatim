@@ -16,12 +16,14 @@
                     <tr>
                         <th>Nombre de Usuario</th>
                         <th>Rol</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>@Model.NombreDeUsuario</td>
                         <td>@Model.Rol</td>
+                        <td><td><button type="button" class="btn btn-outline-modificar"><a class="btn-outline-modificar" asp-controller="Usuario" asp-action="ModificarUsuario" asp-route-idUsuario="@Model.Id">Modificar</a></button></td></td>
                     </tr>
                 </tbody>
             </table>

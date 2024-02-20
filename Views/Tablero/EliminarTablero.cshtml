@@ -2,28 +2,65 @@
 
 @{
     ViewBag.Title = "Eliminar Tablero";
+    @if(Context.Session.GetString("Rol") == "Administrador")
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    } else 
+    {
+        Layout = "~/Views/Shared/_LayoutOperador.cshtml";
+    }
 }
 
 @model TableroViewModel
 
+
 <div class="container">
-    <form asp-controller="Tablero" asp-action="DeleteTablero" class="row">
-        <input asp-for="@Model.Id" value="@Model.Id" hidden>
-        <div class="col-6">
-            <label asp-for="@Model.Nombre" class="form-label">Nombre</label>
-                <input asp-for="@Model.Nombre" value="@Model.Nombre" class="form-control">
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripcion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.Nombre</td>
+                        <td>@Model.Descripcion</td>
+                        <td>
+                            <button type="submit" class="btn btn-modificar mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal-@Model.Id">
+                                Eliminar Tarea
+                            </button>
+                            <div class="modal fade" id="exampleModal-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-@Model.Id" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel-@Model.Id">
+                                                ¿Esta seguro de eliminar a @Model.Nombre?
+                                            </h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            Si lo elimina, se borraran todas las tareas del tablero.
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-modificar" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-modificar px-2">
+                                            <a class="btn btn-modificar" asp-controller="Tablero" asp-action="DeleteTablero" asp-route-idTablero="@Model.Id">
+                                                Eliminar
+                                            </a>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-cancelar mt-3 mr-3">
+                            <a class="btn-link" asp-controller="Tablero" asp-action="ListarTableros">Cancelar</a>
+                        </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="col-6">
-            <label asp-for="@Model.Descripcion" class="form-label">Descripcion</label>
-                <input asp-for="@Model.Descripcion" value="@Model.Descripcion" class="form-control">
-        </div>
-        <div class="col-6">
-            <button type="submit" class="btn btn-primary mt-3">Eliminar Tablero</button>
-        </div>
-        <div class="col-6">
-            <button type="button" class="btn btn-primary mt-3">
-                <a asp-controller="Tablero" asp-action="ListarTableros">Cancelar</a>
-            </button>
-        </div>
-    </form>
+    </div>
 </div>

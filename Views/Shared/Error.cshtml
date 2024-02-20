@@ -1,6 +1,13 @@
 ﻿@model ErrorViewModel
 @{
     ViewData["Title"] = "Error";
+    @if(Context.Session.GetString("Rol") == "Administrador")
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    } else 
+    {
+        Layout = "~/Views/Shared/_LayoutOperador.cshtml";
+    }
 }
 
 <h1 class="text-danger">Error.</h1>

@@ -2,6 +2,13 @@
 
 @{
     ViewBag.Title = "Crear Tablero";
+    @if(Context.Session.GetString("Rol") == "Administrador")
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    } else 
+    {
+        Layout = "~/Views/Shared/_LayoutOperador.cshtml";
+    }
 }
 
 @model CrearTableroViewModel
@@ -12,13 +19,15 @@
         <div class="col-6">
             <label asp-for="@Model.Nombre" class="form-label">Nombre</label>
                 <input asp-for="@Model.Nombre" class="form-control">
+                <span asp-validation-for="@Model.Nombre" class="validation"></span>
         </div>
         <div class="col-6">
             <label asp-for="@Model.Descripcion" class="form-label">Descripcion</label>
                 <input asp-for="@Model.Descripcion" class="form-control">
+                <span asp-validation-for="@Model.Descripcion" class="validation"></span>
         </div>
         <div class="col-6">
-            <button type="submit" class="btn btn-primary mt-3">Crear Tablero</button>
+            <button type="submit" class="btn btn-crear mt-3">Crear Tablero</button>
         </div>
     </form>
 </div>

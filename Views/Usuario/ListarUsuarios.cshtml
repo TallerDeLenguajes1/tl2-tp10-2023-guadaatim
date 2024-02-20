@@ -1,7 +1,7 @@
 @using Kanban.ViewModels
 
 @{
-    ViewBag.Title = "Listar Usuario";
+    ViewBag.Title = "Usuarios";
 }
 
 @model ListarUsuariosViewModel
@@ -23,7 +23,7 @@
                     <tr>
                         <td>@Model.UsuarioLoggeado.NombreDeUsuario</td>
                         <td>@Model.UsuarioLoggeado.Rol</td>
-                        <td><a asp-controller="Usuario" asp-action="ModificarUsuario" asp-route-idUsuario="@Model.UsuarioLoggeado.Id">Modificar</a></td>
+                        <td><button type="button" class="btn btn-outline-modificar"><a class="btn-outline-modificar" asp-controller="Usuario" asp-action="ModificarUsuario" asp-route-idUsuario="@Model.UsuarioLoggeado.Id">Modificar</a></button></td>
                         <td>No disponible</td>
                     </tr>
                     @foreach(UsuarioViewModel usuario in @Model.UsuariosVM)
@@ -31,8 +31,8 @@
                         <tr>
                             <td>@usuario.NombreDeUsuario</td>
                             <td>@usuario.Rol</td>
-                            <td><a asp-controller="Usuario" asp-action="ModificarUsuario" asp-route-idUsuario="@usuario.Id">Modificar</a></td>
-                            <td><a asp-controller="Usuario" asp-action="EliminarUsuario" asp-route-idUsuario="@usuario.Id">Eliminar</a></td>
+                            <td><button type="button" class="btn btn-outline-modificar"><a class="btn-outline-modificar" asp-controller="Usuario" asp-action="ModificarUsuario" asp-route-idUsuario="@usuario.Id">Modificar</a></button></td>
+                            <td><button type="button" class="btn btn-outline-eliminar"><a class="btn-outline-eliminar" asp-controller="Usuario" asp-action="EliminarUsuario" asp-route-idUsuario="@usuario.Id">Eliminar</a></button></td>
                         </tr>
                     }
                 </tbody>

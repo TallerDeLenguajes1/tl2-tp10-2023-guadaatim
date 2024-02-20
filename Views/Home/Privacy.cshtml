@@ -1,5 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
+    @if(Context.Session.GetString("Rol") == "Administrador")
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    } else 
+    {
+        Layout = "~/Views/Shared/_LayoutOperador.cshtml";
+    }
 }
 <h1>@ViewData["Title"]</h1>
 

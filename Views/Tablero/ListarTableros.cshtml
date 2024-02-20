@@ -33,10 +33,10 @@
                             <td>@tablero.NombreUsuario</td>
                             <td>@tablero.Nombre</td>
                             <td>@tablero.Descripcion</td>
-                            <td><a asp-controller="Tablero" asp-action="ModificarTablero" asp-route-idTablero="@tablero.Id">Modificar</a></td>
-                            <td><a asp-controller="Tablero" asp-action="EliminarTablero" asp-route-idTablero="@tablero.Id">Eliminar</a></td>
-                            <td><a asp-controller="Tarea" asp-action="ListarTareasPorTablero" asp-route-idTablero="@tablero.Id">Listar Tareas</a> </td>
-                            <td><a asp-controller="Tarea" asp-action="AltaTarea" asp-route-idTablero="@tablero.Id">Agregar Tarea</a></td>
+                            <td><button type="button" class="btn btn-outline-modificar"><a class="btn-outline-modificar" asp-controller="Tablero" asp-action="ModificarTablero" asp-route-idTablero="@tablero.Id">Modificar</a></button></td>
+                            <td><button type="button" class="btn btn-outline-eliminar"><a class="btn-outline-eliminar" asp-controller="Tablero" asp-action="EliminarTablero" asp-route-idTablero="@tablero.Id">Eliminar</a></button></td>
+                            <td><button type="button" class="btn btn-outline-listar"><a class="btn-outline-listar" asp-controller="Tarea" asp-action="ListarTareasPorTablero" asp-route-idTablero="@tablero.Id">Listar Tareas</a></button></td>
+                            <td><button type="button" class="btn btn-outline-agregar"><a class="btn-outline-agregar" asp-controller="Tarea" asp-action="AltaTarea" asp-route-idTablero="@tablero.Id">Agregar Tarea</a></button></td>
                         </tr>
                     }
                 </tbody>
@@ -72,10 +72,10 @@
                             <td>@tablero.NombreUsuario</td>
                             <td>@tablero.Nombre</td>
                             <td>@tablero.Descripcion</td>
-                            <td><a asp-controller="Tablero" asp-action="ModificarTablero" asp-route-idTablero="@tablero.Id">Modificar</a></td>
-                            <td><a asp-controller="Tablero" asp-action="EliminarTablero" asp-route-idTablero="@tablero.Id">Eliminar</a></td>
-                            <td><a asp-controller="Tarea" asp-action="ListarTareasPorTablero" asp-route-idTablero="@tablero.Id">Listar Tareas</a> </td>
-                            <td><a asp-controller="Tarea" asp-action="AltaTarea" asp-route-idTablero="@tablero.Id">Agregar Tarea</a></td>
+                            <td><button type="button" class="btn btn-outline-modificar"><a class="btn-outline-modificar" asp-controller="Tablero" asp-action="ModificarTablero" asp-route-idTablero="@tablero.Id">Modificar</a></button></td>
+                            <td><button type="button" class="btn btn-outline-eliminar"><a class="btn-outline-eliminar" asp-controller="Tablero" asp-action="EliminarTablero" asp-route-idTablero="@tablero.Id">Eliminar</a></button></td>
+                            <td><button type="button" class="btn btn-outline-listar"><a class="btn-outline-listar" asp-controller="Tarea" asp-action="ListarTareasPorTablero" asp-route-idTablero="@tablero.Id">Listar Tareas</a></button></td>
+                            <td><button type="button" class="btn btn-outline-agregar"><a class="btn-outline-agregar" asp-controller="Tarea" asp-action="AltaTarea" asp-route-idTablero="@tablero.Id">Agregar Tarea</a></button></td>
                         </tr>
                     }
                 </tbody>
