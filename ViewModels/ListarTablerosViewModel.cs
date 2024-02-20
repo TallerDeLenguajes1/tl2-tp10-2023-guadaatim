@@ -13,7 +13,7 @@ public class ListarTablerosViewModel
     {
     }
 
-    public ListarTablerosViewModel(List<Tablero> tableros, List<Tablero> tablerosPropios, List<Usuario> usuarios)
+    public ListarTablerosViewModel(List<Tablero> tableros)
     {
         tablerosVM = new List<TableroViewModel>();
         tablerosPropiosVM = new List<TableroViewModel>();
@@ -21,14 +21,24 @@ public class ListarTablerosViewModel
         foreach (var tablero in tableros)
         {
             TableroViewModel tableroVM = new TableroViewModel(tablero);
-            tableroVM.NombreUsuario = usuarios.FirstOrDefault(u => u.Id == tableroVM.IdUsuarioPropietario).NombreDeUsuario;
+            tablerosVM.Add(tableroVM);
+        }
+    }
+
+    public ListarTablerosViewModel(List<Tablero> tableros, List<Tablero> tablerosPropios)
+    {
+        tablerosVM = new List<TableroViewModel>();
+        tablerosPropiosVM = new List<TableroViewModel>();
+
+        foreach (var tablero in tableros)
+        {
+            TableroViewModel tableroVM = new TableroViewModel(tablero);
             tablerosVM.Add(tableroVM);
         }
 
         foreach (var tablero in tablerosPropios)
         {
             TableroViewModel tableroVM = new TableroViewModel(tablero);
-            tableroVM.NombreUsuario = usuarios.FirstOrDefault(u => u.Id == tableroVM.IdUsuarioPropietario).NombreDeUsuario;
             tablerosPropiosVM.Add(tableroVM);
         }
     }
