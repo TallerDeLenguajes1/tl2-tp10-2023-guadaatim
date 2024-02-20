@@ -29,6 +29,8 @@ public class TareaViewModel
         this.descripcion = tarea.Descripcion;
         this.color = tarea.Color;
         this.idUsuarioAsignado = tarea.IdUsuarioAsignado;
+        this.nombreTablero = tarea.NombreTablero;
+        this.nombreUsuario = tarea.NombreUsuario;
     }
 
     public int Id { get => id; set => id = value; }
