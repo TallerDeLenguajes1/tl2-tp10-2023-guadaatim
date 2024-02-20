@@ -38,9 +38,7 @@ public class TareaController : Controller
                 int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
                 List<Tarea> tareas = _tareaRepository.GetAllTareas();
                 List<Tarea> tareasPropias = _tareaRepository.GetAllTareasByUsuario(id);
-                List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
-                List<Tablero> tableros = _tableroRepository.GetAllTableros();
-                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, tareasPropias, usuarios, tableros);
+                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, tareasPropias);
                 return View(tareasVM);
             } else
             {
@@ -70,9 +68,7 @@ public class TareaController : Controller
                 int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
                 List<Tarea> tareas = _tareaRepository.GetAllTareas();
                 List<Tarea> tareasPropias = _tareaRepository.GetAllTareasByUsuario(id);
-                List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
-                List<Tablero> tableros = _tableroRepository.GetAllTableros();
-                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, tareasPropias, usuarios, tableros);
+                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, tareasPropias);
                 return View(tareasVM);
             } else
             {
@@ -91,13 +87,11 @@ public class TareaController : Controller
     {
         try
         {
-            if (isOperador()) //operador y admin ?? 
+            if (isOperador() || isAdmin()) 
             {
                 int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
                 Tarea tarea = _tareaRepository.GetTareaByUsuarioAndTablero(id, idTablero);
                 TareaViewModel tareaVM = new TareaViewModel(tarea);
-                Tablero tablero = _tableroRepository.GetTableroById(idTablero);
-                tareaVM.NombreTablero = tablero.Nombre;
                 return View(tareaVM);
             } else
             {
@@ -108,7 +102,7 @@ public class TareaController : Controller
         {
             _logger.LogError(ex.ToString());
             return RedirectToAction("Error"); 
-        } 
+        }
     }
 
     [HttpGet]
@@ -120,15 +114,13 @@ public class TareaController : Controller
             if (isAdmin() || _tableroRepository.PerteneceTablero(idUsuario, idTablero))
             {
                 List<Tarea> tareas = _tareaRepository.GetAllTareasByTablero(idTablero);
-                List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
-                List<Tablero> tableros = _tableroRepository.GetAllTableros();
-                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, usuarios, tableros);
+                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas);
                 return View(tareasVM);
             } else
             {
                 if(isOperador())
                 {
-                    return RedirectToAction("ListarTareasPorTableroOperador", new {idTablero = idTablero});
+                    return RedirectToAction("ListarTareasPorTableroOperador", idTablero);
                 } else
                 {
                     return RedirectToAction("Error"); 
@@ -150,9 +142,7 @@ public class TareaController : Controller
             if (isOperador())
             {
                 List<Tarea> tareas = _tareaRepository.GetAllTareasByTablero(idTablero);
-                List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
-                List<Tablero> tableros = _tableroRepository.GetAllTableros();
-                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas, usuarios, tableros);
+                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas);
                 return View(tareasVM);
             } else
             {
@@ -163,6 +153,29 @@ public class TareaController : Controller
         {
             _logger.LogError(ex.ToString());
             return RedirectToAction("Error"); 
+        }
+    }
+
+    [HttpGet]
+    public IActionResult ListarMisTareas()
+    {
+        try
+        {
+            if (isAdmin() || isOperador())
+            {
+                int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
+                List<Tarea> tareas = _tareaRepository.GetAllTareasByUsuario(id);
+                ListarTareasViewModel tareasVM = new ListarTareasViewModel(tareas);
+                return View(tareasVM);
+            } else
+            {
+                return RedirectToAction("Error");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString()); 
+            return RedirectToAction("Error");
         }
     }
 
@@ -230,7 +243,7 @@ public class TareaController : Controller
             {
                 if(isOperador())
                 {
-                    return RedirectToAction("ModificarTareaOperador", new {idTarea = idTarea});
+                    return RedirectToAction("ModificarTareaOperador", idTarea);
                 } else
                 {
                     return RedirectToAction("Error"); 
@@ -315,14 +328,13 @@ public class TareaController : Controller
         }  
     }
 
-    [HttpPost]
-    public IActionResult DeleteTarea(TareaViewModel tarea)
+    public IActionResult DeleteTarea(int idTarea)
     {
         try
         {
             if (isAdmin() || isOperador())
             {
-                _tareaRepository.DeleteTarea(tarea.Id);
+                _tareaRepository.DeleteTarea(idTarea);
                 return RedirectToAction("ListarTareas");
             } else
             {
