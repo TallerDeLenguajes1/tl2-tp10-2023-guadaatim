@@ -39,7 +39,7 @@ public class TableroController : Controller
                 List<Tablero> tablerosVM = _tableroRepository.GetAllTableros();
                 List<Tablero> tablerosPropiosVM = _tableroRepository.GetTableroByUsuario(id);
                 List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
-                ListarTablerosViewModel tableros = new ListarTablerosViewModel(tablerosVM, tablerosPropiosVM, usuarios);
+                ListarTablerosViewModel tableros = new ListarTablerosViewModel(tablerosVM, tablerosPropiosVM);
                 return View(tableros);
             } else
             {
@@ -70,12 +70,35 @@ public class TableroController : Controller
                 List<Tablero> tablerosVM = _tableroRepository.GetTablerosByTarea(id);
                 List<Tablero> tablerosPropiosVM = _tableroRepository.GetTableroByUsuario(id);
                 List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
-                ListarTablerosViewModel tableros = new ListarTablerosViewModel(tablerosVM, tablerosPropiosVM, usuarios);
+                ListarTablerosViewModel tableros = new ListarTablerosViewModel(tablerosVM, tablerosPropiosVM);
                 return View(tableros);
             } else
             {
                 return RedirectToAction("Error");
             }  
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString()); 
+            return RedirectToAction("Error");
+        }
+    }
+
+    [HttpGet]
+    public IActionResult ListarMisTableros()
+    {
+        try
+        {
+            if (isAdmin() || isOperador())
+            {
+                int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
+                List<Tablero> tableros = _tableroRepository.GetTableroByUsuario(id);
+                ListarTablerosViewModel tablerosVM = new ListarTablerosViewModel(tableros);
+                return View(tablerosVM);
+            } else
+            {
+                return RedirectToAction("Error");
+            }
         }
         catch (Exception ex)
         {
@@ -203,21 +226,19 @@ public class TableroController : Controller
         }
     }
 
-    [HttpPost]
-    public IActionResult DeleteTablero(TableroViewModel tablero)
+    public IActionResult DeleteTablero(int idTablero)
     {
         try
         {
             if (isAdmin() || isOperador())
             {
-                _tareaRepository.DeleteTareaByTablero(tablero.Id);
-                _tableroRepository.DeleteTablero(tablero.Id);
+                _tareaRepository.DeleteTareaByTablero(idTablero);
+                _tableroRepository.DeleteTablero(idTablero);
                 return RedirectToAction("ListarTableros");
             } else
             {
                 return RedirectToAction("Error");
             }
-            
         }
         catch (Exception ex)
         {
