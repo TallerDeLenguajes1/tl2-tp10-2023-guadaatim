@@ -33,7 +33,12 @@ public class TableroRepository : ITableroRepository
     
     public List<Tablero> GetAllTableros()
     {
-        var queryString = @"SELECT * FROM Tablero WHERE activo = 1;";
+        var queryString = @"SELECT Tablero.id as idTablero, Tablero.nombre as tablero, 
+        Tablero.descripcion as descripcion, Tablero.id_usuario_propietario as idUsuario,
+        Usuario.nombre_de_usuario as usuario
+        FROM Tablero 
+        INNER JOIN Usuario ON Tablero.id_usuario_propietario = Usuario.id
+        WHERE Tablero.activo = 1;";
         List<Tablero> tableros = new List<Tablero>();
 
         using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
@@ -46,10 +51,11 @@ public class TableroRepository : ITableroRepository
                 while (reader.Read())
                 {
                     Tablero tablero = new Tablero();
-                    tablero.Id = Convert.ToInt32(reader["id"]);
-                    tablero.Nombre = reader["nombre"].ToString();
+                    tablero.Id = Convert.ToInt32(reader["idTablero"]);
+                    tablero.Nombre = reader["tablero"].ToString();
                     tablero.Descripcion = reader["descripcion"].ToString();
-                    tablero.IdUsuarioPropietario = Convert.ToInt32(reader["id_usuario_propietario"]);
+                    tablero.IdUsuarioPropietario = Convert.ToInt32(reader["idUsuario"]);
+                    tablero.NombreUsuario = reader["usuario"].ToString();
                     tableros.Add(tablero);
                 }
             }
@@ -86,7 +92,11 @@ public class TableroRepository : ITableroRepository
 
     public List<Tablero> GetTableroByUsuario(int idUsuario)
     {
-        var queryString = @"SELECT * FROM Tablero WHERE id_usuario_propietario = @idUsuario AND activo = 1;";
+        var queryString = @"SELECT Tablero.id as idTablero, Tablero.nombre as tablero, 
+        Tablero.descripcion as descripcion, Tablero.id_usuario_propietario as idUsuario,
+        Usuario.nombre_de_usuario as usuario
+        FROM Tablero INNER JOIN Usuario ON Tablero.id_usuario_propietario = Usuario.id
+        WHERE Tablero.id_usuario_propietario = @idUsuario AND Tablero.activo = 1;";
         
         List<Tablero> tableros = new List<Tablero>();
 
@@ -101,10 +111,11 @@ public class TableroRepository : ITableroRepository
                 while (reader.Read())
                 {
                     Tablero tablero = new Tablero();
-                    tablero.Id = Convert.ToInt32(reader["id"]);
-                    tablero.Nombre = reader["nombre"].ToString();
+                    tablero.Id = Convert.ToInt32(reader["idTablero"]);
+                    tablero.Nombre = reader["tablero"].ToString();
                     tablero.Descripcion = reader["descripcion"].ToString();
-                    tablero.IdUsuarioPropietario = Convert.ToInt32(reader["id_usuario_propietario"]);
+                    tablero.IdUsuarioPropietario = Convert.ToInt32(reader["idUsuario"]);
+                    tablero.NombreUsuario = reader["usuario"].ToString();
                     tableros.Add(tablero);
                 }
             }
@@ -132,28 +143,15 @@ public class TableroRepository : ITableroRepository
             connection.Close();
         }
     }
-    
-    public void DeleteTablero(int idTablero)
-    {
-        var queryString = @"UPDATE Tablero SET activo = 0 WHERE id = @idTablero;";
-
-        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
-        {
-            connection.Open();
-
-            SQLiteCommand command = new SQLiteCommand(queryString, connection);
-            command.Parameters.Add(new SQLiteParameter("@idTablero", idTablero));
-
-            command.ExecuteNonQuery();
-            connection.Close();
-        }
-    }
 
     public List<Tablero> GetTablerosByTarea(int idUsuario)
     {
-        var queryString = @"SELECT DISTINCT Tablero.id as idTablero, Tablero.id_usuario_propietario as idUsuario,
-        Tablero.nombre as tablero, Tablero.descripcion as descripcion
+        var queryString = @"SELECT DISTINCT Tablero.id as idTablero, 
+        Tablero.id_usuario_propietario as idUsuario,
+        Tablero.nombre as tablero, Tablero.descripcion as descripcion,
+        Usuario.nombre_de_usuario as usuario
         FROM Tablero INNER JOIN Tarea ON Tablero.id = Tarea.id_tablero
+        INNER JOIN Usuario ON Tablero.id_usuario_propietario = Usuario.id
         WHERE Tarea.id_usuario_asignado = @idUsuario AND Tablero.activo = 1;";
         List<Tablero> tableros = new List<Tablero>();
 
@@ -172,6 +170,7 @@ public class TableroRepository : ITableroRepository
                     tablero.IdUsuarioPropietario = Convert.ToInt32(reader["idUsuario"]);
                     tablero.Nombre = reader["tablero"].ToString();
                     tablero.Descripcion = reader["descripcion"].ToString();
+                    tablero.NombreUsuario = reader["usuario"].ToString();
                     tableros.Add(tablero);
                 }
             }
@@ -206,6 +205,22 @@ public class TableroRepository : ITableroRepository
             connection.Close();
         } 
         return pertenece;
+    }
+
+    public void DeleteTablero(int idTablero)
+    {
+        var queryString = @"UPDATE Tablero SET activo = 0 WHERE id = @idTablero;";
+
+        using (SQLiteConnection connection = new SQLiteConnection(_cadenaConexion))
+        {
+            connection.Open();
+
+            SQLiteCommand command = new SQLiteCommand(queryString, connection);
+            command.Parameters.Add(new SQLiteParameter("@idTablero", idTablero));
+
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
     }
 
     public void DeleteTableroByUsuario(int idUsuario)
