@@ -65,11 +65,30 @@ public class LoginController : Controller
         }
     }
 
+    public IActionResult Logout()
+    {
+        try
+        {
+            desloguearUsuario();
+        }
+        catch (Exception ex)
+        {
+            
+            _logger.LogError("Error al intentar cerrar sesion del usuario" + ex.ToString());
+        }
+        return RedirectToAction("Index");
+    }
+
     private void loggearUsuario(Usuario usuario)
     {
         HttpContext.Session.SetString("NombreDeUsuario", usuario.NombreDeUsuario);
         HttpContext.Session.SetString("Rol", usuario.Rol.ToString());
         HttpContext.Session.SetInt32("Id", usuario.Id);
+    }
+
+    private void desloguearUsuario()
+    {
+        HttpContext.Session.Clear();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
