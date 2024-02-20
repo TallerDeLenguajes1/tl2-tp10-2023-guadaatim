@@ -114,7 +114,6 @@ public class UsuarioController : Controller
                 {
                     if(_usuarioRepository.ExisteUsuario(usuarioNuevoVM.NombreDeUsuario))
                     {
-                        ModelState.AddModelError("NombreDeUsuario", "El nombre de usuario no esta disponible");
                         return View(usuarioNuevoVM);
                     } else
                     {
@@ -143,17 +142,22 @@ public class UsuarioController : Controller
             if(isAdmin())
             {
                 int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
+                ModificarUsuarioViewModel usuario = new ModificarUsuarioViewModel(_usuarioRepository.GetUsuarioById(idUsuario));
                 if (id == idUsuario)
                 {
-                    ModificarUsuarioViewModel usuario = new ModificarUsuarioViewModel(_usuarioRepository.GetUsuarioById(idUsuario));
                     return View("ModificarUsuarioAdmin", usuario);
                 } else
                 {
-                    ModificarUsuarioViewModel usuario = new ModificarUsuarioViewModel(_usuarioRepository.GetUsuarioById(idUsuario));
                     return View(usuario);
                 }
             } else
             {
+                if (isOperador())
+                {
+                    int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
+                    ModificarUsuarioViewModel usuario = new ModificarUsuarioViewModel(_usuarioRepository.GetUsuarioById(idUsuario));
+                    return View("ModificarUsuarioOperador", usuario);
+                }
                 return RedirectToAction("Error"); 
             }
         }
@@ -169,7 +173,7 @@ public class UsuarioController : Controller
     {
         try
         {
-            if (isAdmin())
+            if (isAdmin() || isOperador())
             {
                 if(!ModelState.IsValid)
                 {
@@ -213,17 +217,16 @@ public class UsuarioController : Controller
         }
     }
 
-    [HttpPost]
-    public IActionResult DeleteUsuario(UsuarioViewModel usuario)
+    public IActionResult DeleteUsuario(int idUsuario)
     {
         try
         {
             if(isAdmin())
             {
-                _tareaRepository.UpdateTareaAsignada(usuario.Id);
-                _tareaRepository.DeleteByUsuario(usuario.Id);
-                _tableroRepository.DeleteTableroByUsuario(usuario.Id);
-                _usuarioRepository.DeleteUsuario(usuario.Id);
+                _tareaRepository.UpdateTareaAsignada(idUsuario);
+                _tareaRepository.DeleteByUsuario(idUsuario);
+                _tableroRepository.DeleteTableroByUsuario(idUsuario);
+                _usuarioRepository.DeleteUsuario(idUsuario);
                 return RedirectToAction("ListarUsuarios");
             } else
             {
