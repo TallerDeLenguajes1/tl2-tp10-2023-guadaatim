@@ -13,6 +13,7 @@
 
 @model TableroViewModel
 
+<h1>Eliminar Tablero</h1>
 
 <div class="container">
     <div class="row">
@@ -30,7 +31,7 @@
                         <td>@Model.Descripcion</td>
                         <td>
                             <button type="submit" class="btn btn-modificar mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal-@Model.Id">
-                                Eliminar Tarea
+                                Eliminar Tablero
                             </button>
                             <div class="modal fade" id="exampleModal-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-@Model.Id" aria-hidden="true">
                                 <div class="modal-dialog" role="document">

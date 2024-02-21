@@ -7,13 +7,16 @@
 
 @model ModificarTareaViewModel
 
+<h1>Modificar Tarea</h1>
+
 <div class="container">
     <form asp-controller="Tarea" asp-action="UpdateTarea" class="row">
+        <div asp-validation-summary="ModelOnly"></div>
             <input asp-for="@Model.Id" value="@Model.Id" hidden>
             <input asp-for="@Model.IdTablero" value="@Model.IdTablero" hidden>
         <div class="col-6">
             <label asp-for="@Model.Nombre" class="form-label">Nombre</label>
-                <input asp-for="@Model.Nombre" value="@Model.Nombre" class="form-control" readonly>
+                <input asp-for="@Model.Nombre" value="@Model.Nombre" class="form-control">
         </div>
         <div class="col-6">
             <label asp-for="@Model.Descripcion" class="form-label">Descripcion</label>

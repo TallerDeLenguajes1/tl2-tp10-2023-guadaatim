@@ -7,8 +7,11 @@
 
 @model ModificarUsuarioViewModel
 
+<h1>Modificar Usuario</h1>
+
 <div class="container">
     <form asp-controller="Usuario" asp-action="ModificarUsuario" class="row g-3">
+        <div asp-validation-summary="ModelOnly"></div>
             <input asp-for="@Model.Id" value="@Model.Id" hidden>
         <div class="col-6">
             <label asp-for="@Model.NombreDeUsuario" class="form-label">Nombre de usuario</label>
