@@ -109,11 +109,13 @@ public class UsuarioController : Controller
             {
                 if(!ModelState.IsValid)
                 {
-                    return RedirectToAction("Error"); 
+                    usuarioNuevoVM.Error = "Error al crear el usuario. Intente de nuevo.";
+                    return View(usuarioNuevoVM); 
                 } else 
                 {
                     if(_usuarioRepository.ExisteUsuario(usuarioNuevoVM.NombreDeUsuario))
                     {
+                        usuarioNuevoVM.Error = "El nombre de usuario ya existe.";
                         return View(usuarioNuevoVM);
                     } else
                     {
@@ -176,8 +178,22 @@ public class UsuarioController : Controller
             if (isAdmin() || isOperador())
             {
                 if(!ModelState.IsValid)
-                {
-                    return RedirectToAction("Error"); 
+                {   
+                    usuarioModificadoVM.Error = "Error al modificar el usuario.";
+                    if (isAdmin())
+                    {
+                        int id = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
+                        if (id == usuarioModificadoVM.Id)
+                        {
+                            return View("ModificarUsuarioAdmin", usuarioModificadoVM);
+                        } else
+                        {
+                            return View("ModificarUsuario", usuarioModificadoVM);
+                        }
+                    } else
+                    {
+                        return View("ModificarUsuarioOperador", usuarioModificadoVM);
+                    }
                 } else
                 {
                     Usuario usuarioModificado = new Usuario(usuarioModificadoVM);

@@ -41,8 +41,10 @@ public class LoginController : Controller
 
                     if (!existeUsuario)
                     {
-                        _logger.LogWarning("Intento de acceso invalido - Usuario: " + usuario.NombreDeUsuario + " - Clave ingresada: " + usuario.Contrasenia);
-                        return RedirectToAction("Index");
+                        LoginViewModel loginVM = new LoginViewModel();
+                        loginVM.Error = "Usuario o contraseña incorrectos. Intente otra vez";
+                        _logger.LogWarning("Intento de acceso invalido - Usuario: " + usuario.NombreDeUsuario + " - Clave ingresada: " + usuario.Contrasenia);                        
+                        return View("Index", loginVM);
                     } else
                     {
                         Usuario usuarioLoggeado = _usuarioRepository.GetUsuarioByNombre(usuario.NombreDeUsuario);

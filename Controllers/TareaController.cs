@@ -120,7 +120,7 @@ public class TareaController : Controller
             {
                 if(isOperador())
                 {
-                    return RedirectToAction("ListarTareasPorTableroOperador", idTablero);
+                    return RedirectToAction("ListarTareasPorTableroOperador", new {idTablero = idTablero});
                 } else
                 {
                     return RedirectToAction("Error"); 
@@ -209,7 +209,8 @@ public class TareaController : Controller
             {
                 if(!ModelState.IsValid)
                 {
-                    return RedirectToAction("Error"); 
+                    tareaNuevaVM.Error  ="Error al crear la tarea.";
+                    return View("AltaTarea", tareaNuevaVM); 
                 } else
                 {
                     Tarea tareaNueva = new Tarea(tareaNuevaVM);
@@ -243,7 +244,7 @@ public class TareaController : Controller
             {
                 if(isOperador())
                 {
-                    return RedirectToAction("ModificarTareaOperador", idTarea);
+                    return RedirectToAction("ModificarTareaOperador", new {idTarea = idTarea});
                 } else
                 {
                     return RedirectToAction("Error"); 
