@@ -13,6 +13,7 @@ public class CrearTareaViewModel
     private string? descripcion;
     private string? color;
     private int idUsuarioAsignado;
+    private string? error;
     private ListarUsuariosViewModel? usuarios;
 
     public CrearTareaViewModel()
@@ -59,4 +60,5 @@ public class CrearTareaViewModel
     [Display(Name = "Id Usuario Asignado")]
     public int IdUsuarioAsignado { get => idUsuarioAsignado; set => idUsuarioAsignado = value; }
     public ListarUsuariosViewModel? Usuarios { get => usuarios; set => usuarios = value; }
+    public string? Error { get => error; set => error = value; }
 }

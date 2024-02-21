@@ -10,6 +10,7 @@ public class ModificarUsuarioViewModel
     private string nombreDeUsuario;
     private string contrasenia;
     private Rol rol;
+    private string? error;
 
     public ModificarUsuarioViewModel()
     {
@@ -40,4 +41,5 @@ public class ModificarUsuarioViewModel
     [Required(ErrorMessage = "Este campo no puede estar vacio")]
     [Display(Name = "Rol")]
     public Rol Rol { get => rol; set => rol = value; }
+    public string? Error { get => error; set => error = value; }
 }

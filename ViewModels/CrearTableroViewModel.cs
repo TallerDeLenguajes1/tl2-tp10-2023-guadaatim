@@ -10,9 +10,16 @@ public class CrearTableroViewModel
     private int idUsuarioPropietario;
     private string nombre;
     private string? descripcion;
+    private string? error;
+    private List<Usuario>? usuarios;
 
     public CrearTableroViewModel()
     {
+    }
+
+    public CrearTableroViewModel(List<Usuario> usuarios)
+    {
+        this.usuarios = usuarios;
     }
 
     public CrearTableroViewModel(TableroViewModel tableroNuevo)
@@ -33,4 +40,6 @@ public class CrearTableroViewModel
     [MaxLength(50, ErrorMessage = "La descripcion debe tener hasta 50 caracteres")]
     [Display(Name = "Descripcion")]
     public string? Descripcion { get => descripcion; set => descripcion = value; }
+    public List<Usuario>? Usuarios { get => usuarios; set => usuarios = value; }
+    public string? Error { get => error; set => error = value; }
 }

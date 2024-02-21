@@ -13,4 +13,5 @@ public class LoginViewModel
     [Display(Name = "Contraseña")]
     [PasswordPropertyText]
     public string Contrasenia {get; set;}
+    public string? Error { get; set; }
 }

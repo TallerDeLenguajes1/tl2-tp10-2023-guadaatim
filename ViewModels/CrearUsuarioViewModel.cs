@@ -9,6 +9,7 @@ public class CrearUsuarioViewModel
     private string nombreDeUsuario;
     private string contrasenia;
     private Rol rol;
+    private string? error;
 
     public CrearUsuarioViewModel()
     {
@@ -35,4 +36,5 @@ public class CrearUsuarioViewModel
     [Required(ErrorMessage = "Complete el campo")]
     [Display(Name = "Rol")]
     public Rol Rol { get => rol; set => rol = value; }
+    public string? Error { get => error; set => error = value; }
 }
