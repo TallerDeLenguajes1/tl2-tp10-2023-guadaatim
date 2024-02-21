@@ -112,12 +112,19 @@ public class TableroController : Controller
     {
         try
         {
-            if (isAdmin() || isOperador())
+            if (isAdmin())
             {
-                return View(new CrearTableroViewModel());
+                List<Usuario> usuarios = _usuarioRepository.GetAllUsuarios();
+                return View(new CrearTableroViewModel(usuarios));
             } else
             {
-                return RedirectToAction("Error");
+                if (isOperador())
+                {
+                    return View("AltaTableroOperador", new CrearTableroViewModel());
+                } else
+                {
+                    return RedirectToAction("Error");
+                }
             }
         }
         catch (Exception ex)
@@ -132,21 +139,37 @@ public class TableroController : Controller
     {
         try
         {
-            if (isAdmin() || isOperador())
+            if (isAdmin())
             {
                 if(!ModelState.IsValid)
                 {
-                    return RedirectToAction("Error");
+                    tableroNuevoVM.Error = "Error al crear el tablero.";
+                    return View("AltaTablero", tableroNuevoVM);
                 } else
                 {
                     Tablero tableroNuevo = new Tablero(tableroNuevoVM);
-                    tableroNuevo.IdUsuarioPropietario = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
                     _tableroRepository.CreateTablero(tableroNuevo);
                     return RedirectToAction("ListarTableros");
                 }
             } else
             {
-                return RedirectToAction("Error");
+                if (isOperador())
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        tableroNuevoVM.Error = "Error al crear el tablero.";
+                        return View("AltaTablero",tableroNuevoVM);
+                    } else
+                    {   
+                        Tablero tableroNuevo = new Tablero(tableroNuevoVM);
+                        tableroNuevo.IdUsuarioPropietario = HttpContext.Session.GetInt32("Id").GetValueOrDefault();
+                        _tableroRepository.CreateTablero(tableroNuevo);
+                        return RedirectToAction("ListarTableros");
+                    }
+                } else
+                {
+                    return RedirectToAction("Error");
+                }
             }
         }
         catch (Exception ex)
@@ -163,7 +186,7 @@ public class TableroController : Controller
         {
             if (isAdmin() || isOperador())
             {
-                TableroViewModel tablero = new TableroViewModel(_tableroRepository.GetTableroById(idTablero));
+                ModificarTableroViewModel tablero = new ModificarTableroViewModel(_tableroRepository.GetTableroById(idTablero));
                 return View(tablero);
             } else
             {
@@ -186,7 +209,8 @@ public class TableroController : Controller
             {
                 if(!ModelState.IsValid)
                 {
-                    return RedirectToAction("Error");
+                    tableroModificadoVM.Error = "Error al modificar el tablero.";
+                    return View("ModificarTablero", tableroModificadoVM);
                 } else 
                 {
                     Tablero tableroModificado = new Tablero(tableroModificadoVM);
