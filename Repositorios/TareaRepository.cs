@@ -76,6 +76,10 @@ public class TareaRepository : ITareaRepository
             }
             connection.Close();
         }
+        if (tareas == null)
+        {
+            throw new Exception ("La lista de tareas esta vacia");
+        }
         return tareas;
     }
 
@@ -120,6 +124,10 @@ public class TareaRepository : ITareaRepository
                 }
             }
             connection.Close();
+        }
+        if (tareas == null)
+        {
+            throw new Exception ("La lista de tareas esta vacia");
         }
         return tareas;
     }
@@ -166,6 +174,10 @@ public class TareaRepository : ITareaRepository
             }
             connection.Close();
         }
+        if (tareas == null)
+        {
+            throw new Exception ("La lista de tareas esta vacia");
+        }
         return tareas;
     }
 
@@ -200,6 +212,10 @@ public class TareaRepository : ITareaRepository
                 }
             }
             connection.Close();
+        }
+        if (tarea == null)
+        {
+            throw new Exception ("La tarea no existe");
         }
         return tarea;
     }
@@ -262,6 +278,10 @@ public class TareaRepository : ITareaRepository
                 }
             }
             connection.Close();
+        }
+        if (tarea == null)
+        {
+            throw new Exception ("La tarea no existe");
         }
         return tarea;
     }

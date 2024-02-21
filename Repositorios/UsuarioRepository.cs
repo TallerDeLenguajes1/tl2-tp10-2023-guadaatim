@@ -104,6 +104,10 @@ public class UsuarioRepository : IUsuarioRepository
             }
             connection.Close();
         }
+        if (usuarios == null)
+        {
+            throw new Exception ("La lista de usuarios esta vacia");
+        }
         return usuarios;
     }
 
@@ -131,6 +135,10 @@ public class UsuarioRepository : IUsuarioRepository
             }
             connection.Close();
         }
+        if (usuario == null)
+        {
+            throw new Exception ("El usuario no existe");
+        }
         return usuario;
     }
 
@@ -157,6 +165,10 @@ public class UsuarioRepository : IUsuarioRepository
                 }
             }
             connection.Close();
+        }
+        if (usuario == null)
+        {
+            throw new Exception ("El usuario no existe");
         }
         return usuario;
     }
@@ -231,6 +243,10 @@ public class UsuarioRepository : IUsuarioRepository
                 }
             }
             connection.Close();
+        }
+        if (usuarios == null)
+        {
+            throw new Exception ("La lista de usuarios esta vacia");
         }
         return usuarios;
     }

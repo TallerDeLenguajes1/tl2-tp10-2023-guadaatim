@@ -61,6 +61,10 @@ public class TableroRepository : ITableroRepository
             }
             connection.Close();
         }
+        if (tableros == null)
+        {
+            throw new Exception ("La lista de tableros esta vacia");
+        }
         return tableros;
     }
     
@@ -86,6 +90,10 @@ public class TableroRepository : ITableroRepository
                 }
             }
             connection.Close();
+        }
+        if (tablero == null)
+        {
+            throw new Exception ("El tablero no existe");
         }
         return tablero;
     }
@@ -120,6 +128,10 @@ public class TableroRepository : ITableroRepository
                 }
             }
             connection.Close();
+        }
+        if (tableros == null)
+        {
+            throw new Exception ("La lista de tableros esta vacia");
         }
         return tableros;
     }
@@ -175,6 +187,10 @@ public class TableroRepository : ITableroRepository
                 }
             }
             connection.Close();
+        }
+        if (tableros == null)
+        {
+            throw new Exception ("La lista de tableros esta vacia");
         }
         return tableros;
     }
