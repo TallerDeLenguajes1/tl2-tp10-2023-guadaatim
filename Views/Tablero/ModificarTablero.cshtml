@@ -11,18 +11,26 @@
     }
 }
 
-@model TableroViewModel
+@model ModificarTableroViewModel
+
+<h1>Modificar Tablero</h1>
+
+@if(@Model.Error != null)
+{
+    <p>@Model.Error</p>
+}
 
 <div class="container">
     <form asp-controller="Tablero" asp-action="UpdateTablero" class="row">
+        <div asp-validation-summary="ModelOnly"></div>
         <input asp-for="@Model.Id" value="@Model.Id" hidden>
         <input asp-for="@Model.IdUsuarioPropietario" value="@Model.IdUsuarioPropietario" hidden>
-        <div class="col-6">
+        <div class="col-6 has-validation">
             <label asp-for="@Model.Nombre" class="form-label">Nombre</label>
                 <input asp-for="@Model.Nombre" value="@Model.Nombre" class="form-control">
-                <span asp-validation-for="@Model.Nombre" class="validation"></span>
+                <span asp-validation-for="@Model.Nombre"></span>
         </div>
-        <div class="col-6">
+        <div class="col-6 has-validation">
             <label asp-for="@Model.Descripcion" class="form-label">Descripcion</label>
                 <input asp-for="@Model.Descripcion" value="@Model.Descripcion" class="form-control">
                 <span asp-validation-for="@Model.Descripcion" class="validation"></span>

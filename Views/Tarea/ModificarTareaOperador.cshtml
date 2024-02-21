@@ -9,6 +9,11 @@
 
 <h1>Modificar Tarea</h1>
 
+@if(@Model.Error != null)
+{
+    <p>@Model.Error</p>
+}
+
 <div class="container">
     <form asp-controller="Tarea" asp-action="UpdateTarea" class="row">
         <div asp-validation-summary="ModelOnly"></div>
