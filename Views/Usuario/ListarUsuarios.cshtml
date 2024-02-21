@@ -24,7 +24,7 @@
                         <td>@Model.UsuarioLoggeado.NombreDeUsuario</td>
                         <td>@Model.UsuarioLoggeado.Rol</td>
                         <td><button type="button" class="btn btn-outline-modificar"><a class="btn-outline-modificar" asp-controller="Usuario" asp-action="ModificarUsuario" asp-route-idUsuario="@Model.UsuarioLoggeado.Id">Modificar</a></button></td>
-                        <td>No disponible</td>
+                        <td></td>
                     </tr>
                     @foreach(UsuarioViewModel usuario in @Model.UsuariosVM)
                     {
