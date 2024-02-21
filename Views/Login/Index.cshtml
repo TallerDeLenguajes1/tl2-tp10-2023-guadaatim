@@ -4,11 +4,18 @@
     ViewBag.Title = "Login";
 }
 
-
 @model LoginViewModel
+
+<h1>Inicie sesion</h1>
+
+@if(@Model.Error != null)
+{
+    <p>@Model.Error</p>
+}
 
 <div class="container">
     <form class="form-signin" asp-controller="Login" asp-action="Login">
+        <div asp-validation-summary="ModelOnly"></div>
         <div class="row">
             <label asp-for="@Model.NombreDeUsuario" class="col-2 form-label">Nombre de usuario</label>
                 <div class="col-5">
@@ -30,6 +37,5 @@
         </div>
     </form>
 </div>
-
 
 @section Scripts {<partial name="_ValidationScriptsPartial" />}
